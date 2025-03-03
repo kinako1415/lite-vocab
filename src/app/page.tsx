@@ -1,3 +1,9 @@
+import StartButton from "@/components/StartButton";
+
 export default function Home() {
-  return <div></div>;
+  return (
+    <div>
+      <StartButton></StartButton>
+    </div>
+  );
 }
