@@ -1,0 +1,26 @@
+.mainContainer {
+  border-radius: 20px;
+  width: 80%;
+  height: fit-content;
+  gap: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 100;
+  padding: 10px;
+  background-color: #ffffff;
+  box-shadow: 0px 0px 16px rgba(0, 0, 0, 0.14);
+}
+
+.container {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  inset: 0;
+  margin: auto;
+  z-index: 1000;
+  background-color: rgba(0, 0, 0, 0.5);
+}
