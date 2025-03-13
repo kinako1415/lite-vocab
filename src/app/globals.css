@@ -1,3 +1,14 @@
 body {
   font-family: var(--font-zen-kaku-gothic), sans-serif;
+
+  --primary-900: #26007e;
+  --primary-800: #330c8f;
+  --primary-700: #40179e;
+  --primary-600: #5a2cc5;
+  --primary-500: #5f31cb;
+  --primary-400: #7750d3;
+  --primary-300: #9070dc;
+  --primary-200: #ab8ff0;
+  --primary-100: #d1beff;
+  --primary-50: #e1d5ff;
 }
