@@ -11,4 +11,16 @@ body {
   --primary-200: #ab8ff0;
   --primary-100: #d1beff;
   --primary-50: #e1d5ff;
+
+  --white-100: #ffffff;
+  --gray-50: #f4f5ff;
+  --gray-100: #eaebfd;
+  --gray-200: #dddef0;
+  --gray-300: #c9cbdb;
+  --gray-400: #a4a5b5;
+  --gray-500: #838493;
+  --gray-600: #5c5d6b;
+  --gray-700: #494a58;
+  --gray-800: #2b2d3a;
+  --gray-900: #0a0c1a;
 }
