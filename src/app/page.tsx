@@ -3,19 +3,41 @@ import ModalWindow from "@/components/ModalWindow";
 import { CreateUser, SignIn } from "@/lib/auth";
 import { auth } from "@/lib/firebase";
 import { addWord } from "@/lib/firestore";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { onAuthStateChanged, User } from "firebase/auth";
 
 export default function Home() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [user, setUser] = useState<User | null>(null);
 
-  const aEmail = "inu@gmail.com";
-  const aPassword = "inuinui";
+  const aEmail = "tomatog29@gmail.com";
+  const aPassword = "831Hakudamono";
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+    });
+
+    return () => unsubscribe(); // クリーンアップ
+  }, []);
 
   if (auth.currentUser !== null) {
-    return <div>{auth.currentUser.email}</div>;
+    return (
+      <div>
+        <div>{auth.currentUser.email}</div>{" "}
+        <button
+          onClick={() => {
+            auth.signOut();
+          }}
+        >
+          サインアウトかも
+        </button>
+      </div>
+    );
   }
+
   return (
     <div>
       <button
