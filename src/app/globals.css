@@ -1,4 +1,5 @@
 body {
+  margin: 0;
   font-family: var(--font-zen-kaku-gothic), sans-serif;
 
   --primary-900: #26007e;
