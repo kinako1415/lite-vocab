@@ -6,26 +6,26 @@ import Button from "@/components/elements/Button";
 import Input from "@/components/elements/Input";
 import Image from "next/image";
 import { motion } from "framer-motion";
+import { useRouter } from "next/navigation";
 
 const SignUp = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
+  const router = useRouter();
+
   return (
-    <motion.div
-      className={styles.container}
-      initial={{ opacity: 0, scale: 0 }}
-      animate={{ opacity: "100%", scale: "100%" }}
-      onClick={(e) => e.stopPropagation()}
-    >
-      <form
+    <div className={styles.container} onClick={(e) => e.stopPropagation()}>
+      <motion.form
+        initial={{ opacity: 0, scale: 0 }}
+        animate={{ opacity: "100%", scale: "100%" }}
         onSubmit={(e) => {
           e.preventDefault();
           CreateUser({ email, password });
         }}
       >
         <div className={styles.titleContainer}>
-          <div className={styles.title}>😎 サインインをしよう！！</div>
+          <div className={styles.title}>🤩 ユーザー登録をしよう！</div>
           <div className={styles.subTitle}>
             🚀 今すぐログインして、ワクワクする体験を始めよう！！
           </div>
@@ -84,13 +84,20 @@ const SignUp = () => {
             </Button>
           </div>
           <div className={styles.registerMessage}>
-            まだアカウント登録してない？ ここで
-            <span className={styles.highlightText}>Sign up</span>
+            もうアカウント登録してる？？ してるならここで
+            <span
+              className={styles.highlightText}
+              onClick={() => {
+                router.push("/signIn");
+              }}
+            >
+              Sign In
+            </span>
             !!
           </div>
         </div>
-      </form>
-    </motion.div>
+      </motion.form>
+    </div>
   );
 };
 
