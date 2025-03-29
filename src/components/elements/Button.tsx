@@ -1,7 +1,17 @@
 import styles from "./Button.module.scss";
 
-const StartButton = ({ children }: { children: React.ReactNode }) => {
-  return <button className={styles.button}>{children}</button>;
+const Button = ({
+  children,
+  type,
+}: {
+  children: React.ReactNode;
+  type?: "button" | "submit" | "reset" | undefined;
+}) => {
+  return (
+    <button className={styles.button} type={type}>
+      {children}
+    </button>
+  );
 };
 
-export default StartButton;
+export default Button;
