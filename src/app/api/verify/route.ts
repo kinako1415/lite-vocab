@@ -14,12 +14,7 @@ export async function GET(req: NextApiRequest) {
       return NextResponse.json({ isValid: false }, { status: 401 });
     }
 
-    // console.log("セッション  :  ", session);
-
     const decodedToken = await adminAuth.verifySessionCookie(session, true);
-
-    // console.log("デコデッドトークン  :  ", decodedToken);
-    // console.log("デコデッドトークンアドミン  :  ", decodedToken.admin);
 
     if (!decodedToken) {
       return NextResponse.json({ isValid: false }, { status: 403 });
