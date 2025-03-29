@@ -1,77 +1,37 @@
 "use client";
+import styles from "./page.module.scss";
 import { CreateUser } from "@/lib/auth";
 import { useState } from "react";
 import Button from "@/components/elements/Button";
 import Input from "@/components/elements/Input";
 import Image from "next/image";
+import { motion } from "framer-motion";
 
-const Login = () => {
+const SignUp = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
   return (
-    <div
-      style={{
-        backgroundColor: "#7750D3",
-        width: "100vw",
-        height: "100vh",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
+    <motion.div
+      className={styles.container}
+      initial={{ opacity: 0, scale: 0 }}
+      animate={{ opacity: "100%", scale: "100%" }}
+      onClick={(e) => e.stopPropagation()}
     >
       <form
         onSubmit={(e) => {
           e.preventDefault();
           CreateUser({ email, password });
         }}
-        style={{
-          borderRadius: "20px",
-          height: "fit-content",
-          width: "fit-content",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          zIndex: "100",
-          padding: "54px 48px",
-          backgroundColor: "#ffffff",
-          gap: "56px",
-        }}
       >
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "2px",
-            alignItems: "center",
-          }}
-        >
-          <div
-            style={{ fontSize: "24px", fontWeight: "500", color: "#7750D3" }}
-          >
-            😎 サインインをしよう！！
-          </div>
-          <div
-            style={{ fontSize: "12px", fontWeight: "400", color: "#7750D3" }}
-          >
+        <div className={styles.titleContainer}>
+          <div className={styles.title}>😎 サインインをしよう！！</div>
+          <div className={styles.subTitle}>
             🚀 今すぐログインして、ワクワクする体験を始めよう！！
           </div>
         </div>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "32px",
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: "16px",
-              width: "400px",
-            }}
-          >
+        <div className={styles.mainContainer}>
+          <div className={styles.inputContainer}>
             <Input
               url="https://api.iconify.design/tabler:mail.svg?color=%23A4A5B5"
               placeholder="メールアドレスを入力！！"
@@ -96,30 +56,16 @@ const Login = () => {
               isPassword={true}
             />
           </div>
+
           <Button type="submit">Sign Up</Button>
-          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-            <div
-              style={{
-                height: "2px",
-                width: "188px",
-                backgroundColor: "#EAEBFD",
-              }}
-            ></div>
-            <div style={{ color: "#A4A5B5", fontWeight: "700" }}>OR</div>
-            <div
-              style={{
-                height: "2px",
-                width: "188px",
-                backgroundColor: "#EAEBFD",
-              }}
-            ></div>
+
+          <div className={styles.divider}>
+            <div className={styles.dividerLine}></div>
+            <div className={styles.dividerText}>OR</div>
+            <div className={styles.dividerLine}></div>
           </div>
-          <div
-            style={{
-              display: "flex",
-              gap: "20px",
-            }}
-          >
+
+          <div className={styles.authContainer}>
             <Button type="submit" color="gray">
               <Image
                 src="https://api.iconify.design/devicon:google.svg?color=%23293641"
@@ -137,21 +83,15 @@ const Login = () => {
               />
             </Button>
           </div>
-          <div
-            style={{
-              textAlign: "center",
-              fontSize: "12px",
-              color: "#A4A5B5",
-            }}
-          >
+          <div className={styles.registerMessage}>
             まだアカウント登録してない？ ここで
-            <span style={{ fontWeight: "500", color: "#0A0C1A" }}>Sign up</span>
+            <span className={styles.highlightText}>Sign up</span>
             !!
           </div>
         </div>
       </form>
-    </div>
+    </motion.div>
   );
 };
 
-export default Login;
+export default SignUp;
