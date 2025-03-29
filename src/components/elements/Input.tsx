@@ -1,10 +1,24 @@
 import styles from "./Input.module.scss";
 import Image from "next/image";
 
-const StartButton = ({ url }: { url: string }) => {
+const StartButton = ({
+  url,
+  onChange,
+  type,
+}: {
+  url: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  type: string;
+}) => {
   return (
     <div className={styles.inputContainer}>
-      <input className={styles.input} />
+      <input
+        className={styles.input}
+        type={type}
+        onChange={(e) => {
+          onChange(e);
+        }}
+      ></input>
       <Image
         src={url}
         alt="book"
