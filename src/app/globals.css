@@ -12,6 +12,17 @@ body {
   --primary-100: #d1beff;
   --primary-50: #e1d5ff;
 
+  --secondary-900: #015ca8;
+  --secondary-800: #027dca;
+  --secondary-700: #008ede;
+  --secondary-600: #00a1f2;
+  --secondary-500: #00b0ff;
+  --secondary-400: #25bcff;
+  --secondary-300: #4fc8ff;
+  --secondary-200: #74d8ff;
+  --secondary-100: #aee8ff;
+  --secondary-50: #e0f6ff;
+
   --white-100: #ffffff;
   --gray-50: #f4f5ff;
   --gray-100: #eaebfd;
