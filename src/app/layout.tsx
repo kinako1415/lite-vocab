@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { Zen_Kaku_Gothic_New } from "next/font/google";
 
 import "./globals.css";
+import LoginListener from "@/hooks/LoginListener";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -35,6 +36,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${zenKakuGothic.variable} antialiased`}
       >
+        <LoginListener />
         {children}
       </body>
     </html>

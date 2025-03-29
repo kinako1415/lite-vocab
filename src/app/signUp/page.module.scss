@@ -1,0 +1,77 @@
+.container {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  form {
+    border-radius: 20px;
+    height: fit-content;
+    width: fit-content;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 100;
+    padding: 54px 48px;
+    background-color: #ffffff;
+    gap: 56px;
+
+    .titleContainer {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      align-items: center;
+      .title {
+        font-size: 24px;
+        font-weight: 500;
+        color: #7750d3;
+      }
+      .subTitle {
+        font-size: 12px;
+        font-weight: 400;
+        color: #7750d3;
+      }
+    }
+
+    .mainContainer {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+      .inputContainer {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        width: 400px;
+      }
+      .divider {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        .dividerLine {
+          height: 2px;
+          width: 188px;
+          background-color: #eaebfd;
+        }
+        .dividerText {
+          color: #a4a5b5;
+          font-weight: 700;
+        }
+      }
+      .authContainer {
+        display: flex;
+        gap: 20px;
+      }
+      .registerMessage {
+        text-align: center;
+        font-size: 12px;
+        color: #a4a5b5;
+        .highlightText {
+          font-weight: 500;
+          color: #0a0c1a;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+}
