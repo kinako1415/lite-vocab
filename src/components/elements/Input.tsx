@@ -1,43 +1,3 @@
-// import { useState } from "react";
-// import styles from "./Input.module.scss";
-// import Image from "next/image";
-
-// const StartButton = ({
-//   url,
-//   onChange,
-//   type,
-//   placeholder,
-// }: {
-//   url?: string;
-//   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-//   type?: string;
-//   placeholder: string;
-// }) => {
-//   const [isShow, setIsShow] = useState<boolean>(true);
-
-//   return (
-//     <div className={styles.inputContainer}>
-//       <input
-//         className={styles.input}
-//         type={type}
-//         placeholder={placeholder}
-//         onChange={(e) => {
-//           onChange(e);
-//         }}
-//       ></input>
-//       <Image
-//         src={url ? url : ""}
-//         alt="book"
-//         width={24}
-//         height={24}
-//         className={styles.image}
-//       />
-//     </div>
-//   );
-// };
-
-// export default StartButton;
-
 import { useState } from "react";
 import styles from "./Input.module.scss";
 import Image from "next/image";
@@ -92,8 +52,8 @@ const StartButton = ({
         width={24}
         height={24}
         className={styles.image}
-        onClick={isPassword ? () => setIsHidden(!isHidden) : () => {}} // クリックで状態を切り替え
-        style={{ cursor: "pointer" }} // クリックできるように
+        onClick={isPassword ? () => setIsHidden(!isHidden) : () => {}}
+        style={{ cursor: "pointer" }}
       />
     </div>
   );
