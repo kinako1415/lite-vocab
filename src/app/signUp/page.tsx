@@ -8,25 +8,7 @@ import { useRouter } from "next/navigation";
 import { InputField } from "@/components/elements/Input";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-
-const signUpSchema = z
-  .object({
-    email: z.string().email("これはメールアドレス？？"),
-    password: z.string().min(6, "秘密のパスワードは6文字以上!!"),
-    passwordConfirm: z.string().min(1, "何も入力してないわけないよね？？"),
-  })
-  .superRefine(({ password, passwordConfirm }, ctx) => {
-    if (password !== passwordConfirm) {
-      ctx.addIssue({
-        path: ["passwordConfirm"],
-        code: "custom",
-        message: "同じ秘密のパスワードを入力してね!!",
-      });
-    }
-  });
-
-type signUpValue = z.infer<typeof signUpSchema>;
+import { signUpSchema, signUpValue } from "@/schemas/signUp";
 
 const SignUp = () => {
   const router = useRouter();
