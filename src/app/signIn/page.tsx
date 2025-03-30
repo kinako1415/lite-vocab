@@ -7,9 +7,9 @@ import { actionsCreateSessionCookie } from "../actions/createSessionCookie";
 import { jwtDecode } from "jwt-decode";
 import { motion } from "framer-motion";
 import Button from "@/components/elements/Button";
-import Input from "@/components/elements/Input";
 import Image from "next/image";
 import { useState } from "react";
+import { InputField } from "@/components/elements/Input";
 
 const SignIn = () => {
   const [email, setEmail] = useState<string>("");
@@ -55,14 +55,14 @@ const SignIn = () => {
         </div>
         <div className={styles.mainContainer}>
           <div className={styles.inputContainer}>
-            <Input
+            <InputField
               url="https://api.iconify.design/tabler:mail.svg?color=%23A4A5B5"
               placeholder="メールアドレスを入力！！"
               onChange={(e) => {
                 setEmail(e.target.value);
               }}
             />
-            <Input
+            <InputField
               url="https://api.iconify.design/tabler:eye.svg?color=%23A4A5B5"
               placeholder="秘密のパスワードを入力してね！！"
               onChange={(e) => {

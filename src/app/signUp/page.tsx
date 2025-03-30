@@ -1,28 +1,54 @@
 "use client";
 import styles from "./page.module.scss";
 import { CreateUser } from "@/lib/auth";
-import { useState } from "react";
 import Button from "@/components/elements/Button";
-import Input from "@/components/elements/Input";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
+import { InputField } from "@/components/elements/Input";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+
+const signUpSchema = z
+  .object({
+    email: z.string().email("これはメールアドレス？？"),
+    password: z.string().min(6, "秘密のパスワードは6文字以上!!"),
+    passwordConfirm: z.string().min(1, "何も入力してないわけないよね？？"),
+  })
+  .superRefine(({ password, passwordConfirm }, ctx) => {
+    if (password !== passwordConfirm) {
+      ctx.addIssue({
+        path: ["passwordConfirm"],
+        code: "custom",
+        message: "同じ秘密のパスワードを入力してね!!",
+      });
+    }
+  });
+
+type signUpValue = z.infer<typeof signUpSchema>;
 
 const SignUp = () => {
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-
   const router = useRouter();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<signUpValue>({
+    resolver: zodResolver(signUpSchema),
+  });
+
+  const onSubmit: SubmitHandler<signUpValue> = (form) => {
+    CreateUser({ email: form.email, password: form.passwordConfirm });
+  };
 
   return (
     <div className={styles.container} onClick={(e) => e.stopPropagation()}>
       <motion.form
         initial={{ opacity: 0, scale: 0 }}
         animate={{ opacity: "100%", scale: "100%" }}
-        onSubmit={(e) => {
-          e.preventDefault();
-          CreateUser({ email, password });
-        }}
+        onSubmit={handleSubmit(onSubmit)}
       >
         <div className={styles.titleContainer}>
           <div className={styles.title}>🤩 ユーザー登録をしよう！</div>
@@ -32,28 +58,25 @@ const SignUp = () => {
         </div>
         <div className={styles.mainContainer}>
           <div className={styles.inputContainer}>
-            <Input
+            <InputField
               url="https://api.iconify.design/tabler:mail.svg?color=%23A4A5B5"
               placeholder="メールアドレスを入力！！"
-              onChange={(e) => {
-                setEmail(e.target.value);
-              }}
+              errors={errors.email?.message}
+              {...register("email")}
             />
-            <Input
+            <InputField
               url="https://api.iconify.design/tabler:eye.svg?color=%23A4A5B5"
               placeholder="秘密のパスワードを入力してね！！"
-              onChange={(e) => {
-                setPassword(e.target.value);
-              }}
+              errors={errors.password?.message}
               isPassword={true}
+              {...register("password")}
             />
-            <Input
+            <InputField
               url="https://api.iconify.design/tabler:eye.svg?color=%23A4A5B5"
               placeholder="秘密のパスワードをもう一度入力しよう！！"
-              onChange={(e) => {
-                setPassword(e.target.value);
-              }}
+              errors={errors.passwordConfirm?.message}
               isPassword={true}
+              {...register("passwordConfirm")}
             />
           </div>
 
