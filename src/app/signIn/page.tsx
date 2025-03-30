@@ -8,19 +8,28 @@ import { jwtDecode } from "jwt-decode";
 import { motion } from "framer-motion";
 import Button from "@/components/elements/Button";
 import Image from "next/image";
-import { useState } from "react";
 import { InputField } from "@/components/elements/Input";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { signInSchema, signInValue } from "@/schemas/signIn";
 
 const SignIn = () => {
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
+  const router = useRouter();
 
-  const handleSignIn = async () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<signInValue>({
+    resolver: zodResolver(signInSchema),
+  });
+
+  const onSubmit: SubmitHandler<signInValue> = async (form) => {
     try {
       const userCredential = await signInWithEmailAndPassword(
         auth,
-        email,
-        password
+        form.email,
+        form.password
       );
       const idToken = await userCredential.user.getIdToken();
       const decodedToken = jwtDecode(idToken);
@@ -35,17 +44,12 @@ const SignIn = () => {
     }
   };
 
-  const router = useRouter();
-
   return (
     <div className={styles.container} onClick={(e) => e.stopPropagation()}>
       <motion.form
         initial={{ opacity: 0, scale: 0 }}
         animate={{ opacity: "100%", scale: "100%" }}
-        onSubmit={(e) => {
-          e.preventDefault();
-          handleSignIn();
-        }}
+        onSubmit={handleSubmit(onSubmit)}
       >
         <div className={styles.titleContainer}>
           <div className={styles.title}>😎 サインインをしよう！！</div>
@@ -58,16 +62,14 @@ const SignIn = () => {
             <InputField
               url="https://api.iconify.design/tabler:mail.svg?color=%23A4A5B5"
               placeholder="メールアドレスを入力！！"
-              onChange={(e) => {
-                setEmail(e.target.value);
-              }}
+              errors={errors.email?.message}
+              {...register("email")}
             />
             <InputField
               url="https://api.iconify.design/tabler:eye.svg?color=%23A4A5B5"
               placeholder="秘密のパスワードを入力してね！！"
-              onChange={(e) => {
-                setPassword(e.target.value);
-              }}
+              errors={errors.password?.message}
+              {...register("password")}
               isPassword={true}
             />
           </div>
