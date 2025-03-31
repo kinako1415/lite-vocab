@@ -14,7 +14,7 @@
     align-items: center;
     z-index: 100;
     padding: 54px 48px;
-    background-color: #ffffff;
+    background-color: var(--white-100);
     gap: 56px;
 
     .titleContainer {
@@ -25,12 +25,12 @@
       .title {
         font-size: 24px;
         font-weight: 500;
-        color: #7750d3;
+        color: var(--primary-400);
       }
       .subTitle {
         font-size: 12px;
         font-weight: 400;
-        color: #7750d3;
+        color: var(--primary-200);
       }
     }
 
@@ -51,11 +51,12 @@
         .dividerLine {
           height: 2px;
           width: 188px;
-          background-color: #eaebfd;
+          background-color: var(--gray-300);
         }
         .dividerText {
-          color: #a4a5b5;
+          color: var(--gray-300);
           font-weight: 700;
+          margin-bottom: 4px;
         }
       }
       .authContainer {
@@ -65,10 +66,10 @@
       .registerMessage {
         text-align: center;
         font-size: 12px;
-        color: #a4a5b5;
+        color: var(--gray-400);
         .highlightText {
           font-weight: 500;
-          color: #0a0c1a;
+          color: var(--gray-900);
           cursor: pointer;
         }
       }

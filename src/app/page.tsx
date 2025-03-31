@@ -6,7 +6,6 @@ import { addWord } from "@/lib/firestore";
 import { useEffect, useState } from "react";
 import { onAuthStateChanged, signOut, User } from "firebase/auth";
 import { deleteSessionCookie } from "./actions/deleteSessionCookie";
-import Button from "@/components/elements/Button";
 
 export default function Home() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -67,7 +66,6 @@ export default function Home() {
         </button>
       </div>
       <div>{user ? user.email : ""}</div>
-      <Button>Sign Up</Button>
     </div>
   );
 }

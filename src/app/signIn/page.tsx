@@ -12,6 +12,7 @@ import { InputField } from "@/components/elements/Input";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signInSchema, signInValue } from "@/schemas/signIn";
+import { FirebaseError } from "firebase/app";
 
 const SignIn = () => {
   const router = useRouter();
@@ -40,7 +41,9 @@ const SignIn = () => {
         return { success: false, error: response.error };
       }
     } catch (error) {
-      console.error("Sign-in failed", error);
+      if (error instanceof FirebaseError) {
+        console.error(error.code);
+      }
     }
   };
 
