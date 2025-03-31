@@ -1,6 +1,6 @@
 "use client";
 import styles from "./page.module.scss";
-import { CreateUser } from "@/lib/auth";
+import { CreateUser, SignInWithGoogle } from "@/lib/auth";
 import Button from "@/components/elements/Button";
 import Image from "next/image";
 import { motion } from "framer-motion";
@@ -69,7 +69,7 @@ const SignUp = () => {
           </div>
 
           <div className={styles.authContainer}>
-            <Button type="submit" color="gray">
+            <Button type="submit" color="gray" onClick={SignInWithGoogle}>
               <Image
                 src="https://api.iconify.design/devicon:google.svg?color=%23293641"
                 alt="google"

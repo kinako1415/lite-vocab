@@ -3,6 +3,12 @@ import {
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import { auth } from "./firebase";
+import { GoogleAuthProvider, signInWithPopup, User } from "firebase/auth";
+import {
+  actionsCreateSessionCookie,
+  AsyncResult,
+} from "@/app/actions/createSessionCookie";
+import { FirebaseError } from "firebase/app";
 
 export const CreateUser = async ({
   email,
@@ -18,8 +24,6 @@ export const CreateUser = async ({
   createUserWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       const user = userCredential.user;
-
-      console.log("登録成功した！！！！");
       console.log(user);
     })
     .catch((error) => {
@@ -27,7 +31,6 @@ export const CreateUser = async ({
       const errorMessage = error.message;
 
       console.log(errorCode, errorMessage);
-      console.log("登録失敗した！！！！");
     });
 };
 
@@ -48,14 +51,37 @@ export const SignIn = async ({
     .then((userCredential) => {
       const user = userCredential.user;
 
-      console.log("サインイン成功した！！！！");
       console.log(user);
     })
     .catch((error) => {
       const errorCode = error.code;
       const errorMessage = error.message;
 
-      console.log("エラー出た！！！！");
       console.log(errorCode, errorMessage);
     });
+};
+
+const googleProvider = new GoogleAuthProvider();
+
+export const SignInWithGoogle = async (): Promise<
+  AsyncResult<{ user: User }>
+> => {
+  try {
+    const userCredential = await signInWithPopup(auth, googleProvider);
+    const idToken = await userCredential.user.getIdToken();
+    const response = await actionsCreateSessionCookie(idToken);
+
+    if (!response.success) {
+      return { success: false, error: response.error };
+    }
+    return {
+      success: true,
+      data: { user: userCredential.user },
+    };
+  } catch (error) {
+    if (error instanceof FirebaseError) {
+      console.error(error.code);
+    }
+    return { success: false, error: "認証処理に失敗しました" };
+  }
 };

@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/lib/firebase";
 import { actionsCreateSessionCookie } from "../actions/createSessionCookie";
-import { jwtDecode } from "jwt-decode";
+// import { jwtDecode } from "jwt-decode";
 import { motion } from "framer-motion";
 import Button from "@/components/elements/Button";
 import Image from "next/image";
@@ -14,6 +14,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { signInSchema, signInValue } from "@/schemas/signIn";
 import { FirebaseError } from "firebase/app";
 import { useState } from "react";
+import { SignInWithGoogle } from "@/lib/auth";
 
 const SignIn = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -36,8 +37,7 @@ const SignIn = () => {
         form.password
       );
       const idToken = await userCredential.user.getIdToken();
-      const decodedToken = jwtDecode(idToken);
-      console.log(decodedToken.iss);
+      // const decodedToken = jwtDecode(idToken);
       const response = await actionsCreateSessionCookie(idToken);
       router.push("/");
       if (!response.success) {
@@ -92,7 +92,14 @@ const SignIn = () => {
           </div>
 
           <div className={styles.authContainer}>
-            <Button type="submit" color="gray">
+            <Button
+              type="submit"
+              color="gray"
+              onClick={
+                SignInWithGoogle
+                // router.push("/signUp");
+              }
+            >
               <Image
                 src="https://api.iconify.design/devicon:google.svg?color=%23293641"
                 alt="google"
