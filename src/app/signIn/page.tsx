@@ -54,101 +54,148 @@ const SignIn = () => {
   };
 
   return (
-    <div className={styles.container} onClick={(e) => e.stopPropagation()}>
-      <motion.form
-        initial={{ opacity: 0, scale: "70%", filter: "blur(10px)" }}
-        animate={{
-          opacity: "100%",
-          scale: "100%",
-          filter: "blur(0px)",
-          y: isSuccess ? "500px" : "0",
-        }}
-        onSubmit={handleSubmit(onSubmit)}
-        transition={{
-          duration: 0.2,
-          scale: { type: "spring", visualDuration: 0.3, bounce: 0.3 },
-          y: { type: "spring", visualDuration: 0.3, bounce: 0.3 },
-          filter: { duration: 0.3 },
-        }}
-      >
-        <div className={styles.titleContainer}>
-          <div className={styles.title}>😎 サインインをしよう！！</div>
-          <div className={styles.subTitle}>
-            🚀 今すぐログインして、ワクワクする体験を始めよう！！
-          </div>
-        </div>
-        <div className={styles.mainContainer}>
-          <div className={styles.inputContainer}>
-            <InputField
-              url="https://api.iconify.design/line-md:email.svg?color=%23A4A5B5"
-              placeholder="メールアドレスを入力！！"
-              errors={errors.email?.message}
-              {...register("email")}
-            />
-            <InputField
-              placeholder="秘密のパスワードを入力してね！！"
-              errors={errors.password?.message}
-              {...register("password")}
-              isPassword={true}
-            />
-          </div>
-
-          <Button type="submit" isLoading={isLoading}>
-            Sign In
-          </Button>
-
-          <div className={styles.divider}>
-            <div className={styles.dividerLine}></div>
-            <div className={styles.dividerText}>OR</div>
-            <div className={styles.dividerLine}></div>
-          </div>
-
-          <div className={styles.authContainer}>
+    <>
+      <div className={styles.container} onClick={(e) => e.stopPropagation()}>
+        {isSuccess && (
+          <motion.div
+            className={styles.completeContainer}
+            initial={{
+              opacity: 0,
+              scale: "0%",
+              filter: "blur(10px)",
+              y: "300px",
+            }}
+            animate={{
+              opacity: "100%",
+              scale: "100%",
+              filter: "blur(0px)",
+            }}
+            transition={{
+              duration: 0.2,
+              scale: { type: "spring", visualDuration: 0.3, bounce: 0.3 },
+              y: { type: "spring", visualDuration: 0.3, bounce: 0.3 },
+              filter: { duration: 0.3 },
+            }}
+          >
+            <div className={styles.mainContainer}>
+              <Image
+                src="https://api.iconify.design/material-symbols:check-circle-rounded.svg?color=%2325BCFF"
+                alt="check"
+                width={80}
+                height={80}
+              />
+              <div className={styles.textContainer}>
+                <div className={styles.title}>✨サインイン完了!!!!!!</div>
+                <div className={styles.subTitle}>
+                  やっとアプリが使えるようになるね!!
+                </div>
+              </div>
+            </div>
             <Button
-              type="submit"
-              color="gray"
-              onClick={
-                SignInWithGoogle
-                // router.push("/signUp");
-              }
-            >
-              <Image
-                src="https://api.iconify.design/devicon:google.svg?color=%23293641"
-                alt="google"
-                width={28}
-                height={28}
-              />
-            </Button>
-            <Button type="submit" color="gray">
-              <Image
-                src="https://api.iconify.design/akar-icons:github-fill.svg?color=%23293641"
-                alt="google"
-                width={30}
-                height={30}
-              />
-            </Button>
-          </div>
-          <div className={styles.registerMessage}>
-            まだアカウント登録してない？ ここで
-            <motion.span
-              className={styles.highlightText}
               onClick={() => {
                 router.push("/signUp");
               }}
-              initial={{
-                opacity: "100%",
-              }}
-              whileHover={{
-                opacity: "60%",
-              }}
             >
-              Sign up
-            </motion.span>
-            !!
+              top画面へ進む!!
+            </Button>
+          </motion.div>
+        )}
+
+        <motion.form
+          initial={{ opacity: 0, scale: "70%", filter: "blur(10px)" }}
+          animate={{
+            opacity: "100%",
+            scale: "100%",
+            filter: isSuccess ? "blur(1px)" : "blur(0px)",
+            y: isSuccess ? "340px" : "0",
+          }}
+          onSubmit={handleSubmit(onSubmit)}
+          transition={{
+            duration: 0.2,
+            scale: { type: "spring", visualDuration: 0.3, bounce: 0.3 },
+            y: { type: "spring", visualDuration: 0.3, bounce: 0.3 },
+            filter: { duration: 0.3 },
+          }}
+        >
+          <div className={styles.titleContainer}>
+            <div className={styles.title}>😎 サインインをしよう！！</div>
+            <div className={styles.subTitle}>
+              🚀 今すぐログインして、ワクワクする体験を始めよう！！
+            </div>
           </div>
-        </div>
-      </motion.form>
-    </div>
+          <div className={styles.mainContainer}>
+            <div className={styles.inputContainer}>
+              <InputField
+                url="https://api.iconify.design/line-md:email.svg?color=%23A4A5B5"
+                placeholder="メールアドレスを入力！！"
+                errors={errors.email?.message}
+                {...register("email")}
+              />
+              <InputField
+                placeholder="秘密のパスワードを入力してね！！"
+                errors={errors.password?.message}
+                {...register("password")}
+                isPassword={true}
+              />
+            </div>
+
+            <Button type="submit" isLoading={isLoading}>
+              Sign In
+            </Button>
+
+            <div className={styles.divider}>
+              <div className={styles.dividerLine}></div>
+              <div className={styles.dividerText}>OR</div>
+              <div className={styles.dividerLine}></div>
+            </div>
+
+            <div className={styles.authContainer}>
+              <Button
+                type="submit"
+                color="gray"
+                onClick={
+                  SignInWithGoogle
+                  // router.push("/signUp");
+                }
+              >
+                <Image
+                  src="https://api.iconify.design/devicon:google.svg?color=%23293641"
+                  alt="google"
+                  width={28}
+                  height={28}
+                />
+              </Button>
+              <Button type="submit" color="gray">
+                <Image
+                  src="https://api.iconify.design/akar-icons:github-fill.svg?color=%23293641"
+                  alt="google"
+                  width={30}
+                  height={30}
+                />
+              </Button>
+            </div>
+            <div className={styles.registerMessage}>
+              まだアカウント登録してない？ ここで
+              <motion.span
+                className={styles.highlightText}
+                onClick={() => {
+                  router.push("/signUp");
+                }}
+                initial={{
+                  opacity: "100%",
+                }}
+                whileHover={{
+                  opacity: "60%",
+                }}
+              >
+                Sign up
+              </motion.span>
+              !!
+            </div>
+          </div>
+        </motion.form>
+      </div>
+    </>
   );
 };
 

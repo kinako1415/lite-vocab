@@ -4,6 +4,41 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
+
+  .completeContainer {
+    background-color: var(--white-100);
+    width: 400px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 48px;
+    padding: 54px 48px;
+    border-radius: 20px;
+    .mainContainer {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+
+      .textContainer {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+        .title {
+          font-size: 24px;
+          font-weight: bold;
+          color: var(--primary-400);
+        }
+        .subTitle {
+          font-size: 14px;
+          font-weight: medium;
+          color: var(--primary-200);
+        }
+      }
+    }
+  }
 
   form {
     border-radius: 20px;
