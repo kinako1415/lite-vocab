@@ -28,8 +28,13 @@ const SignUp = () => {
   return (
     <div className={styles.container} onClick={(e) => e.stopPropagation()}>
       <motion.form
-        initial={{ opacity: 0, scale: 0 }}
-        animate={{ opacity: "100%", scale: "100%" }}
+        initial={{ opacity: 0, scale: "70%", filter: "blur(10px)" }}
+        animate={{ opacity: "100%", scale: "100%", filter: "blur(0px)" }}
+        transition={{
+          duration: 0.2,
+          scale: { type: "spring", visualDuration: 0.3, bounce: 0.3 },
+          filter: { duration: 0.3 },
+        }}
         onSubmit={handleSubmit(onSubmit)}
       >
         <div className={styles.titleContainer}>
@@ -88,14 +93,21 @@ const SignUp = () => {
           </div>
           <div className={styles.registerMessage}>
             もうアカウント登録してる？？ してるならここで
-            <span
+            <motion.span
               className={styles.highlightText}
               onClick={() => {
                 router.push("/signIn");
               }}
+              initial={{
+                opacity: "100%",
+              }}
+              whileHover={{
+                opacity: "60%",
+              }}
+              transition={{ duration: 0.1 }}
             >
               Sign In
-            </span>
+            </motion.span>
             !!
           </div>
         </div>

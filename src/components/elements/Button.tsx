@@ -21,8 +21,8 @@ const Button = ({
       className={`${styles.button} ${color ? styles[color] : ""} ${
         isLoading && styles.loading
       }`}
-      initial={{ scale: 1 }}
-      whileHover={{ scale: 1.02 }}
+      initial={{ opacity: "100%" }}
+      whileHover={{ opacity: "90%" }}
       whileTap={{ scale: 0.98 }}
       type={type}
       onClick={() => {
