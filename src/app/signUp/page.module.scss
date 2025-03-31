@@ -69,8 +69,12 @@
         color: var(--gray-400);
         .highlightText {
           font-weight: 500;
+          padding: 0 2px;
           color: var(--gray-900);
           cursor: pointer;
+        }
+        .highlightText:hover {
+          border-bottom: 1px solid var(--gray-800);
         }
       }
     }

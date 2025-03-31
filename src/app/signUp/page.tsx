@@ -41,20 +41,18 @@ const SignUp = () => {
         <div className={styles.mainContainer}>
           <div className={styles.inputContainer}>
             <InputField
-              url="https://api.iconify.design/tabler:mail.svg?color=%23A4A5B5"
+              url="https://api.iconify.design/line-md:email.svg?color=%23A4A5B5"
               placeholder="メールアドレスを入力！！"
               errors={errors.email?.message}
               {...register("email")}
             />
             <InputField
-              url="https://api.iconify.design/tabler:eye.svg?color=%23A4A5B5"
               placeholder="秘密のパスワードを入力してね！！"
               errors={errors.password?.message}
               isPassword={true}
               {...register("password")}
             />
             <InputField
-              url="https://api.iconify.design/tabler:eye.svg?color=%23A4A5B5"
               placeholder="秘密のパスワードをもう一度入力しよう！！"
               errors={errors.passwordConfirm?.message}
               isPassword={true}

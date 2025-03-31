@@ -13,8 +13,10 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signInSchema, signInValue } from "@/schemas/signIn";
 import { FirebaseError } from "firebase/app";
+import { useState } from "react";
 
 const SignIn = () => {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
 
   const {
@@ -26,6 +28,7 @@ const SignIn = () => {
   });
 
   const onSubmit: SubmitHandler<signInValue> = async (form) => {
+    setIsLoading(true);
     try {
       const userCredential = await signInWithEmailAndPassword(
         auth,
@@ -44,6 +47,8 @@ const SignIn = () => {
       if (error instanceof FirebaseError) {
         console.error(error.code);
       }
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -63,13 +68,12 @@ const SignIn = () => {
         <div className={styles.mainContainer}>
           <div className={styles.inputContainer}>
             <InputField
-              url="https://api.iconify.design/tabler:mail.svg?color=%23A4A5B5"
+              url="https://api.iconify.design/line-md:email.svg?color=%23A4A5B5"
               placeholder="メールアドレスを入力！！"
               errors={errors.email?.message}
               {...register("email")}
             />
             <InputField
-              url="https://api.iconify.design/tabler:eye.svg?color=%23A4A5B5"
               placeholder="秘密のパスワードを入力してね！！"
               errors={errors.password?.message}
               {...register("password")}
@@ -77,7 +81,9 @@ const SignIn = () => {
             />
           </div>
 
-          <Button type="submit">Sign In</Button>
+          <Button type="submit" isLoading={isLoading}>
+            Sign In
+          </Button>
 
           <div className={styles.divider}>
             <div className={styles.dividerLine}></div>
