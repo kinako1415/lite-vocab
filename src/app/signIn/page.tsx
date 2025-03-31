@@ -18,6 +18,7 @@ import { SignInWithGoogle } from "@/lib/auth";
 
 const SignIn = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const router = useRouter();
 
   const {
@@ -39,10 +40,10 @@ const SignIn = () => {
       const idToken = await userCredential.user.getIdToken();
       // const decodedToken = jwtDecode(idToken);
       const response = await actionsCreateSessionCookie(idToken);
-      router.push("/");
       if (!response.success) {
         return { success: false, error: response.error };
       }
+      setIsSuccess(true);
     } catch (error) {
       if (error instanceof FirebaseError) {
         console.error(error.code);
@@ -56,11 +57,17 @@ const SignIn = () => {
     <div className={styles.container} onClick={(e) => e.stopPropagation()}>
       <motion.form
         initial={{ opacity: 0, scale: "70%", filter: "blur(10px)" }}
-        animate={{ opacity: "100%", scale: "100%", filter: "blur(0px)" }}
+        animate={{
+          opacity: "100%",
+          scale: "100%",
+          filter: "blur(0px)",
+          y: isSuccess ? "500px" : "0",
+        }}
         onSubmit={handleSubmit(onSubmit)}
         transition={{
           duration: 0.2,
           scale: { type: "spring", visualDuration: 0.3, bounce: 0.3 },
+          y: { type: "spring", visualDuration: 0.3, bounce: 0.3 },
           filter: { duration: 0.3 },
         }}
       >

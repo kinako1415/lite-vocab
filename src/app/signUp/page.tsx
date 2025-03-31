@@ -29,7 +29,11 @@ const SignUp = () => {
     <div className={styles.container} onClick={(e) => e.stopPropagation()}>
       <motion.form
         initial={{ opacity: 0, scale: "70%", filter: "blur(10px)" }}
-        animate={{ opacity: "100%", scale: "100%", filter: "blur(0px)" }}
+        animate={{
+          opacity: "100%",
+          scale: "100%",
+          filter: "blur(0px)",
+        }}
         transition={{
           duration: 0.2,
           scale: { type: "spring", visualDuration: 0.3, bounce: 0.3 },
