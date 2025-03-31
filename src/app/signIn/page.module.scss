@@ -38,6 +38,12 @@
         }
       }
     }
+    .emojis {
+      position: absolute;
+      span {
+        position: absolute;
+      }
+    }
   }
 
   form {

@@ -21,6 +21,14 @@ const SignIn = () => {
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const router = useRouter();
 
+  const emojiAnimations = [
+    { emoji: "🚀", fontSize: "600%", y: "-240px", x: "100px" },
+    { emoji: "✨", fontSize: "600%", y: "0px", x: "340px" },
+    { emoji: "🫠", fontSize: "500%", y: "260px", x: "300px" },
+    { emoji: "❤️‍🔥", fontSize: "700%", y: "200px", x: "-440px" },
+    { emoji: "😎", fontSize: "900%", y: "-100px", x: "-500px" },
+  ];
+
   const {
     register,
     handleSubmit,
@@ -98,6 +106,27 @@ const SignIn = () => {
             >
               top画面へ進む!!
             </Button>
+            <motion.div
+              className={styles.emojis}
+              initial={{ filter: "blur(10px)" }}
+              animate={{ filter: "blur(0px)" }}
+              transition={{
+                duration: 0.2,
+                type: "spring",
+                visualDuration: 0.3,
+                bounce: 0.3,
+              }}
+            >
+              {emojiAnimations.map(({ emoji, fontSize, y, x }, index) => (
+                <motion.span
+                  key={index}
+                  initial={{ fontSize: "0%", y: "0px", x: "0px" }}
+                  animate={{ fontSize, y, x }}
+                >
+                  {emoji}
+                </motion.span>
+              ))}
+            </motion.div>
           </motion.div>
         )}
 
