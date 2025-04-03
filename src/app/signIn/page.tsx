@@ -22,11 +22,23 @@ const SignIn = () => {
   const router = useRouter();
 
   const emojiAnimations = [
-    { emoji: "🚀", fontSize: "600%", y: "-240px", x: "100px" },
-    { emoji: "✨", fontSize: "600%", y: "0px", x: "340px" },
-    { emoji: "🫠", fontSize: "500%", y: "260px", x: "300px" },
-    { emoji: "❤️‍🔥", fontSize: "700%", y: "200px", x: "-440px" },
-    { emoji: "😎", fontSize: "900%", y: "-100px", x: "-500px" },
+    { emoji: "🚀", fontSize: "600%", y: "-240px", x: "100px", rotate: "20deg" },
+    { emoji: "✨", fontSize: "700%", y: "-40px", x: "340px", rotate: "30deg" },
+    { emoji: "🫠", fontSize: "500%", y: "260px", x: "300px", rotate: "25deg" },
+    {
+      emoji: "❤️‍🔥",
+      fontSize: "700%",
+      y: "200px",
+      x: "-440px",
+      rotate: "-20deg",
+    },
+    {
+      emoji: "😎",
+      fontSize: "900%",
+      y: "-100px",
+      x: "-500px",
+      rotate: "-30deg",
+    },
   ];
 
   const {
@@ -117,15 +129,23 @@ const SignIn = () => {
                 bounce: 0.3,
               }}
             >
-              {emojiAnimations.map(({ emoji, fontSize, y, x }, index) => (
-                <motion.span
-                  key={index}
-                  initial={{ fontSize: "0%", y: "0px", x: "0px" }}
-                  animate={{ fontSize, y, x }}
-                >
-                  {emoji}
-                </motion.span>
-              ))}
+              {emojiAnimations.map(
+                ({ emoji, fontSize, y, x, rotate }, index) => (
+                  <motion.span
+                    key={index}
+                    initial={{
+                      fontSize: "0%",
+                      y: "0px",
+                      x: "0px",
+                      rotate: "0deg",
+                    }}
+                    animate={{ fontSize, y, x }}
+                    whileHover={{ rotate }}
+                  >
+                    {emoji}
+                  </motion.span>
+                )
+              )}
             </motion.div>
           </motion.div>
         )}
