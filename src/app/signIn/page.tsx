@@ -5,7 +5,7 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/lib/firebase";
 import { actionsCreateSessionCookie } from "../actions/createSessionCookie";
 // import { jwtDecode } from "jwt-decode";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import Button from "@/components/elements/Button";
 import Image from "next/image";
 import { InputField } from "@/components/elements/Input";
@@ -76,79 +76,93 @@ const SignIn = () => {
   return (
     <>
       <div className={styles.container} onClick={(e) => e.stopPropagation()}>
-        {isSuccess && (
-          <motion.div
-            className={styles.completeContainer}
-            initial={{
-              opacity: 0,
-              scale: "0%",
-              filter: "blur(10px)",
-              y: "300px",
-            }}
-            animate={{
-              opacity: "100%",
-              scale: "100%",
-              filter: "blur(0px)",
-            }}
-            transition={{
-              duration: 0.2,
-              scale: { type: "spring", visualDuration: 0.3, bounce: 0.3 },
-              y: { type: "spring", visualDuration: 0.3, bounce: 0.3 },
-              filter: { duration: 0.3 },
-            }}
-          >
-            <div className={styles.mainContainer}>
-              <Image
-                src="https://api.iconify.design/material-symbols:check-circle-rounded.svg?color=%2325BCFF"
-                alt="check"
-                width={80}
-                height={80}
-              />
-              <div className={styles.textContainer}>
-                <div className={styles.title}>✨サインイン完了!!!!!!</div>
-                <div className={styles.subTitle}>
-                  やっとアプリが使えるようになるね!!
-                </div>
-              </div>
-            </div>
-            <Button
-              onClick={() => {
-                router.push("/signUp");
-              }}
-            >
-              top画面へ進む!!
-            </Button>
+        <AnimatePresence>
+          {isSuccess && (
             <motion.div
-              className={styles.emojis}
-              initial={{ filter: "blur(10px)" }}
-              animate={{ filter: "blur(0px)" }}
+              className={styles.completeContainer}
+              initial={{
+                opacity: 0,
+                scale: "0%",
+                filter: "blur(10px)",
+                y: "300px",
+              }}
+              animate={{
+                opacity: "100%",
+                scale: "100%",
+                filter: "blur(0px)",
+              }}
               transition={{
                 duration: 0.2,
-                type: "spring",
-                visualDuration: 0.3,
-                bounce: 0.3,
+                scale: { type: "spring", visualDuration: 0.3, bounce: 0.3 },
+                y: { type: "spring", visualDuration: 0.3, bounce: 0.3 },
+                filter: { duration: 0.3 },
+              }}
+              exit={{
+                opacity: 0,
+                scale: "0%",
+                filter: "blur(10px)",
+                y: "300px",
               }}
             >
-              {emojiAnimations.map(
-                ({ emoji, fontSize, y, x, rotate }, index) => (
-                  <motion.span
-                    key={index}
-                    initial={{
-                      fontSize: "0%",
-                      y: "0px",
-                      x: "0px",
-                      rotate: "0deg",
-                    }}
-                    animate={{ fontSize, y, x }}
-                    whileHover={{ rotate }}
-                  >
-                    {emoji}
-                  </motion.span>
-                )
-              )}
+              <div className={styles.mainContainer}>
+                <Image
+                  src="https://api.iconify.design/material-symbols:check-circle-rounded.svg?color=%2325BCFF"
+                  alt="check"
+                  width={80}
+                  height={80}
+                />
+                <div className={styles.textContainer}>
+                  <div className={styles.title}>✨サインイン完了!!!!!!</div>
+                  <div className={styles.subTitle}>
+                    やっとアプリが使えるようになるね!!
+                  </div>
+                </div>
+              </div>
+              <Button
+                onClick={() => {
+                  router.push("/signUp");
+                }}
+              >
+                top画面へ進む!!
+              </Button>
+              <motion.div
+                className={styles.emojis}
+                initial={{ filter: "blur(10px)" }}
+                animate={{ filter: "blur(0px)" }}
+                transition={{
+                  duration: 0.2,
+                  type: "spring",
+                  visualDuration: 0.3,
+                  bounce: 0.3,
+                }}
+              >
+                {emojiAnimations.map(
+                  ({ emoji, fontSize, y, x, rotate }, index) => (
+                    <motion.span
+                      key={index}
+                      initial={{
+                        fontSize: "0%",
+                        y: "0px",
+                        x: "0px",
+                        rotate: "0deg",
+                      }}
+                      animate={{ fontSize, y, x }}
+                      whileHover={{ rotate }}
+                      exit={{
+                        fontSize: "0%",
+                        y: "0px",
+                        x: "0px",
+                        rotate: "0deg",
+                      }}
+                    >
+                      {emoji}
+                    </motion.span>
+                  )
+                )}
+              </motion.div>
             </motion.div>
-          </motion.div>
-        )}
+          )}
+        </AnimatePresence>
 
         <motion.form
           initial={{ opacity: 0, scale: "70%", filter: "blur(10px)" }}
