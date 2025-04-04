@@ -106,7 +106,7 @@ const SignIn = () => {
             >
               <div className={styles.mainContainer}>
                 <Image
-                  src="https://api.iconify.design/material-symbols:check-circle-rounded.svg?color=%2325BCFF"
+                  src="https://api.iconify.design/line-md:circle-filled-to-confirm-circle-filled-transition.svg?color=%2325BCFF"
                   alt="check"
                   width={80}
                   height={80}

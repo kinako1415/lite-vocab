@@ -4,9 +4,11 @@ import { auth } from "@/lib/firebase";
 import { useEffect, useState } from "react";
 import { onAuthStateChanged, signOut, User } from "firebase/auth";
 import { deleteSessionCookie } from "./actions/deleteSessionCookie";
+import styles from "./page.module.scss";
 
 export default function Home() {
   const [user, setUser] = useState<User | null>(null);
+  const [isActive, setIsActive] = useState<boolean>(false);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -40,6 +42,14 @@ export default function Home() {
         >
           サインアウトかも
         </button>
+        <div
+          className={`${styles.boxContainer} ${isActive && styles.active}`}
+          onClick={() => {
+            setIsActive(!isActive);
+          }}
+        >
+          ☺️形容詞まとめ
+        </div>
       </div>
       <div>{user ? user.email : ""}</div>
     </div>
