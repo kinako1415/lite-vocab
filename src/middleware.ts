@@ -7,12 +7,12 @@ export async function middleware(req: NextRequest) {
 
   if (!isLoggedIn) {
     if (
-      req.nextUrl.pathname === "/signIn" ||
-      req.nextUrl.pathname === "/signUp"
+      req.nextUrl.pathname === "/signin" ||
+      req.nextUrl.pathname === "/signup"
     ) {
       return;
     }
-    return NextResponse.redirect(`${process.env.NEXT_PUBLIC_API_URL}/signIn`);
+    return NextResponse.redirect(`${process.env.NEXT_PUBLIC_API_URL}/signin`);
   }
 
   const response = await fetch(
@@ -26,12 +26,12 @@ export async function middleware(req: NextRequest) {
   );
 
   if (!response.ok) {
-    return NextResponse.redirect(`${process.env.NEXT_PUBLIC_API_URL}/signIn`);
+    return NextResponse.redirect(`${process.env.NEXT_PUBLIC_API_URL}/signin`);
   }
 
   if (
-    req.nextUrl.pathname === "/signIn" ||
-    req.nextUrl.pathname === "/signUp"
+    req.nextUrl.pathname === "/signin" ||
+    req.nextUrl.pathname === "/signup"
   ) {
     return NextResponse.redirect(`${process.env.NEXT_PUBLIC_API_URL}/`);
   }
@@ -40,5 +40,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/", "/signIn", "/signUp"],
+  matcher: ["/", "/signin", "/signup"],
 };

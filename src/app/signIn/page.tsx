@@ -120,7 +120,7 @@ const SignIn = () => {
               </div>
               <Button
                 onClick={() => {
-                  router.push("/signUp");
+                  router.push("/signup");
                 }}
               >
                 top画面へ進む!!
@@ -242,7 +242,7 @@ const SignIn = () => {
               <motion.span
                 className={styles.highlightText}
                 onClick={() => {
-                  router.push("/signUp");
+                  router.push("/signup");
                 }}
                 initial={{
                   opacity: "100%",

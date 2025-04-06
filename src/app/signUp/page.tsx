@@ -100,7 +100,7 @@ const SignUp = () => {
             <motion.span
               className={styles.highlightText}
               onClick={() => {
-                router.push("/signIn");
+                router.push("/signin");
               }}
               initial={{
                 opacity: "100%",
