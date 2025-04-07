@@ -26,13 +26,10 @@ export const CreateUser = async ({
     .then(async (userCredential) => {
       const user = userCredential.user;
       const userData = {
-        email: user.email ?? "", // email が null じゃないことを保証
+        email: user.email ?? "",
         userId: user.uid,
-        createdAt: serverTimestamp(), // 必ず serverTimestamp を使う
+        createdAt: serverTimestamp(),
       };
-
-      // ✅ データを確認してから送ると良い
-      console.log("Firestoreに登録するユーザー情報:", userData);
 
       await setDoc(doc(db, "users", user.uid), userData);
 
