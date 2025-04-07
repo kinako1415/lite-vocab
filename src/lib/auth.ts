@@ -2,13 +2,14 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
-import { auth } from "./firebase";
+import { auth, db } from "./firebase";
 import { GoogleAuthProvider, signInWithPopup, User } from "firebase/auth";
 import {
   actionsCreateSessionCookie,
   AsyncResult,
 } from "@/app/actions/createSessionCookie";
 import { FirebaseError } from "firebase/app";
+import { doc, serverTimestamp, setDoc } from "firebase/firestore";
 
 export const CreateUser = async ({
   email,
@@ -22,9 +23,20 @@ export const CreateUser = async ({
   }
 
   createUserWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {
+    .then(async (userCredential) => {
       const user = userCredential.user;
-      console.log(user);
+      const userData = {
+        email: user.email ?? "", // email が null じゃないことを保証
+        userId: user.uid,
+        createdAt: serverTimestamp(), // 必ず serverTimestamp を使う
+      };
+
+      // ✅ データを確認してから送ると良い
+      console.log("Firestoreに登録するユーザー情報:", userData);
+
+      await setDoc(doc(db, "users", user.uid), userData);
+
+      console.log("ユーザー登録 & Firestore登録 完了:", user);
     })
     .catch((error) => {
       const errorCode = error.code;
