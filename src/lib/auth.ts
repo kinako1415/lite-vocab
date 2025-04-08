@@ -32,8 +32,6 @@ export const CreateUser = async ({
       };
 
       await setDoc(doc(db, "users", user.uid), userData);
-
-      console.log("ユーザー登録 & Firestore登録 完了:", user);
     })
     .catch((error) => {
       const errorCode = error.code;
@@ -80,9 +78,17 @@ export const SignInWithGoogle = async (): Promise<
     const idToken = await userCredential.user.getIdToken();
     const response = await actionsCreateSessionCookie(idToken);
 
+    const userData = {
+      email: userCredential.user.email ?? "",
+      userId: userCredential.user.uid,
+      createdAt: serverTimestamp(),
+    };
+
     if (!response.success) {
       return { success: false, error: response.error };
     }
+
+    await setDoc(doc(db, "users", userCredential.user.uid), userData);
     return {
       success: true,
       data: { user: userCredential.user },
