@@ -1,4 +1,10 @@
-import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import {
+  collection,
+  addDoc,
+  serverTimestamp,
+  deleteDoc,
+  doc,
+} from "firebase/firestore";
 import { auth, db } from "./firebase";
 
 export const addBox = async () => {
@@ -13,6 +19,20 @@ export const addBox = async () => {
       createdAt: serverTimestamp(),
       name: "単語まとめ",
     });
+  } catch (e) {
+    console.error("Error adding document: ", e);
+  }
+};
+
+export const deleteBox = async (boxesId: string) => {
+  try {
+    const user = auth.currentUser;
+
+    if (!user) {
+      throw new Error("ログインしていません");
+    }
+
+    await deleteDoc(doc(db, "users", user.uid, "boxes", boxesId));
   } catch (e) {
     console.error("Error adding document: ", e);
   }

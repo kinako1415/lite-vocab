@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { onAuthStateChanged, signOut, User } from "firebase/auth";
 import { deleteSessionCookie } from "./actions/deleteSessionCookie";
 import styles from "./page.module.scss";
-import { addBox } from "@/lib/firestore";
+import { addBox, deleteBox } from "@/lib/firestore";
 
 export default function Home() {
   const [user, setUser] = useState<User | null>(null);
