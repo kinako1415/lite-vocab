@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { onAuthStateChanged, signOut, User } from "firebase/auth";
 import { deleteSessionCookie } from "./actions/deleteSessionCookie";
 import styles from "./page.module.scss";
+import { addBox } from "@/lib/firestore";
 
 export default function Home() {
   const [user, setUser] = useState<User | null>(null);
@@ -50,6 +51,13 @@ export default function Home() {
         >
           ☺️形容詞まとめ
         </div>
+        <button
+          onClick={() => {
+            addBox();
+          }}
+        >
+          あいうえおかきくけこ
+        </button>
       </div>
       <div>{user ? user.email : ""}</div>
     </div>

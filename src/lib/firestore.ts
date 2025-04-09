@@ -1,13 +1,18 @@
-import { collection, addDoc } from "firebase/firestore";
-import { db } from "./firebase";
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { auth, db } from "./firebase";
 
-export const addWord = async () => {
+export const addBox = async () => {
   try {
-    const docRef = await addDoc(collection(db, "words"), {
-      word: "friend",
-      meaning: "ともだち",
+    const user = auth.currentUser;
+
+    if (!user) {
+      throw new Error("ログインしていません");
+    }
+
+    await addDoc(collection(db, "users", user.uid, "boxes"), {
+      createdAt: serverTimestamp(),
+      name: "単語まとめ",
     });
-    console.log("Document written", docRef);
   } catch (e) {
     console.error("Error adding document: ", e);
   }
