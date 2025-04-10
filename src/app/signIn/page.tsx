@@ -6,7 +6,7 @@ import { auth } from "@/lib/firebase";
 import { actionsCreateSessionCookie } from "../actions/createSessionCookie";
 // import { jwtDecode } from "jwt-decode";
 import { AnimatePresence, motion } from "framer-motion";
-import Button from "@/components/elements/Button";
+import { Button } from "@/components/elements/Button";
 import Image from "next/image";
 import { InputField } from "@/components/elements/Input";
 import { SubmitHandler, useForm } from "react-hook-form";

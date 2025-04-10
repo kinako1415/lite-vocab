@@ -1,7 +1,7 @@
 "use client";
 import styles from "./page.module.scss";
 import { CreateUser, SignInWithGoogle } from "@/lib/auth";
-import Button from "@/components/elements/Button";
+import { Button } from "@/components/elements/Button";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";

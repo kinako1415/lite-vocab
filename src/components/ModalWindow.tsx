@@ -8,7 +8,7 @@ type ModalWindowType = {
   isOpen: boolean;
 };
 
-const ModalWindow: React.FC<ModalWindowType> = ({
+export const ModalWindow: React.FC<ModalWindowType> = ({
   children,
   setIsOpen,
   isOpen,
@@ -40,5 +40,3 @@ const ModalWindow: React.FC<ModalWindowType> = ({
     </>
   );
 };
-
-export default ModalWindow;

@@ -1,26 +1,22 @@
 "ues client";
 import { motion } from "framer-motion";
-import styles from "./Button.module.scss";
+import styles from "./OutlineButton.module.scss";
 import Image from "next/image";
 
-export const Button = ({
+export const OutlineButton = ({
   children,
   type,
   onClick,
-  color,
   isLoading,
 }: {
   children: React.ReactNode;
   type?: "button" | "submit" | "reset" | undefined;
   onClick?: () => void;
-  color?: "gray";
   isLoading?: boolean;
 }) => {
   return (
     <motion.button
-      className={`${styles.button} ${color ? styles[color] : ""} ${
-        isLoading && styles.loading
-      }`}
+      className={`${styles.button} ${isLoading && styles.loading}`}
       initial={{ opacity: "100%" }}
       whileHover={{ opacity: "90%" }}
       whileTap={{ scale: 0.98 }}

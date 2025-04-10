@@ -6,6 +6,7 @@ import { onAuthStateChanged, signOut, User } from "firebase/auth";
 import { deleteSessionCookie } from "./actions/deleteSessionCookie";
 import styles from "./page.module.scss";
 import { addBox } from "@/lib/firestore";
+import { OutlineButton } from "@/components/elements/OutlineButton";
 
 export default function Home() {
   const [user, setUser] = useState<User | null>(null);
@@ -58,6 +59,7 @@ export default function Home() {
         >
           あいうえおかきくけこ
         </button>
+        <OutlineButton>単語まとめの作成</OutlineButton>
       </div>
       <div>{user ? user.email : ""}</div>
     </div>
