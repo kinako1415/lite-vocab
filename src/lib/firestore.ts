@@ -4,6 +4,8 @@ import {
   serverTimestamp,
   deleteDoc,
   doc,
+  getDoc,
+  getDocs,
 } from "firebase/firestore";
 import { auth, db } from "./firebase";
 
@@ -33,6 +35,27 @@ export const deleteBox = async (boxesId: string) => {
     }
 
     await deleteDoc(doc(db, "users", user.uid, "boxes", boxesId));
+  } catch (e) {
+    console.error("Error adding document: ", e);
+  }
+};
+
+export const getBox = async () => {
+  try {
+    const user = auth.currentUser;
+
+    if (!user) {
+      throw new Error("ログインしていません");
+    }
+
+    const docSnap = await getDocs(collection(db, "users", user.uid, "boxes"));
+
+    const boxes = docSnap.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+
+    return boxes;
   } catch (e) {
     console.error("Error adding document: ", e);
   }

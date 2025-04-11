@@ -53,7 +53,7 @@ export const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
               {...rest}
             />
           )}
-          {url ? (
+          {(isPassword || url) && (
             <Image
               src={
                 isPassword
@@ -74,8 +74,6 @@ export const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
               onClick={isPassword ? () => setIsHidden(!isHidden) : () => {}}
               style={{ cursor: "pointer" }}
             />
-          ) : (
-            ""
           )}
         </div>
       </div>
