@@ -32,6 +32,7 @@ export const WordModal: React.FC<WordModalType> = ({ setIsOpen, isOpen }) => {
       setIsLoading(true);
       reset();
       await addBox(form.name);
+      setIsOpen(false);
     } catch (error) {
       console.log(error);
     } finally {

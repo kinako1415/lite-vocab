@@ -7,6 +7,7 @@ import { deleteSessionCookie } from "./actions/deleteSessionCookie";
 import styles from "./page.module.scss";
 import { OutlineButton } from "@/components/elements/OutlineButton";
 import { WordModal } from "@/components/WordModal";
+import { Button } from "@/components/elements/Button";
 
 export default function Home() {
   const [user, setUser] = useState<User | null>(null);
@@ -39,13 +40,13 @@ export default function Home() {
     <div>
       <WordModal setIsOpen={setIsOpen} isOpen={isOpen} />
       <div>
-        <button
+        <Button
           onClick={() => {
             handleSignOut();
           }}
         >
           サインアウトかも
-        </button>
+        </Button>
         <div
           className={`${styles.boxContainer} ${isActive && styles.active}`}
           onClick={() => {

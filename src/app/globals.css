@@ -37,3 +37,11 @@ body {
   --gray-800: #2b2d3a;
   --gray-900: #0a0c1a;
 }
+
+button {
+  font-family: var(--font-zen-kaku-gothic), sans-serif;
+}
+
+input {
+  font-family: var(--font-zen-kaku-gothic), sans-serif;
+}
