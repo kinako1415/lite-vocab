@@ -36,6 +36,7 @@ export const Button = ({
           width={28}
           height={28}
           priority
+          className={styles.image}
         />
       ) : (
         children

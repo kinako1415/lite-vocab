@@ -8,7 +8,7 @@ import { InputField } from "./elements/Input";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { wordBoxSchema, wordBoxValue } from "@/schemas/wordBox";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 type WordModalType = {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -22,14 +22,16 @@ export const WordModal: React.FC<WordModalType> = ({ setIsOpen, isOpen }) => {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm<wordBoxValue>({
     resolver: zodResolver(wordBoxSchema),
   });
 
   const onSubmit: SubmitHandler<wordBoxValue> = async (form) => {
     try {
-      addBox(form.name);
       setIsLoading(true);
+      reset();
+      await addBox(form.name);
     } catch (error) {
       console.log(error);
     } finally {
@@ -40,6 +42,12 @@ export const WordModal: React.FC<WordModalType> = ({ setIsOpen, isOpen }) => {
   const handleBackgroundClick = () => {
     setIsOpen(false);
   };
+
+  useEffect(() => {
+    if (isOpen === false) {
+      reset();
+    }
+  }, [isOpen, reset]);
 
   return (
     <>
@@ -69,16 +77,13 @@ export const WordModal: React.FC<WordModalType> = ({ setIsOpen, isOpen }) => {
             <div className={styles.mainContainer}>
               <div className={styles.inputContainer}>
                 <InputField
-                  url="https://api.iconify.design/line-md:email.svg?color=%23A4A5B5"
                   placeholder="単語ボックスの名前を入れて！！"
                   errors={errors.name?.message}
                   {...register("name")}
                 />
               </div>
 
-              <Button type="submit" isLoading={isLoading}>
-                Sign In
-              </Button>
+              <Button isLoading={isLoading}>単語ボックスを追加</Button>
             </div>
           </motion.form>
         </div>
