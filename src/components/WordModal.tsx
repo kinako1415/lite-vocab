@@ -7,7 +7,7 @@ import { Button } from "./elements/Button";
 import { InputField } from "./elements/Input";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { signInSchema, signInValue } from "@/schemas/signIn";
+import { wordBoxSchema, wordBoxValue } from "@/schemas/wordBox";
 import { useState } from "react";
 
 export const WordModal = () => {
@@ -17,11 +17,11 @@ export const WordModal = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<signInValue>({
-    resolver: zodResolver(signInSchema),
+  } = useForm<wordBoxValue>({
+    resolver: zodResolver(wordBoxSchema),
   });
 
-  const onSubmit: SubmitHandler<signInValue> = async () => {
+  const onSubmit: SubmitHandler<wordBoxValue> = async () => {
     try {
       addBox();
       setIsLoading(true);
