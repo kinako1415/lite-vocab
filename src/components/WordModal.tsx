@@ -26,9 +26,9 @@ export const WordModal: React.FC<WordModalType> = ({ setIsOpen, isOpen }) => {
     resolver: zodResolver(wordBoxSchema),
   });
 
-  const onSubmit: SubmitHandler<wordBoxValue> = async () => {
+  const onSubmit: SubmitHandler<wordBoxValue> = async (form) => {
     try {
-      addBox();
+      addBox(form.name);
       setIsLoading(true);
     } catch (error) {
       console.log(error);
@@ -71,14 +71,8 @@ export const WordModal: React.FC<WordModalType> = ({ setIsOpen, isOpen }) => {
                 <InputField
                   url="https://api.iconify.design/line-md:email.svg?color=%23A4A5B5"
                   placeholder="単語ボックスの名前を入れて！！"
-                  errors={errors.email?.message}
-                  {...register("email")}
-                />
-                <InputField
-                  placeholder="秘密のパスワードを入力してね！！"
-                  errors={errors.password?.message}
-                  {...register("password")}
-                  isPassword={true}
+                  errors={errors.name?.message}
+                  {...register("name")}
                 />
               </div>
 

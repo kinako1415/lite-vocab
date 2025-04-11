@@ -7,7 +7,7 @@ import {
 } from "firebase/firestore";
 import { auth, db } from "./firebase";
 
-export const addBox = async () => {
+export const addBox = async (name: string) => {
   try {
     const user = auth.currentUser;
 
@@ -17,7 +17,7 @@ export const addBox = async () => {
 
     await addDoc(collection(db, "users", user.uid, "boxes"), {
       createdAt: serverTimestamp(),
-      name: "単語まとめ",
+      name: name,
     });
   } catch (e) {
     console.error("Error adding document: ", e);

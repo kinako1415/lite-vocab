@@ -63,13 +63,6 @@ export default function Home() {
         </OutlineButton>
       </div>
       <div>{user ? user.email : ""}</div>
-      <button
-        onClick={() => {
-          setIsOpen(!isOpen);
-        }}
-      >
-        slfkj
-      </button>
     </div>
   );
 }
