@@ -17,8 +17,6 @@ export const OutlineButton = ({
   return (
     <motion.button
       className={`${styles.button} ${isLoading && styles.loading}`}
-      initial={{ opacity: "100%" }}
-      whileHover={{ opacity: "90%" }}
       whileTap={{ scale: 0.98 }}
       type={type}
       onClick={() => {

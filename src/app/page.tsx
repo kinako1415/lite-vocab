@@ -63,7 +63,7 @@ export default function Home() {
           単語まとめの作成
         </OutlineButton>
       </div>
-      <div>{user ? user.email : ""}</div>
+      {/* <div>{user ? user.email : ""}</div> */}
     </div>
   );
 }

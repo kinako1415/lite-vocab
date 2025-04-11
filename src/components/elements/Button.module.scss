@@ -9,6 +9,11 @@
   background-color: var(--primary-400);
   color: var(--white-100);
   border: none;
+  transition: 300ms;
+}
+
+.button:hover {
+  background-color: var(--primary-300);
 }
 
 .gray {

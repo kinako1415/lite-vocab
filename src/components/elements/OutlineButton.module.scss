@@ -9,4 +9,9 @@
   background-color: var(--primary-400);
   border: 2px solid var(--primary-300);
   color: var(--white-100);
+  transition: 300ms;
+}
+
+.button:hover {
+  background-color: var(--primary-300);
 }
