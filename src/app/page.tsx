@@ -8,7 +8,6 @@ import styles from "./page.module.scss";
 import { OutlineButton } from "@/components/elements/OutlineButton";
 import { WordModal } from "@/components/WordModal";
 import { Button } from "@/components/elements/Button";
-import { getBox } from "@/lib/firestore";
 
 export default function Home() {
   const [user, setUser] = useState<User | null>(null);
@@ -62,14 +61,6 @@ export default function Home() {
         >
           サインアウトかも
         </Button>
-        <Button
-          onClick={async () => {
-            const boxes = await getBox();
-            console.log(boxes);
-          }}
-        >
-          ボックスゲット
-        </Button>
         <div
           className={`${styles.boxContainer} ${isActive && styles.active}`}
           onClick={() => {
@@ -79,7 +70,6 @@ export default function Home() {
           ☺️ 形容詞まとめ
         </div>
       </div>
-      {/* <div>{user ? user.email : ""}</div> */}
     </div>
   );
 }
