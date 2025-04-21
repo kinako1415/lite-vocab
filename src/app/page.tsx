@@ -16,6 +16,8 @@ export default function Home() {
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
+  const wordBoxes = ["形容詞まとめ", "名詞まとめ", "簡単単語集"];
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
@@ -61,6 +63,9 @@ export default function Home() {
         >
           サインアウトかも
         </Button>
+        {wordBoxes.map((boxName, i) => (
+          <Button key={i}>{boxName}</Button>
+        ))}
         <div
           className={`${styles.boxContainer} ${isActive && styles.active}`}
           onClick={() => {
