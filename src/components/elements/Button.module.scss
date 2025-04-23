@@ -18,7 +18,11 @@
 
 .gray {
   background-color: var(--gray-50);
+  color: #0a0c1a;
   padding: 8px 0;
+}
+.gray:hover {
+  background-color: var(--gray-100);
 }
 
 .loading {

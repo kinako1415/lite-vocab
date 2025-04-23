@@ -8,15 +8,12 @@ import styles from "./page.module.scss";
 import { OutlineButton } from "@/components/elements/OutlineButton";
 import { WordModal } from "@/components/WordModal";
 import { Button } from "@/components/elements/Button";
+import { Left } from "@/components/page/Left";
 
 export default function Home() {
   const [user, setUser] = useState<User | null>(null);
   const [isActive, setIsActive] = useState<boolean>(false);
   const router = useRouter();
-
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-
-  const wordBoxes = ["形容詞まとめ", "名詞まとめ", "簡単単語集"];
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -40,39 +37,41 @@ export default function Home() {
 
   return (
     <div>
-      <WordModal setIsOpen={setIsOpen} isOpen={isOpen} />
       <div
         style={{
           display: "flex",
-          flexDirection: "column",
-          gap: "16px",
-          margin: "16px",
+          width: "100vw",
+          height: "100vh",
         }}
       >
-        <OutlineButton
-          onClick={() => {
-            setIsOpen(!isOpen);
-          }}
-        >
-          単語まとめの作成
-        </OutlineButton>
-        <Button
-          onClick={() => {
-            handleSignOut();
-          }}
-        >
-          サインアウトかも
-        </Button>
-        {wordBoxes.map((boxName, i) => (
-          <Button key={i}>{boxName}</Button>
-        ))}
+        <Left />
         <div
-          className={`${styles.boxContainer} ${isActive && styles.active}`}
-          onClick={() => {
-            setIsActive(!isActive);
+          style={{
+            display: "flex",
+            gap: "16px",
+            flexDirection: "column",
+            width: "100%",
+            padding: "16px",
+            backgroundColor: "#FFFFFF",
+            borderRadius: "32px 0 0 32px",
           }}
         >
-          ☺️ 形容詞まとめ
+          <Button
+            color="gray"
+            onClick={() => {
+              handleSignOut();
+            }}
+          >
+            サインアウトかも
+          </Button>
+          <div
+            className={`${styles.boxContainer} ${isActive && styles.active}`}
+            onClick={() => {
+              setIsActive(!isActive);
+            }}
+          >
+            ☺️ 形容詞まとめ
+          </div>
         </div>
       </div>
     </div>
