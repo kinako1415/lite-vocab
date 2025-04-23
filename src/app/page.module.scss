@@ -1,21 +1,21 @@
 .boxContainer {
   width: 100%;
-  height: 46px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--primary-100);
-  background-color: var(--primary-400);
+  color: var(--gray-400);
+  background-color: var(--gray-50);
   font-weight: 500;
   font-size: 14px;
+  padding: 16px 0;
   border-radius: 16px;
   transition: 200ms;
 }
 
 .boxContainer:hover {
-  background-color: var(--primary-300);
+  background-color: var(--gray-100);
 }
 
 .active {
-  color: var(--white-100);
+  color: var(--gray-900);
 }

@@ -5,13 +5,11 @@ import { useEffect, useState } from "react";
 import { onAuthStateChanged, signOut, User } from "firebase/auth";
 import { deleteSessionCookie } from "./actions/deleteSessionCookie";
 import styles from "./page.module.scss";
-import { OutlineButton } from "@/components/elements/OutlineButton";
-import { WordModal } from "@/components/WordModal";
 import { Button } from "@/components/elements/Button";
 import { Left } from "@/components/page/Left";
 
 export default function Home() {
-  const [user, setUser] = useState<User | null>(null);
+  const [, setUser] = useState<User | null>(null);
   const [isActive, setIsActive] = useState<boolean>(false);
   const router = useRouter();
 
