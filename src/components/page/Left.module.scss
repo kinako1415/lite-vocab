@@ -1,7 +1,13 @@
 .container {
-  width: 18%;
+  width: 256px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 24px;
   margin: 16px;
+}
+
+.boxContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }

@@ -17,9 +17,11 @@ export const Left = () => {
       >
         単語まとめの作成
       </OutlineButton>
-      {wordBoxes.map((boxName, i) => (
-        <Button key={i}>{boxName}</Button>
-      ))}
+      <div className={styles.boxContainer}>
+        {wordBoxes.map((boxName, i) => (
+          <Button key={i}>{boxName}</Button>
+        ))}
+      </div>
     </div>
   );
 };
