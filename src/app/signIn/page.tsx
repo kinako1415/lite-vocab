@@ -217,7 +217,6 @@ const SignIn = () => {
                 color="gray"
                 onClick={
                   SignInWithGoogle
-                  // router.push("/signUp");
                 }
               >
                 <Image
