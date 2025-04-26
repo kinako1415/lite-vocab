@@ -57,7 +57,6 @@ const SignIn = () => {
         form.password
       );
       const idToken = await userCredential.user.getIdToken();
-      // const decodedToken = jwtDecode(idToken);
       const response = await actionsCreateSessionCookie(idToken);
       if (!response.success) {
         return { success: false, error: response.error };
