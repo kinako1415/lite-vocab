@@ -3,6 +3,7 @@ import { Button } from "../elements/Button";
 import { OutlineButton } from "../elements/OutlineButton";
 import styles from "./Left.module.scss";
 import { WordModal } from "../WordModal";
+import { getBox } from "@/lib/firestore";
 
 export const Left = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -19,7 +20,9 @@ export const Left = () => {
       </OutlineButton>
       <div className={styles.boxContainer}>
         {wordBoxes.map((boxName, i) => (
-          <Button key={i}>{boxName}</Button>
+          <Button key={i} onClick={() => getBox}>
+            {boxName}
+          </Button>
         ))}
       </div>
     </div>

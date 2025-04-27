@@ -55,8 +55,11 @@ export const getBox = async () => {
       ...doc.data(),
     }));
 
+    console.log("取得したボックス一覧:", boxes); // ← ここでログ出す！
+
     return boxes;
   } catch (e) {
-    console.error("Error adding document: ", e);
+    console.error("Error getting boxes: ", e);
+    return [];
   }
 };
