@@ -20,7 +20,7 @@ export const Left = () => {
       </OutlineButton>
       <div className={styles.boxContainer}>
         {wordBoxes.map((boxName, i) => (
-          <Button key={i} onClick={() => getBox}>
+          <Button key={i} onClick={() => getBox()}>
             {boxName}
           </Button>
         ))}

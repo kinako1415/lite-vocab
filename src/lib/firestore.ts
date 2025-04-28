@@ -4,7 +4,6 @@ import {
   serverTimestamp,
   deleteDoc,
   doc,
-  getDoc,
   getDocs,
 } from "firebase/firestore";
 import { auth, db } from "./firebase";
@@ -55,11 +54,10 @@ export const getBox = async () => {
       ...doc.data(),
     }));
 
-    console.log("取得したボックス一覧:", boxes); // ← ここでログ出す！
+    console.log(boxes);
 
     return boxes;
   } catch (e) {
-    console.error("Error getting boxes: ", e);
-    return [];
+    console.error("Error adding document: ", e);
   }
 };
