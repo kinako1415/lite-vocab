@@ -7,15 +7,20 @@ import { deleteSessionCookie } from "./actions/deleteSessionCookie";
 import styles from "./page.module.scss";
 import { Button } from "@/components/elements/Button";
 import { Left } from "@/components/page/Left";
+import { useSetAtom } from "jotai";
+import { boxesAtom } from "@/store/boxesAtom";
+import { getBox } from "@/lib/firestore";
 
 export default function Home() {
   const [, setUser] = useState<User | null>(null);
   const [isActive, setIsActive] = useState<boolean>(false);
   const router = useRouter();
+  const setBoxes = useSetAtom(boxesAtom);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
+      setBoxes(getBox());
     });
 
     return () => unsubscribe();

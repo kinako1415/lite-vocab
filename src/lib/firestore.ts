@@ -5,6 +5,7 @@ import {
   deleteDoc,
   doc,
   getDocs,
+  Timestamp,
 } from "firebase/firestore";
 import { auth, db } from "./firebase";
 
@@ -39,6 +40,10 @@ export const deleteBox = async (boxesId: string) => {
   }
 };
 
+interface FirestoreItem {
+  id: string;
+}
+
 export const getBox = async () => {
   try {
     const user = auth.currentUser;
@@ -56,7 +61,7 @@ export const getBox = async () => {
 
     console.log(boxes);
 
-    return boxes;
+    return boxes as FirestoreItem[];
   } catch (e) {
     console.error("Error adding document: ", e);
   }

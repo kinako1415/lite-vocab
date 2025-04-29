@@ -1,9 +1,7 @@
 import { atom } from "jotai";
 
-interface boxesProp {
-  createdAt: string;
+interface Box {
   id: string;
-  name: string;
 }
 
-export const boxesAtom = atom<boxesProp[]>([]);
+export const boxesAtom = atom<Box[]>();
