@@ -10,6 +10,7 @@ import { Left } from "@/components/page/Left";
 import { useSetAtom } from "jotai";
 import { boxesAtom } from "@/store/boxesAtom";
 import { getBox } from "@/lib/firestore";
+import { Timestamp } from "firebase/firestore";
 
 export default function Home() {
   const [, setUser] = useState<User | null>(null);
@@ -18,13 +19,18 @@ export default function Home() {
   const setBoxes = useSetAtom(boxesAtom);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       setUser(currentUser);
-      setBoxes(getBox());
+      const data = await getBox();
+      const sanitizedData = data.map((box) => ({
+        ...box,
+        createdAt: box.createdAt || new Timestamp(0, 0),
+      }));
+      setBoxes(sanitizedData);
     });
 
     return () => unsubscribe();
-  }, []);
+  }, [setBoxes]);
 
   const handleSignOut = async () => {
     try {

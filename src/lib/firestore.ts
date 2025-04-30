@@ -8,6 +8,7 @@ import {
   Timestamp,
 } from "firebase/firestore";
 import { auth, db } from "./firebase";
+import { converter } from "./converter";
 
 export const addBox = async (name: string) => {
   try {
@@ -40,11 +41,13 @@ export const deleteBox = async (boxesId: string) => {
   }
 };
 
-interface FirestoreItem {
+interface Boxes {
   id: string;
+  name: string;
+  createdAt?: Timestamp;
 }
 
-export const getBox = async () => {
+export const getBox = async (): Promise<Boxes[]> => {
   try {
     const user = auth.currentUser;
 
@@ -52,17 +55,24 @@ export const getBox = async () => {
       throw new Error("ログインしていません");
     }
 
-    const docSnap = await getDocs(collection(db, "users", user.uid, "boxes"));
+    const docSnap = await getDocs(
+      collection(db, "users", user.uid, "boxes").withConverter(
+        converter<Boxes>()
+      )
+    );
 
-    const boxes = docSnap.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
+    const boxes = docSnap.docs
+      .map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }))
+      .filter((box): box is Boxes => !!box.createdAt && !!box.name);
 
     console.log(boxes);
 
-    return boxes as FirestoreItem[];
+    return boxes;
   } catch (e) {
     console.error("Error adding document: ", e);
+    return [];
   }
 };

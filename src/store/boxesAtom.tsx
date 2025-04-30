@@ -1,7 +1,10 @@
+import { Timestamp } from "firebase/firestore";
 import { atom } from "jotai";
 
-interface Box {
+interface Boxes {
+  createdAt: Timestamp;
+  name: string;
   id: string;
 }
 
-export const boxesAtom = atom<Box[]>();
+export const boxesAtom = atom<Boxes[]>();

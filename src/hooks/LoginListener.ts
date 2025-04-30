@@ -5,7 +5,7 @@ import Cookies from "js-cookie";
 import { auth } from "./../lib/firebase";
 
 const LoginListener = () => {
-  const [user, setUser] = useState<User | null>(null);
+  const [, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
