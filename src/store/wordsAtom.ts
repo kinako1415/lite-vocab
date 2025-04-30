@@ -1,4 +1,4 @@
-import { Word } from "@/types/word";
+import { Words } from "@/types/word";
 import { atom } from "jotai";
 
-export const wordsCacheAtom = atom<Record<string, Word[]>>({});
+export const wordsCacheAtom = atom<Record<string, Words[]>>({});

@@ -6,6 +6,7 @@ import { useAtom, useAtomValue } from "jotai";
 import { boxesAtom } from "@/store/boxesAtom";
 import { ToggleButton } from "../elements/ToggleButton";
 import { wordsCacheAtom } from "@/store/wordsAtom";
+import { getWord } from "@/lib/firestore";
 
 export const Left = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -16,9 +17,8 @@ export const Left = () => {
 
   const handleClick = async (boxId: string) => {
     setActiveBoxes(boxId);
-
     if (!wordsCache[boxId]) {
-      const words = await fetchWordsByBoxId(boxId);
+      const words = await getWord(boxId);
       setWordsCache((prev) => ({
         ...prev,
         [boxId]: words,
@@ -44,6 +44,7 @@ export const Left = () => {
               isActive={boxName.id === activeBoxes ? true : false}
               onClick={() => {
                 setActiveBoxes(boxName.id);
+                handleClick(boxName.id);
               }}
             >
               {boxName.name}
