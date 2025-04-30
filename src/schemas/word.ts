@@ -1,7 +1,6 @@
 import { z } from "zod";
 
 export const wordSchemas = z.object({
-  createdAt: z.string(),
   meaning: z
     .string()
     .min(1, "意味を追加してください")

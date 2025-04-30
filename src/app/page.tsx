@@ -4,7 +4,6 @@ import { auth } from "@/lib/firebase";
 import { useEffect, useState } from "react";
 import { onAuthStateChanged, signOut, User } from "firebase/auth";
 import { deleteSessionCookie } from "./actions/deleteSessionCookie";
-import styles from "./page.module.scss";
 import { Button } from "@/components/elements/Button";
 import { Left } from "@/components/page/Left";
 import { useSetAtom } from "jotai";
@@ -14,7 +13,6 @@ import { Timestamp } from "firebase/firestore";
 
 export default function Home() {
   const [, setUser] = useState<User | null>(null);
-  const [isActive, setIsActive] = useState<boolean>(false);
   const router = useRouter();
   const setBoxes = useSetAtom(boxesAtom);
 
@@ -73,14 +71,6 @@ export default function Home() {
           >
             サインアウトかも
           </Button>
-          <div
-            className={`${styles.boxContainer} ${isActive && styles.active}`}
-            onClick={() => {
-              setIsActive(!isActive);
-            }}
-          >
-            ☺️ 形容詞まとめ
-          </div>
         </div>
       </div>
     </div>

@@ -1,16 +1,31 @@
 import { useState } from "react";
-import { Button } from "../elements/Button";
 import { OutlineButton } from "../elements/OutlineButton";
 import styles from "./Left.module.scss";
 import { WordModal } from "../WordModal";
-import { useAtomValue } from "jotai";
+import { useAtom, useAtomValue } from "jotai";
 import { boxesAtom } from "@/store/boxesAtom";
 import { ToggleButton } from "../elements/ToggleButton";
+import { wordsCacheAtom } from "@/store/wordsAtom";
 
 export const Left = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [activeBoxes, setActiveBoxes] = useState<string>("");
+  const [wordsCache, setWordsCache] = useAtom(wordsCacheAtom);
 
   const wordBoxes = useAtomValue(boxesAtom);
+
+  const handleClick = async (boxId: string) => {
+    setActiveBoxes(boxId);
+
+    if (!wordsCache[boxId]) {
+      const words = await fetchWordsByBoxId(boxId);
+      setWordsCache((prev) => ({
+        ...prev,
+        [boxId]: words,
+      }));
+    }
+  };
+
   return (
     <div className={styles.container}>
       <WordModal setIsOpen={setIsOpen} isOpen={isOpen} />
@@ -22,11 +37,17 @@ export const Left = () => {
         単語まとめの作成
       </OutlineButton>
       <div className={styles.boxContainer}>
-        <ToggleButton isActive>active</ToggleButton>
-        <ToggleButton isActive={false}>not active</ToggleButton>
         {wordBoxes &&
           wordBoxes.map((boxName, i) => (
-            <Button key={i}>{boxName.name}</Button>
+            <ToggleButton
+              key={i}
+              isActive={boxName.id === activeBoxes ? true : false}
+              onClick={() => {
+                setActiveBoxes(boxName.id);
+              }}
+            >
+              {boxName.name}
+            </ToggleButton>
           ))}
       </div>
     </div>

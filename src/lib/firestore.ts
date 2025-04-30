@@ -5,10 +5,10 @@ import {
   deleteDoc,
   doc,
   getDocs,
-  Timestamp,
 } from "firebase/firestore";
 import { auth, db } from "./firebase";
 import { converter } from "./converter";
+import { Boxes } from "@/types/boxes";
 
 export const addBox = async (name: string) => {
   try {
@@ -40,12 +40,6 @@ export const deleteBox = async (boxesId: string) => {
     console.error("Error adding document: ", e);
   }
 };
-
-interface Boxes {
-  id: string;
-  name: string;
-  createdAt?: Timestamp;
-}
 
 export const getBox = async (): Promise<Boxes[]> => {
   try {
