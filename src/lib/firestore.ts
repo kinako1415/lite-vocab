@@ -106,3 +106,25 @@ export const getWord = async (boxesId: string): Promise<Words[]> => {
     return [];
   }
 };
+
+export const addWord = async (
+  word: string,
+  meaning: string,
+  boxesId: string
+) => {
+  try {
+    const user = auth.currentUser;
+
+    if (!user) {
+      throw new Error("ログインしていません");
+    }
+
+    await addDoc(collection(db, "users", user.uid, "boxes", boxesId), {
+      createdAt: serverTimestamp(),
+      word: word,
+      meaning: meaning,
+    });
+  } catch (e) {
+    console.error("Error adding document: ", e);
+  }
+};

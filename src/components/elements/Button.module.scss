@@ -4,12 +4,13 @@
   font-size: 16px;
   border-radius: 16px;
   justify-content: center;
+  height: fit-content;
   align-items: center;
   font-weight: 500;
   background-color: var(--primary-400);
   color: var(--white-100);
   border: none;
-  transition: 300ms;
+  transition: 200ms;
 }
 
 .button:hover {

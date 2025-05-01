@@ -25,7 +25,7 @@ export const WordsContent: React.FC = () => {
       <div className={styles.buttonContainer}>
         {wordsCache[activeBoxes]?.map((data, i) => {
           return (
-            <Button key={i} color="gray">
+            <Button color="gray" key={i}>
               {data.meaning}
             </Button>
           );
