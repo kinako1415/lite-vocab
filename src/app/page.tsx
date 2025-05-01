@@ -10,6 +10,7 @@ import { useSetAtom } from "jotai";
 import { boxesAtom } from "@/store/boxesAtom";
 import { getBox } from "@/lib/firestore";
 import { Timestamp } from "firebase/firestore";
+import { WordsContent } from "@/components/page/WordsContent";
 
 export default function Home() {
   const [, setUser] = useState<User | null>(null);
@@ -56,20 +57,21 @@ export default function Home() {
           style={{
             display: "flex",
             gap: "16px",
-            flexDirection: "column",
+            // flexDirection: "column",
             width: "100%",
             padding: "16px",
             backgroundColor: "#FFFFFF",
             borderRadius: "32px 0 0 32px",
           }}
         >
+          <WordsContent></WordsContent>
           <Button
             color="gray"
             onClick={() => {
               handleSignOut();
             }}
           >
-            サインアウトかも
+            サインアウトします
           </Button>
         </div>
       </div>

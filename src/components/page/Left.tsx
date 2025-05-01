@@ -3,16 +3,16 @@ import { OutlineButton } from "../elements/OutlineButton";
 import styles from "./Left.module.scss";
 import { WordModal } from "../WordModal";
 import { useAtom, useAtomValue } from "jotai";
-import { boxesAtom } from "@/store/boxesAtom";
+import { activeBoxesAtom, boxesAtom } from "@/store/boxesAtom";
 import { ToggleButton } from "../elements/ToggleButton";
 import { wordsCacheAtom } from "@/store/wordsAtom";
 import { getWord } from "@/lib/firestore";
 
 export const Left = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [activeBoxes, setActiveBoxes] = useState<string>("");
   const [wordsCache, setWordsCache] = useAtom(wordsCacheAtom);
 
+  const [activeBoxes, setActiveBoxes] = useAtom(activeBoxesAtom);
   const wordBoxes = useAtomValue(boxesAtom);
 
   const handleClick = async (boxId: string) => {
