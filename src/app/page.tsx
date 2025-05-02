@@ -64,7 +64,7 @@ export default function Home() {
             borderRadius: "32px 0 0 32px",
           }}
         >
-          <WordsContent></WordsContent>
+          <WordsContent />
           <Button
             color="gray"
             onClick={() => {

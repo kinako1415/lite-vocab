@@ -3,7 +3,7 @@ import styles from "./page.module.scss";
 import { useRouter } from "next/navigation";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/lib/firebase";
-import { actionsCreateSessionCookie } from "../actions/createSessionCookie";
+import { actionsCreateSessionCookie } from "../../actions/createSessionCookie";
 import { AnimatePresence, motion } from "framer-motion";
 import { Button } from "@/components/elements/Button";
 import Image from "next/image";
@@ -211,13 +211,7 @@ const SignIn = () => {
             </div>
 
             <div className={styles.authContainer}>
-              <Button
-                type="submit"
-                color="gray"
-                onClick={
-                  SignInWithGoogle
-                }
-              >
+              <Button type="submit" color="gray" onClick={SignInWithGoogle}>
                 <Image
                   src="https://api.iconify.design/devicon:google.svg?color=%23293641"
                   alt="google"
