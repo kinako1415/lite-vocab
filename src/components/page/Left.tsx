@@ -16,7 +16,6 @@ export const Left = () => {
   const wordBoxes = useAtomValue(boxesAtom);
 
   const handleClick = async (boxId: string) => {
-    setActiveBoxes(boxId);
     if (!wordsCache[boxId]) {
       const words = await getWord(boxId);
       setWordsCache((prev) => ({
@@ -29,6 +28,7 @@ export const Left = () => {
   return (
     <div className={styles.container}>
       <BoxesModal setIsOpen={setIsOpen} isOpen={isOpen} />
+      <div className={styles.logo}>lite-vocab</div>
       <OutlineButton
         onClick={() => {
           setIsOpen(!isOpen);
@@ -41,9 +41,12 @@ export const Left = () => {
           wordBoxes.map((boxName, i) => (
             <ToggleButton
               key={i}
-              isActive={boxName.id === activeBoxes ? true : false}
+              isActive={boxName.id === activeBoxes}
               onClick={() => {
-                setActiveBoxes(boxName.id);
+                const nextActive =
+                  boxName.id === activeBoxes ? undefined : boxName.id;
+                console.log(nextActive);
+                setActiveBoxes(nextActive);
                 handleClick(boxName.id);
               }}
             >

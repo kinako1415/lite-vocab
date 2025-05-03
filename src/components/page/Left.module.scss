@@ -6,6 +6,12 @@
   font-weight: 500;
   margin: 16px;
   white-space: nowrap;
+  .logo {
+    font-weight: 900;
+    font-size: 24px;
+    text-align: center;
+    color: var(--white-100);
+  }
 }
 
 .boxContainer {

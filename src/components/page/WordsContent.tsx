@@ -13,29 +13,33 @@ export const WordsContent: React.FC = () => {
   const wordsCache = useAtomValue(wordsCacheAtom);
 
   return (
-    <div className={styles.container}>
-      <WordsModal setIsOpen={setIsOpen} isOpen={isOpen} />
-      <div className={styles.titleContainer}>
-        {wordBoxes
-          ?.filter((data) => data.id === activeBoxes)
-          .map((data) => (
-            <div key={data.id} className={styles.name}>
-              {data.name}
-            </div>
-          ))}
-        <Button color="gray" onClick={() => setIsOpen(!isOpen)}>
-          +
-        </Button>
-      </div>
-      <div className={styles.buttonContainer}>
-        {wordsCache[activeBoxes]?.map((data, i) => {
-          return (
-            <Button color="gray" key={i}>
-              {data.meaning}
+    <>
+      {activeBoxes !== undefined && (
+        <div className={styles.container}>
+          <WordsModal setIsOpen={setIsOpen} isOpen={isOpen} />
+          <div className={styles.titleContainer}>
+            {wordBoxes
+              ?.filter((data) => data.id === activeBoxes)
+              .map((data) => (
+                <div key={data.id} className={styles.name}>
+                  {data.name}
+                </div>
+              ))}
+            <Button color="gray" onClick={() => setIsOpen(!isOpen)}>
+              +
             </Button>
-          );
-        })}
-      </div>
-    </div>
+          </div>
+          <div className={styles.buttonContainer}>
+            {wordsCache[activeBoxes]?.map((data, i) => {
+              return (
+                <Button color="gray" key={i}>
+                  {data.meaning}
+                </Button>
+              );
+            })}
+          </div>
+        </div>
+      )}
+    </>
   );
 };

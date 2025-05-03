@@ -35,7 +35,7 @@ export const WordsModal: React.FC<WordsModalType> = ({ setIsOpen, isOpen }) => {
     try {
       setIsLoading(true);
       reset();
-      await addWord(form.word, form.meaning, activeBoxes);
+      if (activeBoxes) await addWord(form.word, form.meaning, activeBoxes);
       setIsOpen(false);
     } catch (error) {
       console.log(error);

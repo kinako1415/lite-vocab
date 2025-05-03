@@ -61,7 +61,7 @@ export default function Home() {
             width: "100%",
             padding: "24px",
             backgroundColor: "#FFFFFF",
-            borderRadius: "32px 0 0 32px",
+            borderRadius: "32px 0 0 0",
           }}
         >
           <WordsContent />
