@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { OutlineButton } from "../elements/OutlineButton";
 import styles from "./Left.module.scss";
-import { WordModal } from "../WordModal";
+import { BoxesModal } from "../BoxesModal";
 import { useAtom, useAtomValue } from "jotai";
 import { activeBoxesAtom, boxesAtom } from "@/store/boxesAtom";
 import { ToggleButton } from "../elements/ToggleButton";
@@ -28,7 +28,7 @@ export const Left = () => {
 
   return (
     <div className={styles.container}>
-      <WordModal setIsOpen={setIsOpen} isOpen={isOpen} />
+      <BoxesModal setIsOpen={setIsOpen} isOpen={isOpen} />
       <OutlineButton
         onClick={() => {
           setIsOpen(!isOpen);

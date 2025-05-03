@@ -119,7 +119,7 @@ export const addWord = async (
       throw new Error("ログインしていません");
     }
 
-    await addDoc(collection(db, "users", user.uid, "boxes", boxesId), {
+    await addDoc(collection(db, "users", user.uid, "boxes", boxesId, "words"), {
       createdAt: serverTimestamp(),
       word: word,
       meaning: meaning,

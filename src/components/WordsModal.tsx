@@ -1,37 +1,41 @@
 "use client";
-import styles from "./WordModal.module.scss";
+import styles from "./WordsModal.module.scss";
 
-import { addBox } from "@/lib/firestore";
+import { addWord } from "@/lib/firestore";
 import { motion } from "framer-motion";
 import { Button } from "./elements/Button";
 import { InputField } from "./elements/Input";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { wordBoxSchema, wordBoxValue } from "@/schemas/wordBox";
 import { useEffect, useState } from "react";
+import { wordSchemas } from "@/schemas/word";
+import { WordsValue } from "@/types/word";
+import { activeBoxesAtom } from "@/store/boxesAtom";
+import { useAtomValue } from "jotai";
 
-type WordModalType = {
+type WordsModalType = {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   isOpen: boolean;
 };
 
-export const WordModal: React.FC<WordModalType> = ({ setIsOpen, isOpen }) => {
+export const WordsModal: React.FC<WordsModalType> = ({ setIsOpen, isOpen }) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const activeBoxes = useAtomValue(activeBoxesAtom);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm<wordBoxValue>({
-    resolver: zodResolver(wordBoxSchema),
+  } = useForm<WordsValue>({
+    resolver: zodResolver(wordSchemas),
   });
 
-  const onSubmit: SubmitHandler<wordBoxValue> = async (form) => {
+  const onSubmit: SubmitHandler<WordsValue> = async (form) => {
     try {
       setIsLoading(true);
       reset();
-      await addBox(form.name);
+      await addWord(form.word, form.meaning, activeBoxes);
       setIsOpen(false);
     } catch (error) {
       console.log(error);
@@ -78,9 +82,14 @@ export const WordModal: React.FC<WordModalType> = ({ setIsOpen, isOpen }) => {
             <div className={styles.mainContainer}>
               <div className={styles.inputContainer}>
                 <InputField
-                  placeholder="単語ボックスの名前を入れて！！"
-                  errors={errors.name?.message}
-                  {...register("name")}
+                  placeholder="覚えたい単語を入力！！"
+                  errors={errors.word?.message}
+                  {...register("word")}
+                />
+                <InputField
+                  placeholder="単語の意味を入力！！"
+                  errors={errors.meaning?.message}
+                  {...register("meaning")}
                 />
               </div>
 
