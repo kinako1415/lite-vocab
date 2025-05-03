@@ -5,6 +5,7 @@ import { activeBoxesAtom, boxesAtom } from "@/store/boxesAtom";
 import { Button } from "../elements/Button";
 import { wordsCacheAtom } from "@/store/wordsAtom";
 import { WordsModal } from "../WordsModal";
+import { IconButton } from "../elements/IconButton";
 
 export const WordsContent: React.FC = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -25,9 +26,10 @@ export const WordsContent: React.FC = () => {
                   {data.name}
                 </div>
               ))}
-            <Button color="gray" onClick={() => setIsOpen(!isOpen)}>
-              +
-            </Button>
+            <IconButton
+              url="https://api.iconify.design/heroicons:plus-16-solid.svg?color=%237750d3"
+              onClick={() => setIsOpen(!isOpen)}
+            ></IconButton>
           </div>
           <div className={styles.buttonContainer}>
             {wordsCache[activeBoxes]?.map((data, i) => {
