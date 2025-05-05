@@ -1,0 +1,29 @@
+.container {
+  width: 100%;
+  padding: 12px 0;
+  font-size: 16px;
+  border-radius: 16px;
+  justify-content: center;
+  height: fit-content;
+  align-items: center;
+  font-weight: 500;
+  background-color: var(--gray-50);
+  border: none;
+  transition: 200ms;
+  display: flex;
+  flex-direction: column;
+}
+
+.container:hover {
+  background-color: var(--gray-100);
+}
+
+.word {
+  font-size: 16px;
+  color: var(--gray-900);
+}
+
+.meaning {
+  font-size: 12px;
+  color: var(--gray-400);
+}
