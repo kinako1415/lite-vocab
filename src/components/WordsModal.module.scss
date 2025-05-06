@@ -8,7 +8,8 @@
   inset: 0;
   margin: auto;
   z-index: 1000;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(32, 34, 41, 0.7);
+  backdrop-filter: blur(2px);
 
   form {
     border-radius: 20px;

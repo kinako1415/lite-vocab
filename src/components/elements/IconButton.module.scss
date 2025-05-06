@@ -7,4 +7,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  transition: 200ms;
+}
+
+.button:hover {
+  background-color: var(--primary-100);
 }
