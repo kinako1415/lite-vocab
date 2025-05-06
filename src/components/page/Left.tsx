@@ -28,7 +28,7 @@ export const Left = () => {
   return (
     <div className={styles.container}>
       <BoxesModal setIsOpen={setIsOpen} isOpen={isOpen} />
-      <div className={styles.logo}>lite-vocab</div>
+      <div className={styles.logo}>liteVocab</div>
       <OutlineButton
         onClick={() => {
           setIsOpen(!isOpen);
