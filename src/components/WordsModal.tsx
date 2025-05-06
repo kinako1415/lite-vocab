@@ -74,7 +74,7 @@ export const WordsModal: React.FC<WordsModalType> = ({ setIsOpen, isOpen }) => {
             }}
           >
             <div className={styles.titleContainer}>
-              <div className={styles.title}>😎 単語ボックスの追加！</div>
+              <div className={styles.title}>😎 単語の追加！</div>
               <div className={styles.subTitle}>
                 🚀 追加したらたくさんの管理できるかも！！！
               </div>
