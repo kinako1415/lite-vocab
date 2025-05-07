@@ -7,6 +7,8 @@ import { activeBoxesAtom, boxesAtom } from "@/store/boxesAtom";
 import { ToggleButton } from "../elements/ToggleButton";
 import { wordsCacheAtom } from "@/store/wordsAtom";
 import { getWord } from "@/lib/firestore";
+import { translateWord } from "@/lib/gemini";
+import { Button } from "../elements/Button";
 
 export const Left = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -23,6 +25,11 @@ export const Left = () => {
         [boxId]: words,
       }));
     }
+  };
+
+  const handleClick2 = async () => {
+    const result = await translateWord("좋아하다");
+    console.log(result);
   };
 
   return (
@@ -54,6 +61,7 @@ export const Left = () => {
             </ToggleButton>
           ))}
       </div>
+      <Button onClick={handleClick2}>翻訳</Button>
     </div>
   );
 };
