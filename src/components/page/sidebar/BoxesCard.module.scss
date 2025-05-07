@@ -18,3 +18,10 @@
 .button:hover {
   background-color: var(--primary-300);
 }
+
+.buttonContainer {
+  overflow: hidden;
+  align-content: center;
+  display: flex;
+  gap: 4px;
+}

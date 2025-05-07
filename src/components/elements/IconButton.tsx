@@ -9,7 +9,7 @@ export const IconButton = ({
   url,
 }: {
   onClick?: () => void;
-  color?: "gray";
+  color?: "gray" | "purple";
   url: string;
 }) => {
   return (
