@@ -8,7 +8,7 @@ import { BoxesCard } from "./BoxesCard";
 import { wordsCacheAtom } from "@/store/wordsAtom";
 import { getWord } from "@/lib/firestore";
 import { translateWord } from "@/lib/gemini";
-import { Button } from "../../elements/Button";
+import { Button } from "@/components/elements/Button";
 
 export const Sidebar = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -49,6 +49,7 @@ export const Sidebar = () => {
             <BoxesCard
               key={i}
               isActive={boxName.id === activeBoxes}
+              activeBoxId={boxName.id}
               onClick={() => {
                 const nextActive =
                   boxName.id === activeBoxes ? undefined : boxName.id;

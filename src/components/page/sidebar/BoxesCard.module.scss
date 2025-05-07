@@ -23,5 +23,11 @@
   overflow: hidden;
   align-content: center;
   display: flex;
-  gap: 4px;
+  gap: 8px;
+}
+
+.mainContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
 }

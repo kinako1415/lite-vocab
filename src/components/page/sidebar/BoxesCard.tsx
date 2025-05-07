@@ -2,16 +2,23 @@
 import { AnimatePresence, motion } from "framer-motion";
 import styles from "./BoxesCard.module.scss";
 import { IconButton } from "@/components/elements/IconButton";
+import { deleteBox } from "@/lib/firestore";
 
 type BoxesCardProps = {
   children: React.ReactNode;
   isActive: boolean;
   onClick?: () => void;
+  activeBoxId: string;
 };
 
-export const BoxesCard = ({ children, isActive, onClick }: BoxesCardProps) => {
+export const BoxesCard = ({
+  children,
+  isActive,
+  onClick,
+  activeBoxId,
+}: BoxesCardProps) => {
   return (
-    <>
+    <div className={styles.mainContainer}>
       <motion.button
         key={`button-${isActive}`}
         className={`${styles.button} ${isActive && styles.active}`}
@@ -27,9 +34,9 @@ export const BoxesCard = ({ children, isActive, onClick }: BoxesCardProps) => {
           <motion.div
             key="button-container"
             className={styles.buttonContainer}
-            initial={{ height: 0, opacity: 1 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 1 }}
+            initial={{ height: 0, opacity: 1, marginTop: 0 }}
+            animate={{ height: "auto", opacity: 1, marginTop: 8 }}
+            exit={{ height: 0, opacity: 1, marginTop: 0 }}
             transition={{ duration: 0.1 }}
           >
             <IconButton
@@ -39,10 +46,14 @@ export const BoxesCard = ({ children, isActive, onClick }: BoxesCardProps) => {
             <IconButton
               url="https://api.iconify.design/material-symbols:delete-outline.svg?color=%23ffffff"
               color="purple"
+              onClick={async () => {
+                await deleteBox(activeBoxId);
+                console.log("deleted");
+              }}
             />
           </motion.div>
         )}
       </AnimatePresence>
-    </>
+    </div>
   );
 };
