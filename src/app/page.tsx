@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { onAuthStateChanged, signOut, User } from "firebase/auth";
 import { deleteSessionCookie } from "./actions/deleteSessionCookie";
 import { Button } from "@/components/elements/Button";
-import { Left } from "@/components/page/Left";
+import { Sidebar } from "@/components/page/sidebar/Sidebar";
 import { useSetAtom } from "jotai";
 import { boxesAtom } from "@/store/boxesAtom";
 import { getBox } from "@/lib/firestore";
@@ -52,7 +52,7 @@ export default function Home() {
           height: "100vh",
         }}
       >
-        <Left />
+        <Sidebar />
         <div
           style={{
             display: "flex",

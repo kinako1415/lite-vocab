@@ -1,18 +1,14 @@
 "use client";
 import { motion } from "framer-motion";
-import styles from "./ToggleButton.module.scss";
+import styles from "./BoxesCard.module.scss";
 
-type ToggleButtonProps = {
+type BoxesCardProps = {
   children: React.ReactNode;
   isActive: boolean;
   onClick?: () => void;
 };
 
-export const ToggleButton = ({
-  children,
-  isActive,
-  onClick,
-}: ToggleButtonProps) => {
+export const BoxesCard = ({ children, isActive, onClick }: BoxesCardProps) => {
   return (
     <motion.button
       className={`${styles.button} ${isActive && styles.active}`}

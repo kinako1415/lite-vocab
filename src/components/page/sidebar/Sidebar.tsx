@@ -1,16 +1,16 @@
 import { useState } from "react";
-import { OutlineButton } from "../elements/OutlineButton";
-import styles from "./Left.module.scss";
-import { BoxesModal } from "../BoxesModal";
+import { OutlineButton } from "../../elements/OutlineButton";
+import styles from "./Sidebar.module.scss";
+import { BoxesModal } from "./BoxesModal";
 import { useAtom, useAtomValue } from "jotai";
 import { activeBoxesAtom, boxesAtom } from "@/store/boxesAtom";
-import { ToggleButton } from "../elements/ToggleButton";
+import { BoxesCard } from "./BoxesCard";
 import { wordsCacheAtom } from "@/store/wordsAtom";
 import { getWord } from "@/lib/firestore";
 import { translateWord } from "@/lib/gemini";
-import { Button } from "../elements/Button";
+import { Button } from "../../elements/Button";
 
-export const Left = () => {
+export const Sidebar = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [wordsCache, setWordsCache] = useAtom(wordsCacheAtom);
 
@@ -46,7 +46,7 @@ export const Left = () => {
       <div className={styles.boxContainer}>
         {wordBoxes &&
           wordBoxes.map((boxName, i) => (
-            <ToggleButton
+            <BoxesCard
               key={i}
               isActive={boxName.id === activeBoxes}
               onClick={() => {
@@ -58,7 +58,7 @@ export const Left = () => {
               }}
             >
               {boxName.name}
-            </ToggleButton>
+            </BoxesCard>
           ))}
       </div>
       <Button onClick={handleClick2}>翻訳</Button>
