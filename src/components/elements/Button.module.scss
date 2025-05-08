@@ -29,3 +29,11 @@
 .loading {
   padding: 10px 0;
 }
+
+.red {
+  background-color: var(--red-100);
+}
+
+.red:hover {
+  background-color: var(--red-50);
+}

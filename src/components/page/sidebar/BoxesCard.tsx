@@ -3,12 +3,15 @@ import { AnimatePresence, motion } from "framer-motion";
 import styles from "./BoxesCard.module.scss";
 import { IconButton } from "@/components/elements/IconButton";
 import { deleteBox } from "@/lib/firestore";
+import { useState } from "react";
+import { DeleteModal } from "./DeleteModal";
 
 type BoxesCardProps = {
   children: React.ReactNode;
   isActive: boolean;
   onClick?: () => void;
   activeBoxId: string;
+  boxName: string;
 };
 
 export const BoxesCard = ({
@@ -16,7 +19,19 @@ export const BoxesCard = ({
   isActive,
   onClick,
   activeBoxId,
+  boxName,
 }: BoxesCardProps) => {
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+
+  const handleDelete = async () => {
+    try {
+      await deleteBox(activeBoxId);
+    } catch (error) {
+      console.error("Error deleting box:", error);
+    }
+  };
+
   return (
     <div className={styles.mainContainer}>
       <motion.button
@@ -26,8 +41,20 @@ export const BoxesCard = ({
         onClick={() => {
           if (onClick) onClick();
         }}
+        onHoverStart={() => setIsHovered(true)}
+        onHoverEnd={() => setIsHovered(false)}
       >
         {children}
+
+        <AnimatePresence initial={false}>
+          <motion.div
+            className={styles.highlightBar}
+            initial={{ scale: 0 }}
+            animate={{ scale: isHovered ? 1 : 0 }}
+            whileHover={{ scale: 1 }}
+            transition={{ duration: 0.01 }}
+          />
+        </AnimatePresence>
       </motion.button>
       <AnimatePresence initial={false}>
         {isActive && (
@@ -46,14 +73,18 @@ export const BoxesCard = ({
             <IconButton
               url="https://api.iconify.design/material-symbols:delete-outline.svg?color=%23ffffff"
               color="purple"
-              onClick={async () => {
-                await deleteBox(activeBoxId);
-                console.log("deleted");
-              }}
+              onClick={() => setIsDeleteModalOpen(true)}
             />
           </motion.div>
         )}
       </AnimatePresence>
+
+      <DeleteModal
+        isOpen={isDeleteModalOpen}
+        setIsOpen={setIsDeleteModalOpen}
+        onDelete={handleDelete}
+        boxName={boxName}
+      />
     </div>
   );
 };

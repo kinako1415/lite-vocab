@@ -13,7 +13,7 @@ export const Button = ({
   children: React.ReactNode;
   type?: "button" | "submit" | "reset" | undefined;
   onClick?: () => void;
-  color?: "gray";
+  color?: "gray" | "red";
   isLoading?: boolean;
 }) => {
   return (

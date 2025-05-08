@@ -7,6 +7,9 @@ body {
   position: fixed;
   width: 100%;
 
+  --red-50: #fff2f2;
+  --red-100: #eb3d40;
+
   --primary-900: #26007e;
   --primary-800: #330c8f;
   --primary-700: #40179e;

@@ -57,6 +57,7 @@ export const Sidebar = () => {
                 setActiveBoxes(nextActive);
                 handleClick(boxName.id);
               }}
+              boxName={boxName.name}
             >
               {boxName.name}
             </BoxesCard>
