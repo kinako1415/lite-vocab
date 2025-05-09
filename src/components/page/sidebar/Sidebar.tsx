@@ -35,31 +35,32 @@ export const Sidebar = () => {
   return (
     <div className={styles.container}>
       <BoxesModal setIsOpen={setIsOpen} isOpen={isOpen} />
-      <div className={styles.logo}>liteVocab</div>
-      <OutlineButton
-        onClick={() => {
-          setIsOpen(!isOpen);
-        }}
-      >
-        単語まとめの作成
-      </OutlineButton>
+      <div className={styles.titleContainer}>
+        <div className={styles.logo}>liteVocab</div>
+        <OutlineButton
+          onClick={() => {
+            setIsOpen(!isOpen);
+          }}
+        >
+          単語まとめの作成
+        </OutlineButton>
+      </div>
       <div className={styles.boxContainer}>
         {wordBoxes &&
-          wordBoxes.map((boxName, i) => (
+          wordBoxes.map((data, i) => (
             <BoxesCard
               key={i}
-              isActive={boxName.id === activeBoxes}
-              activeBoxId={boxName.id}
+              isActive={data.id === activeBoxes}
+              activeBoxId={data.id}
               onClick={() => {
                 const nextActive =
-                  boxName.id === activeBoxes ? undefined : boxName.id;
-                console.log(nextActive);
+                  data.id === activeBoxes ? undefined : data.id;
                 setActiveBoxes(nextActive);
-                handleClick(boxName.id);
+                handleClick(data.id);
               }}
-              boxName={boxName.name}
+              boxName={data.name}
             >
-              {boxName.name}
+              {data.name}
             </BoxesCard>
           ))}
       </div>

@@ -49,9 +49,9 @@ export const BoxesCard = ({
         <AnimatePresence initial={false}>
           <motion.div
             className={styles.highlightBar}
-            initial={{ scale: 0 }}
-            animate={{ scale: isHovered ? 1 : 0 }}
-            whileHover={{ scale: 1 }}
+            initial={{ scale: 0, y: "-50%" }}
+            animate={{ scale: isHovered ? 1 : 0, y: "-50%" }}
+            whileHover={{ scale: 1, y: "-50%" }}
             transition={{ duration: 0.01 }}
           />
         </AnimatePresence>
