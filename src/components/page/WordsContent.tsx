@@ -3,7 +3,7 @@ import styles from "./WordsContent.module.scss";
 import { useAtomValue } from "jotai";
 import { activeBoxesAtom, boxesAtom } from "@/store/boxesAtom";
 import { wordsCacheAtom } from "@/store/wordsAtom";
-import { WordsModal } from "../WordsModal";
+import { WordsModal } from "./WordsModal";
 import { IconButton } from "../elements/IconButton";
 import { WordsCard } from "./WordsCard";
 

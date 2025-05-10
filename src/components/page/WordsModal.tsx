@@ -3,8 +3,8 @@ import styles from "./WordsModal.module.scss";
 
 import { addWord } from "@/lib/firestore";
 import { motion } from "framer-motion";
-import { Button } from "./elements/Button";
-import { InputField } from "./elements/Input";
+import { Button } from "../elements/Button";
+import { InputField } from "../elements/Input";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
