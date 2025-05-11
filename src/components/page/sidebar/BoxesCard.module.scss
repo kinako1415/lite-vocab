@@ -1,31 +1,36 @@
+.container {
+  display: flex;
+  position: relative;
+  align-items: center;
+}
+
 .mainContainer {
   display: flex;
   flex-direction: column;
   width: 100%;
-  position: relative;
   padding: 0 16px;
+}
 
-  .button {
-    padding: 12px 0;
-    border: none;
-    border-radius: 16px;
-    font-size: 16px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    color: var(--primary-100);
-    background-color: transparent;
-    width: 100%;
+.button {
+  padding: 12px 0;
+  border: none;
+  border-radius: 16px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+  color: var(--primary-100);
+  background-color: transparent;
+  width: 100%;
+
+  &:hover:not(.active) {
+    background-color: var(--primary-300);
   }
 }
 
 .active {
-  background-color: var(--primary-300);
-  color: var(--white-100);
-}
-
-.button:hover {
-  background-color: var(--primary-300);
+  background-color: var(--primary-300) !important;
+  color: var(--white-100) !important;
 }
 
 .buttonContainer {

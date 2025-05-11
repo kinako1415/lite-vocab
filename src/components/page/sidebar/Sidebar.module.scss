@@ -6,6 +6,7 @@
   font-weight: 500;
   margin: 16px 0;
   white-space: nowrap;
+  align-items: center;
   .logo {
     font-weight: 900;
     font-size: 24px;
@@ -17,7 +18,9 @@
 .boxContainer {
   display: flex;
   flex-direction: column;
+
   gap: 8px;
+  width: 100%;
 }
 
 .titleContainer {
