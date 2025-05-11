@@ -41,16 +41,17 @@ export const BoxesCard = ({
             initial={{ scale: 0, y: "-50%" }}
             animate={{
               scale: isActive ? 1 : isHovered ? 1 : 0,
-              scaleY: isActive ? 2 : 1,
+              height: isActive ? "52px" : "26px",
               y: "-50%",
             }}
             whileHover={{
               scale: 1,
-              scaleY: isActive ? 2 : 1,
+              height: isActive ? "52px" : "26px",
               y: "-50%",
             }}
             transition={{
-              duration: 0.01,
+              delay: 0.05,
+              duration: 0.02,
               ease: "easeInOut",
             }}
           />

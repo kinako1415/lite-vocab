@@ -37,13 +37,15 @@ export const Sidebar = () => {
       <BoxesModal setIsOpen={setIsOpen} isOpen={isOpen} />
       <div className={styles.titleContainer}>
         <div className={styles.logo}>liteVocab</div>
-        <OutlineButton
-          onClick={() => {
-            setIsOpen(!isOpen);
-          }}
-        >
-          単語まとめの作成
-        </OutlineButton>
+        <div className={styles.buttonContainer}>
+          <OutlineButton
+            onClick={() => {
+              setIsOpen(!isOpen);
+            }}
+          >
+            単語まとめの作成
+          </OutlineButton>
+        </div>
       </div>
       <div className={styles.boxContainer}>
         {wordBoxes &&

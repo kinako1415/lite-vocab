@@ -1,5 +1,5 @@
 .container {
-  width: 256px;
+  min-width: 220px;
   display: flex;
   flex-direction: column;
   gap: 24px;
@@ -18,11 +18,16 @@
 .boxContainer {
   display: flex;
   flex-direction: column;
-
   gap: 8px;
   width: 100%;
 }
 
 .titleContainer {
-  padding: 0 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  .buttonContainer {
+    padding: 0 16px;
+  }
 }
