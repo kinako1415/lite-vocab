@@ -12,7 +12,7 @@ import { WordsValue } from "@/types/word";
 import { useEffect, useState } from "react";
 
 type WordUpdateModalType = {
-  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsOpen: (isOpen: boolean) => void;
   isOpen: boolean;
   boxesId: string;
   wordId: string;

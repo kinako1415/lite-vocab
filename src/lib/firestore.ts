@@ -6,6 +6,7 @@ import {
   doc,
   getDocs,
   updateDoc,
+  getDoc,
 } from "firebase/firestore";
 import { auth, db } from "./firebase";
 import { converter } from "./converter";
@@ -138,10 +139,7 @@ export const updateWord = async (
 ) => {
   try {
     const user = auth.currentUser;
-
-    if (!user) {
-      throw new Error("ログインしていません");
-    }
+    if (!user) throw new Error("ログインしていません");
 
     const wordRef = doc(
       db,
@@ -152,10 +150,18 @@ export const updateWord = async (
       "words",
       wordId
     );
+
+    const docSnap = await getDoc(wordRef);
+    if (!docSnap.exists()) {
+      throw new Error("単語が存在しません");
+    }
+
+    const existingCreatedAt = docSnap.data().createdAt;
+
     await updateDoc(wordRef, {
-      word: word,
-      meaning: meaning,
-      updatedAt: serverTimestamp(),
+      word,
+      meaning,
+      createdAt: existingCreatedAt,
     });
   } catch (e) {
     console.error("Error updating word: ", e);
