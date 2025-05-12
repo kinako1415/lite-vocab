@@ -24,7 +24,12 @@ export const DeleteModal = ({
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.8 }}
-        transition={{ duration: 0.2 }}
+        transition={{
+          duration: 0.2,
+          scale: { type: "spring", visualDuration: 0.3, bounce: 0.3 },
+          y: { type: "spring", visualDuration: 0.3, bounce: 0.3 },
+          filter: { duration: 0.3 },
+        }}
         className={styles.modal}
         onClick={(e) => e.stopPropagation()}
       >

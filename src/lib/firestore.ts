@@ -5,6 +5,7 @@ import {
   deleteDoc,
   doc,
   getDocs,
+  updateDoc,
 } from "firebase/firestore";
 import { auth, db } from "./firebase";
 import { converter } from "./converter";
@@ -126,5 +127,38 @@ export const addWord = async (
     });
   } catch (e) {
     console.error("Error adding document: ", e);
+  }
+};
+
+export const updateWord = async (
+  boxesId: string,
+  wordId: string,
+  word: string,
+  meaning: string
+) => {
+  try {
+    const user = auth.currentUser;
+
+    if (!user) {
+      throw new Error("ログインしていません");
+    }
+
+    const wordRef = doc(
+      db,
+      "users",
+      user.uid,
+      "boxes",
+      boxesId,
+      "words",
+      wordId
+    );
+    await updateDoc(wordRef, {
+      word: word,
+      meaning: meaning,
+      updatedAt: serverTimestamp(),
+    });
+  } catch (e) {
+    console.error("Error updating word: ", e);
+    throw e;
   }
 };

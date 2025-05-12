@@ -41,12 +41,12 @@ export const BoxesCard = ({
             initial={{ scale: 0, y: "-50%" }}
             animate={{
               scale: isActive ? 1 : isHovered ? 1 : 0,
-              height: isActive ? "52px" : "26px",
+              height: isActive ? "64px" : "26px",
               y: "-50%",
             }}
             whileHover={{
               scale: 1,
-              height: isActive ? "52px" : "26px",
+              height: isActive ? "64px" : "26px",
               y: "-50%",
             }}
             transition={{
@@ -81,15 +81,39 @@ export const BoxesCard = ({
               exit={{ height: 0, opacity: 1, marginTop: 0 }}
               transition={{ duration: 0.1 }}
             >
-              <IconButton
-                url="https://api.iconify.design/heroicons:play-solid.svg?color=%23ffffff"
-                color="purple"
-              />
-              <IconButton
-                url="https://api.iconify.design/material-symbols:delete-outline.svg?color=%23ffffff"
-                color="purple"
-                onClick={() => setIsDeleteModalOpen(true)}
-              />
+              <motion.div
+                initial={{ opacity: 0, y: -10, scale: 0.8 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -10, scale: 0.8 }}
+                transition={{
+                  type: "spring",
+                  stiffness: 800,
+                  damping: 30,
+                  delay: 0.1,
+                }}
+              >
+                <IconButton
+                  url="https://api.iconify.design/heroicons:play-solid.svg?color=%23ffffff"
+                  color="purple"
+                />
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, y: -10, scale: 0.8 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -10, scale: 0.8 }}
+                transition={{
+                  type: "spring",
+                  stiffness: 800,
+                  damping: 30,
+                  delay: 0.2,
+                }}
+              >
+                <IconButton
+                  url="https://api.iconify.design/material-symbols:delete-outline.svg?color=%23ffffff"
+                  color="purple"
+                  onClick={() => setIsDeleteModalOpen(true)}
+                />
+              </motion.div>
             </motion.div>
           )}
         </AnimatePresence>
