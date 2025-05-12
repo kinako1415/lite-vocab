@@ -7,7 +7,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  transition: 200ms;
+  transform-origin: center;
+  cursor: pointer;
 }
 
 .button:hover {

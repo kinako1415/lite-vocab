@@ -15,7 +15,10 @@ export const IconButton = ({
   return (
     <motion.button
       className={`${styles.button} ${color ? styles[color] : ""}`}
-      whileTap={{ scale: 0.98 }}
+      whileTap={{
+        scale: 0.9,
+        transition: { type: "spring", stiffness: 400, damping: 15 },
+      }}
       onClick={() => {
         if (onClick) onClick();
       }}

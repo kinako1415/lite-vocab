@@ -50,7 +50,7 @@ export const BoxesCard = ({
               y: "-50%",
             }}
             transition={{
-              delay: 0.05,
+              delay: 0.1,
               duration: 0.02,
               ease: "easeInOut",
             }}
@@ -61,7 +61,10 @@ export const BoxesCard = ({
         <motion.button
           key={`button-${isActive}`}
           className={`${styles.button} ${isActive ? styles.active : ""}`}
-          whileTap={{ scale: 0.98 }}
+          whileTap={{
+            scale: 0.97,
+            transition: { type: "spring", stiffness: 400, damping: 15 },
+          }}
           onClick={() => {
             if (onClick) onClick();
           }}
