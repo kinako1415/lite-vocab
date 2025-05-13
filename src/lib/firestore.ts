@@ -7,6 +7,8 @@ import {
   getDocs,
   updateDoc,
   getDoc,
+  onSnapshot,
+  Unsubscribe,
 } from "firebase/firestore";
 import { auth, db } from "./firebase";
 import { converter } from "./converter";
@@ -162,5 +164,71 @@ export const updateWord = async (
   } catch (e) {
     console.error("Error updating word: ", e);
     throw e;
+  }
+};
+
+export const subscribeToBoxesWithWords = (
+  onUpdate: (boxes: Boxes[]) => void,
+  onError: (error: Error) => void
+): Unsubscribe => {
+  try {
+    const user = auth.currentUser;
+    if (!user) throw new Error("ログインしていません");
+
+    // ボックスの変更を監視
+    const unsubscribeBoxes = onSnapshot(
+      collection(db, "users", user.uid, "boxes").withConverter(
+        converter<Boxes>()
+      ),
+      async (boxesSnapshot) => {
+        try {
+          const boxes = boxesSnapshot.docs
+            .map((doc) => ({
+              id: doc.id,
+              ...doc.data(),
+            }))
+            .filter((box): box is Boxes => !!box.createdAt && !!box.name);
+
+          // 各ボックスの単語を並列で取得
+          const boxesWithWords = await Promise.all(
+            boxes.map(async (box) => {
+              const wordsSnapshot = await getDocs(
+                collection(
+                  db,
+                  "users",
+                  user.uid,
+                  "boxes",
+                  box.id,
+                  "words"
+                ).withConverter(converter<Words>())
+              );
+
+              const words = wordsSnapshot.docs
+                .map((doc) => ({
+                  id: doc.id,
+                  ...doc.data(),
+                }))
+                .filter((word): word is Words => !!word.createdAt);
+
+              return { ...box, words };
+            })
+          );
+
+          onUpdate(boxesWithWords);
+        } catch (error) {
+          onError(error instanceof Error ? error : new Error("Unknown error"));
+        }
+      },
+      (error) => {
+        onError(error instanceof Error ? error : new Error("Unknown error"));
+      }
+    );
+
+    return () => {
+      unsubscribeBoxes();
+    };
+  } catch (error) {
+    onError(error instanceof Error ? error : new Error("Unknown error"));
+    return () => {}; // エラー時は空のクリーンアップ関数を返す
   }
 };

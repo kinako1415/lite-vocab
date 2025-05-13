@@ -2,33 +2,61 @@
 import { useRouter } from "next/navigation";
 import { auth } from "@/lib/firebase";
 import { useEffect, useState } from "react";
-import { onAuthStateChanged, signOut, User } from "firebase/auth";
+import { onAuthStateChanged, signOut } from "firebase/auth";
 import { deleteSessionCookie } from "./actions/deleteSessionCookie";
 import { Button } from "@/components/elements/Button";
 import { Sidebar } from "@/components/page/sidebar/Sidebar";
 import { useSetAtom } from "jotai";
 import { boxesAtom } from "@/store/boxesAtom";
-import { getBox } from "@/lib/firestore";
+import { subscribeToBoxesWithWords } from "@/lib/firestore";
 import { Timestamp } from "firebase/firestore";
 import { WordsContent } from "@/components/page/WordsContent";
 
 export default function Home() {
-  const [, setUser] = useState<User | null>(null);
   const router = useRouter();
   const setBoxes = useSetAtom(boxesAtom);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-      setUser(currentUser);
-      const data = await getBox();
-      const sanitizedData = data.map((box) => ({
-        ...box,
-        createdAt: box.createdAt || new Timestamp(0, 0),
-      }));
-      setBoxes(sanitizedData);
+    const unsubscribeAuth = onAuthStateChanged(auth, async (currentUser) => {
+      if (currentUser) {
+        try {
+          // リアルタイムリスナーを設定
+          const unsubscribeBoxes = subscribeToBoxesWithWords(
+            (boxes) => {
+              const sanitizedData = boxes.map((box) => ({
+                ...box,
+                createdAt: box.createdAt || new Timestamp(0, 0),
+              }));
+              setBoxes(sanitizedData);
+              setIsLoading(false);
+            },
+            (error) => {
+              console.error("Error in subscription:", error);
+              setError(error);
+              setIsLoading(false);
+            }
+          );
+
+          // クリーンアップ関数を返す
+          return () => {
+            unsubscribeBoxes();
+          };
+        } catch (error) {
+          console.error("Error setting up subscription:", error);
+          setError(error instanceof Error ? error : new Error("Unknown error"));
+          setIsLoading(false);
+        }
+      } else {
+        setBoxes([]);
+        setIsLoading(false);
+      }
     });
 
-    return () => unsubscribe();
+    return () => {
+      unsubscribeAuth();
+    };
   }, [setBoxes]);
 
   const handleSignOut = async () => {
@@ -38,10 +66,18 @@ export default function Home() {
       router.push("/");
       return { success: true };
     } catch (error) {
-      console.log("Sign out error:", error);
+      console.error("Sign out error:", error);
       return { success: false, error: "サインアウトに失敗しました" };
     }
   };
+
+  if (isLoading) {
+    return <div>Loading...</div>; // または適切なローディングコンポーネント
+  }
+
+  if (error) {
+    return <div>Error: {error.message}</div>; // または適切なエラーコンポーネント
+  }
 
   return (
     <div>
@@ -55,6 +91,7 @@ export default function Home() {
         <Sidebar />
         <div
           style={{
+            position: "relative",
             display: "flex",
             gap: "16px",
             width: "100%",
