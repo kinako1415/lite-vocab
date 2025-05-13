@@ -65,8 +65,6 @@ export const getBox = async (): Promise<Boxes[]> => {
       }))
       .filter((box): box is Boxes => !!box.createdAt && !!box.name);
 
-    console.log(boxes);
-
     return boxes;
   } catch (e) {
     console.error("Error adding document: ", e);
@@ -100,11 +98,9 @@ export const getWord = async (boxesId: string): Promise<Words[]> => {
       }))
       .filter((box): box is Words => !!box.createdAt);
 
-    console.log(words);
-
     return words;
   } catch (e) {
-    console.error("Error adding document: ", e);
+    console.error("Error fetching words: ", e);
     return [];
   }
 };

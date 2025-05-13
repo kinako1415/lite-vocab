@@ -57,7 +57,6 @@ export default function Home() {
           style={{
             display: "flex",
             gap: "16px",
-            // flexDirection: "column",
             width: "100%",
             padding: "24px",
             backgroundColor: "#FFFFFF",
