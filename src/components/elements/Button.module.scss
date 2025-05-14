@@ -12,18 +12,31 @@
   border: none;
   transition: 100ms;
   width: 100%;
+  cursor: pointer;
 }
 
-.button:hover {
+.button:hover:not(.disabled) {
   background-color: var(--primary-300);
+}
+
+.button.disabled {
+  background-color: var(--gray-300);
+  color: var(--gray-500);
+  cursor: not-allowed;
 }
 
 .gray {
   background-color: var(--gray-50);
   color: var(--gray-900);
 }
-.gray:hover {
+
+.gray:hover:not(.disabled) {
   background-color: var(--gray-100);
+}
+
+.gray.disabled {
+  background-color: var(--gray-200);
+  color: var(--gray-400);
 }
 
 .loading {
@@ -34,6 +47,11 @@
   background-color: var(--red-100);
 }
 
-.red:hover {
+.red:hover:not(.disabled) {
   background-color: var(--red-50);
+}
+
+.red.disabled {
+  background-color: var(--gray-300);
+  color: var(--gray-500);
 }

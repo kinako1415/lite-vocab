@@ -5,13 +5,14 @@ import { addWord } from "@/lib/firestore";
 import { motion } from "framer-motion";
 import { Button } from "../elements/Button";
 import { InputField } from "../elements/Input";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { SubmitHandler, useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { wordSchemas } from "@/schemas/word";
 import { WordsValue } from "@/types/word";
 import { activeBoxesAtom } from "@/store/boxesAtom";
 import { useAtomValue } from "jotai";
+import { translateWord, TranslationDirection } from "@/lib/gemini";
 
 type WordsModalType = {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -20,6 +21,7 @@ type WordsModalType = {
 
 export const WordsModal: React.FC<WordsModalType> = ({ setIsOpen, isOpen }) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isTranslating, setIsTranslating] = useState<boolean>(false);
   const activeBoxes = useAtomValue(activeBoxesAtom);
 
   const {
@@ -27,9 +29,38 @@ export const WordsModal: React.FC<WordsModalType> = ({ setIsOpen, isOpen }) => {
     handleSubmit,
     formState: { errors },
     reset,
+    setValue,
+    control,
   } = useForm<WordsValue>({
     resolver: zodResolver(wordSchemas),
   });
+
+  const word = useWatch({ control, name: "word" });
+  const meaning = useWatch({ control, name: "meaning" });
+
+  const handleTranslate = async () => {
+    if (!word && !meaning) return;
+    if (word && meaning) return;
+
+    try {
+      setIsTranslating(true);
+      const direction: TranslationDirection = word
+        ? "word-to-meaning"
+        : "meaning-to-word";
+      const text = word || meaning;
+      const translatedText = await translateWord(text, direction);
+
+      if (direction === "word-to-meaning") {
+        setValue("meaning", translatedText);
+      } else {
+        setValue("word", translatedText);
+      }
+    } catch (error) {
+      console.error("Translation error:", error);
+    } finally {
+      setIsTranslating(false);
+    }
+  };
 
   const onSubmit: SubmitHandler<WordsValue> = async (form) => {
     try {
@@ -91,6 +122,14 @@ export const WordsModal: React.FC<WordsModalType> = ({ setIsOpen, isOpen }) => {
                   errors={errors.meaning?.message}
                   {...register("meaning")}
                 />
+                <Button
+                  type="button"
+                  onClick={handleTranslate}
+                  isLoading={isTranslating}
+                  disabled={(!word && !meaning) || (word && meaning)}
+                >
+                  翻訳
+                </Button>
               </div>
 
               <Button isLoading={isLoading}>単語ボックスを追加</Button>

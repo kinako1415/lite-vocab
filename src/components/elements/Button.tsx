@@ -9,26 +9,29 @@ export const Button = ({
   onClick,
   color,
   isLoading,
+  disabled,
 }: {
   children: React.ReactNode;
   type?: "button" | "submit" | "reset" | undefined;
   onClick?: () => void;
   color?: "gray" | "red";
   isLoading?: boolean;
+  disabled?: boolean;
 }) => {
   return (
     <motion.button
       className={`${styles.button} ${color ? styles[color] : ""} ${
         isLoading && styles.loading
-      }`}
+      } ${disabled && styles.disabled}`}
       whileTap={{
-        scale: 0.9,
+        scale: disabled ? 1 : 0.9,
         transition: { type: "spring", stiffness: 400, damping: 15 },
       }}
       type={type}
       onClick={() => {
-        if (onClick) onClick();
+        if (onClick && !disabled) onClick();
       }}
+      disabled={disabled}
     >
       {isLoading ? (
         <Image
