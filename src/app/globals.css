@@ -43,6 +43,8 @@ body {
   --gray-700: #494a58;
   --gray-800: #2b2d3a;
   --gray-900: #0a0c1a;
+
+  --gradient-primary: linear-gradient(90deg, #7750d3 -12.8%, #27beff 114%);
 }
 
 button {

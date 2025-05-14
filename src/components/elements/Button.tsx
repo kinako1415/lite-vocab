@@ -10,6 +10,7 @@ export const Button = ({
   color,
   isLoading,
   disabled,
+  variant,
 }: {
   children: React.ReactNode;
   type?: "button" | "submit" | "reset" | undefined;
@@ -17,12 +18,13 @@ export const Button = ({
   color?: "gray" | "red";
   isLoading?: boolean;
   disabled?: boolean;
+  variant?: "translate";
 }) => {
   return (
     <motion.button
       className={`${styles.button} ${color ? styles[color] : ""} ${
         isLoading && styles.loading
-      } ${disabled && styles.disabled}`}
+      } ${disabled && styles.disabled} ${variant ? styles[variant] : ""}`}
       whileTap={{
         scale: disabled ? 1 : 0.9,
         transition: { type: "spring", stiffness: 400, damping: 15 },

@@ -79,6 +79,11 @@
           cursor: pointer;
         }
       }
+      .buttonContainer {
+        display: flex;
+        gap: 16px;
+        width: 100%;
+      }
     }
   }
 }

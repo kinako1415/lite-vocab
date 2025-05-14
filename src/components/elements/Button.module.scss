@@ -13,6 +13,18 @@
   transition: 100ms;
   width: 100%;
   cursor: pointer;
+
+  &.translate {
+    background: var(--gradient-primary);
+
+    &.disabled {
+      background: var(--gray-100);
+    }
+  }
+
+  &.translate:hover:not(.disabled) {
+    opacity: 0.9;
+  }
 }
 
 .button:hover:not(.disabled) {
@@ -20,8 +32,8 @@
 }
 
 .button.disabled {
-  background-color: var(--gray-300);
-  color: var(--gray-500);
+  background-color: var(--gray-100);
+  color: var(--gray-400);
   cursor: not-allowed;
 }
 
@@ -35,7 +47,7 @@
 }
 
 .gray.disabled {
-  background-color: var(--gray-200);
+  background-color: var(--gray-100);
   color: var(--gray-400);
 }
 
@@ -52,6 +64,6 @@
 }
 
 .red.disabled {
-  background-color: var(--gray-300);
-  color: var(--gray-500);
+  background-color: var(--gray-100);
+  color: var(--gray-400);
 }

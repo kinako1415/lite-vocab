@@ -122,17 +122,19 @@ export const WordsModal: React.FC<WordsModalType> = ({ setIsOpen, isOpen }) => {
                   errors={errors.meaning?.message}
                   {...register("meaning")}
                 />
+              </div>
+              <div className={styles.buttonContainer}>
                 <Button
                   type="button"
                   onClick={handleTranslate}
                   isLoading={isTranslating}
-                  disabled={(!word && !meaning) || (word && meaning)}
+                  disabled={Boolean((!word && !meaning) || (word && meaning))}
+                  variant="translate"
                 >
                   翻訳
                 </Button>
+                <Button isLoading={isLoading}>単語ボックスを追加</Button>
               </div>
-
-              <Button isLoading={isLoading}>単語ボックスを追加</Button>
             </div>
           </motion.form>
         </div>

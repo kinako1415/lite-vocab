@@ -7,8 +7,6 @@ import { activeBoxesAtom, boxesAtom } from "@/store/boxesAtom";
 import { BoxesCard } from "./BoxesCard";
 import { wordsCacheAtom } from "@/store/wordsAtom";
 import { getWord } from "@/lib/firestore";
-import { translateWord } from "@/lib/gemini";
-import { Button } from "@/components/elements/Button";
 
 export const Sidebar = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -25,11 +23,6 @@ export const Sidebar = () => {
         [boxId]: words,
       }));
     }
-  };
-
-  const handleClick2 = async () => {
-    const result = await translateWord("좋아하다");
-    console.log(result);
   };
 
   return (
@@ -66,7 +59,6 @@ export const Sidebar = () => {
             </BoxesCard>
           ))}
       </div>
-      <Button onClick={handleClick2}>翻訳</Button>
     </div>
   );
 };
