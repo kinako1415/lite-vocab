@@ -65,9 +65,8 @@ export const WordsModal: React.FC<WordsModalType> = ({ setIsOpen, isOpen }) => {
   const onSubmit: SubmitHandler<WordsValue> = async (form) => {
     try {
       setIsLoading(true);
-      reset();
       if (activeBoxes) await addWord(form.word, form.meaning, activeBoxes);
-      setIsOpen(false);
+      reset();
     } catch (error) {
       console.log(error);
     } finally {
@@ -133,7 +132,16 @@ export const WordsModal: React.FC<WordsModalType> = ({ setIsOpen, isOpen }) => {
                 >
                   翻訳
                 </Button>
-                <Button isLoading={isLoading}>単語ボックスを追加</Button>
+                <Button
+                  type="button"
+                  onClick={() => setIsOpen(false)}
+                  color="gray"
+                >
+                  キャンセル
+                </Button>
+                <Button type="submit" isLoading={isLoading}>
+                  単語を追加
+                </Button>
               </div>
             </div>
           </motion.form>
