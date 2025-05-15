@@ -81,8 +81,19 @@
       }
       .buttonContainer {
         display: flex;
+        flex-direction: column;
         gap: 16px;
         width: 100%;
+
+        .translateButton {
+          margin-bottom: 8px;
+        }
+
+        .actionButtons {
+          display: flex;
+          gap: 16px;
+          width: 100%;
+        }
       }
     }
   }

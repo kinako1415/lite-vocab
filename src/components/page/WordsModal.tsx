@@ -113,25 +113,29 @@ export const WordsModal: React.FC<WordsModalType> = ({ setIsOpen, isOpen }) => {
                 />
               </div>
               <div className={styles.buttonContainer}>
-                <Button
-                  type="button"
-                  onClick={handleTranslate}
-                  isLoading={isTranslating}
-                  disabled={!word}
-                  variant="translate"
-                >
-                  翻訳
-                </Button>
-                <Button
-                  type="button"
-                  onClick={() => setIsOpen(false)}
-                  color="gray"
-                >
-                  キャンセル
-                </Button>
-                <Button type="submit" isLoading={isLoading}>
-                  単語を追加
-                </Button>
+                <div className={styles.translateButton}>
+                  <Button
+                    type="button"
+                    onClick={handleTranslate}
+                    isLoading={isTranslating}
+                    disabled={!word}
+                    variant="translate"
+                  >
+                    翻訳
+                  </Button>
+                </div>
+                <div className={styles.actionButtons}>
+                  <Button
+                    type="button"
+                    onClick={() => setIsOpen(false)}
+                    color="gray"
+                  >
+                    キャンセル
+                  </Button>
+                  <Button type="submit" isLoading={isLoading}>
+                    単語を追加
+                  </Button>
+                </div>
               </div>
             </div>
           </motion.form>
