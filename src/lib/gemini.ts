@@ -10,23 +10,14 @@ if (!apiKey) {
 // API クライアント初期化
 const genAI = new GoogleGenerativeAI(apiKey);
 
-export type TranslationDirection = "word-to-meaning" | "meaning-to-word";
-
-export const translateWord = async (
-  text: string,
-  direction: TranslationDirection
-): Promise<string> => {
+export const translateWord = async (text: string): Promise<string> => {
   try {
     const model = genAI.getGenerativeModel({
       model: "gemini-2.0-flash",
     });
 
-    const prompt =
-      direction === "word-to-meaning"
-        ? `以下の単語を日本語に翻訳してください。翻訳結果のみを出力してください。
-単語: ${text}`
-        : `以下の日本語の意味を英語の単語に翻訳してください。翻訳結果のみを出力してください。
-意味: ${text}`;
+    const prompt = `以下の単語を日本語に翻訳してください。翻訳結果のみを出力してください。
+単語: ${text}`;
 
     // プロンプトを送信
     const result = await model.generateContent(prompt);

@@ -12,7 +12,7 @@ import { wordSchemas } from "@/schemas/word";
 import { WordsValue } from "@/types/word";
 import { activeBoxesAtom } from "@/store/boxesAtom";
 import { useAtomValue } from "jotai";
-import { translateWord, TranslationDirection } from "@/lib/gemini";
+import { translateWord } from "@/lib/gemini";
 
 type WordsModalType = {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -39,22 +39,12 @@ export const WordsModal: React.FC<WordsModalType> = ({ setIsOpen, isOpen }) => {
   const meaning = useWatch({ control, name: "meaning" });
 
   const handleTranslate = async () => {
-    if (!word && !meaning) return;
-    if (word && meaning) return;
+    if (!word) return;
 
     try {
       setIsTranslating(true);
-      const direction: TranslationDirection = word
-        ? "word-to-meaning"
-        : "meaning-to-word";
-      const text = word || meaning;
-      const translatedText = await translateWord(text, direction);
-
-      if (direction === "word-to-meaning") {
-        setValue("meaning", translatedText);
-      } else {
-        setValue("word", translatedText);
-      }
+      const translatedText = await translateWord(word);
+      setValue("meaning", translatedText);
     } catch (error) {
       console.error("Translation error:", error);
     } finally {
@@ -127,7 +117,7 @@ export const WordsModal: React.FC<WordsModalType> = ({ setIsOpen, isOpen }) => {
                   type="button"
                   onClick={handleTranslate}
                   isLoading={isTranslating}
-                  disabled={Boolean((!word && !meaning) || (word && meaning))}
+                  disabled={!word}
                   variant="translate"
                 >
                   翻訳
