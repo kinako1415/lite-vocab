@@ -1,14 +1,7 @@
 import type { Metadata } from "next";
-import { Zen_Kaku_Gothic_New } from "next/font/google";
-
 import "./globals.css";
+import "./fonts.css";
 import LoginListener from "@/hooks/LoginListener";
-
-const zenKakuGothic = Zen_Kaku_Gothic_New({
-  variable: "--font-zen-kaku-gothic",
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "700"],
-});
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -17,14 +10,14 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="ja">
-      <body className={`${zenKakuGothic.variable} antialiased`}>
-        <LoginListener />
+      <body className="zen-kaku-gothic-new">
         {children}
+        <LoginListener />
       </body>
     </html>
   );

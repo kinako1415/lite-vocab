@@ -1,6 +1,6 @@
 body {
   margin: 0;
-  font-family: var(--font-zen-kaku-gothic), sans-serif;
+  font-family: "Zen Kaku Gothic New", sans-serif;
   background-color: var(--primary-400);
 
   overflow: hidden;
@@ -53,9 +53,9 @@ body {
 }
 
 button {
-  font-family: var(--font-zen-kaku-gothic), sans-serif;
+  font-family: "Zen Kaku Gothic New", sans-serif;
 }
 
 input {
-  font-family: var(--font-zen-kaku-gothic), sans-serif;
+  font-family: "Zen Kaku Gothic New", sans-serif;
 }

@@ -36,7 +36,6 @@ export const WordsModal: React.FC<WordsModalType> = ({ setIsOpen, isOpen }) => {
   });
 
   const word = useWatch({ control, name: "word" });
-  const meaning = useWatch({ control, name: "meaning" });
 
   const handleTranslate = async () => {
     if (!word) return;
