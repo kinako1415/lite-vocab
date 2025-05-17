@@ -9,6 +9,7 @@ import { z } from "zod";
 import { useEffect, useState } from "react";
 import { extractWordsFromUrl } from "@/lib/gemini";
 import { addWord } from "@/lib/firestore";
+import { IconButton } from "@/components/elements/IconButton";
 
 const urlImportSchema = z.object({
   url: z
@@ -32,10 +33,18 @@ export const UrlImportModal: React.FC<UrlImportModalType> = ({
 }) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isExtracting, setIsExtracting] = useState<boolean>(false);
+  const [error, setError] = useState<string | undefined>(undefined);
   const [extractedWords, setExtractedWords] = useState<
     Array<{ word: string; meaning: string }>
   >([]);
   const [currentIndex, setCurrentIndex] = useState<number>(0);
+  const [editingWord, setEditingWord] = useState<{
+    word: string;
+    meaning: string;
+  }>({
+    word: "",
+    meaning: "",
+  });
 
   const {
     register,
@@ -49,11 +58,23 @@ export const UrlImportModal: React.FC<UrlImportModalType> = ({
   const onSubmit: SubmitHandler<UrlImportValue> = async (form) => {
     try {
       setIsExtracting(true);
+      setError(undefined);
       const words = await extractWordsFromUrl(form.url);
       setExtractedWords(words);
       setCurrentIndex(0);
     } catch (error) {
       console.error("Error extracting words:", error);
+      if (error instanceof Error) {
+        if (error.message.includes("429") || error.message.includes("quota")) {
+          setError(
+            "APIの制限に達しました。しばらく待ってから再度お試しください。"
+          );
+        } else if (error.message.includes("API key")) {
+          setError("APIキーの設定に問題があります。");
+        } else {
+          setError("単語の抽出中にエラーが発生しました。");
+        }
+      }
     } finally {
       setIsExtracting(false);
     }
@@ -77,6 +98,20 @@ export const UrlImportModal: React.FC<UrlImportModalType> = ({
     setIsOpen(false);
   };
 
+  const handleWordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEditingWord((prev) => ({ ...prev, word: e.target.value }));
+  };
+
+  const handleMeaningChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEditingWord((prev) => ({ ...prev, meaning: e.target.value }));
+  };
+
+  const handleSaveEdit = () => {
+    const newWords = [...extractedWords];
+    newWords[currentIndex] = { ...editingWord };
+    setExtractedWords(newWords);
+  };
+
   useEffect(() => {
     if (isOpen === false) {
       reset();
@@ -84,6 +119,12 @@ export const UrlImportModal: React.FC<UrlImportModalType> = ({
       setCurrentIndex(0);
     }
   }, [isOpen, reset]);
+
+  useEffect(() => {
+    if (extractedWords.length > 0) {
+      setEditingWord(extractedWords[currentIndex]);
+    }
+  }, [currentIndex, extractedWords]);
 
   return (
     <>
@@ -96,7 +137,13 @@ export const UrlImportModal: React.FC<UrlImportModalType> = ({
               scale: "100%",
             }}
             onClick={(e) => e.stopPropagation()}
-            onSubmit={handleSubmit(onSubmit)}
+            onSubmit={(e) => {
+              if (extractedWords.length > 0) {
+                e.preventDefault();
+                return;
+              }
+              handleSubmit(onSubmit)(e);
+            }}
             transition={{
               duration: 0.2,
               scale: { type: "spring", visualDuration: 0.3, bounce: 0.3 },
@@ -115,7 +162,7 @@ export const UrlImportModal: React.FC<UrlImportModalType> = ({
                 <div className={styles.inputContainer}>
                   <InputField
                     placeholder="URLを入力してください"
-                    errors={errors.url?.message}
+                    errors={errors.url?.message || error}
                     {...register("url")}
                   />
                   <Button
@@ -128,40 +175,43 @@ export const UrlImportModal: React.FC<UrlImportModalType> = ({
                 </div>
               ) : (
                 <div className={styles.previewContainer}>
-                  <div className={styles.previewTitle}>
-                    抽出された単語 ({currentIndex + 1}/{extractedWords.length})
+                  <div className={styles.navigationButtons}>
+                    <IconButton
+                      url="https://api.iconify.design/heroicons:chevron-left-16-solid.svg?color=%237750D3"
+                      onClick={() => {
+                        if (currentIndex > 0) {
+                          handleSaveEdit();
+                          setCurrentIndex((prev) => prev - 1);
+                        }
+                      }}
+                      color={"gray"}
+                    />
+                    <div className={styles.previewTitle}>
+                      読み取った単語！！ ({currentIndex + 1}/
+                      {extractedWords.length})
+                    </div>
+                    <IconButton
+                      url="https://api.iconify.design/heroicons:chevron-right-16-solid.svg?color=%237750D3"
+                      onClick={() => {
+                        if (currentIndex < extractedWords.length - 1) {
+                          handleSaveEdit();
+                          setCurrentIndex((prev) => prev + 1);
+                        }
+                      }}
+                      color={"gray"}
+                    />
                   </div>
                   <div className={styles.wordPreview}>
-                    <div className={styles.word}>
-                      {extractedWords[currentIndex].word}
-                    </div>
-                    <div className={styles.meaning}>
-                      {extractedWords[currentIndex].meaning}
-                    </div>
-                  </div>
-                  <div className={styles.navigationButtons}>
-                    <Button
-                      type="button"
-                      onClick={() =>
-                        setCurrentIndex((prev) => Math.max(0, prev - 1))
-                      }
-                      disabled={currentIndex === 0}
-                      color="gray"
-                    >
-                      前へ
-                    </Button>
-                    <Button
-                      type="button"
-                      onClick={() =>
-                        setCurrentIndex((prev) =>
-                          Math.min(extractedWords.length - 1, prev + 1)
-                        )
-                      }
-                      disabled={currentIndex === extractedWords.length - 1}
-                      color="gray"
-                    >
-                      次へ
-                    </Button>
+                    <InputField
+                      value={editingWord.word}
+                      onChange={handleWordChange}
+                      placeholder="単語"
+                    />
+                    <InputField
+                      value={editingWord.meaning}
+                      onChange={handleMeaningChange}
+                      placeholder="意味"
+                    />
                   </div>
                   <div className={styles.actionButtons}>
                     <Button
@@ -176,7 +226,10 @@ export const UrlImportModal: React.FC<UrlImportModalType> = ({
                     </Button>
                     <Button
                       type="button"
-                      onClick={handleAddWords}
+                      onClick={() => {
+                        handleSaveEdit();
+                        handleAddWords();
+                      }}
                       isLoading={isLoading}
                     >
                       単語を追加
