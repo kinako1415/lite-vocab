@@ -5,6 +5,7 @@ import { activeBoxesAtom, boxesAtom } from "@/store/boxesAtom";
 import { wordsCacheAtom } from "@/store/wordsAtom";
 import { WordsModal } from "./WordsModal";
 import { WordUpdateModal } from "./sidebar/WordUpdateModal";
+import { UrlImportModal } from "./sidebar/UrlImportModal";
 import { IconButton } from "../elements/IconButton";
 import { WordsCard } from "./WordsCard";
 import { Words } from "@/types/word";
@@ -16,6 +17,7 @@ type UpdateModalState = {
 
 export const WordsContent: React.FC = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isUrlImportOpen, setIsUrlImportOpen] = useState<boolean>(false);
   const [updateModal, setUpdateModal] = useState<UpdateModalState>({
     isOpen: false,
     word: null,
@@ -36,6 +38,11 @@ export const WordsContent: React.FC = () => {
       {activeBoxes !== undefined && (
         <div className={styles.container}>
           <WordsModal setIsOpen={setIsOpen} isOpen={isOpen} />
+          <UrlImportModal
+            setIsOpen={setIsUrlImportOpen}
+            isOpen={isUrlImportOpen}
+            boxesId={activeBoxes}
+          />
           {updateModal.word && (
             <WordUpdateModal
               setIsOpen={(isOpen: boolean) =>
@@ -56,10 +63,16 @@ export const WordsContent: React.FC = () => {
                   {data.name}
                 </div>
               ))}
-            <IconButton
-              url="https://api.iconify.design/heroicons:plus-16-solid.svg?color=%237750d3"
-              onClick={() => setIsOpen(!isOpen)}
-            ></IconButton>
+            <div className={styles.buttonGroup}>
+              <IconButton
+                url="https://api.iconify.design/material-symbols:link.svg?color=%237750d3"
+                onClick={() => setIsUrlImportOpen(true)}
+              />
+              <IconButton
+                url="https://api.iconify.design/heroicons:plus-16-solid.svg?color=%237750d3"
+                onClick={() => setIsOpen(!isOpen)}
+              />
+            </div>
           </div>
           <div className={styles.buttonContainer}>
             {wordsCache[activeBoxes]?.map((data, i) => {
