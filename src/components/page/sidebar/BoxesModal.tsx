@@ -80,6 +80,7 @@ export const BoxesModal: React.FC<BoxesModalType> = ({ setIsOpen, isOpen }) => {
                 <InputField
                   placeholder="単語ボックスの名前を入れて！！"
                   errors={errors.name?.message}
+                  maxLength={30}
                   {...register("name")}
                 />
               </div>
