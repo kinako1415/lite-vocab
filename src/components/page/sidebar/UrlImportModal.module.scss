@@ -1,0 +1,88 @@
+.container {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  inset: 0;
+  margin: auto;
+  z-index: 1000;
+  background-color: rgba(32, 34, 41, 0.7);
+
+  form {
+    border-radius: 20px;
+    height: fit-content;
+    width: fit-content;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 100;
+    padding: 54px 48px;
+    background-color: var(--white-100);
+    gap: 56px;
+
+    .titleContainer {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      align-items: center;
+      .title {
+        font-size: 24px;
+        font-weight: 500;
+        color: var(--primary-400);
+      }
+      .subTitle {
+        font-size: 12px;
+        font-weight: 400;
+        color: var(--primary-200);
+      }
+    }
+
+    .mainContainer {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+      width: 400px;
+
+      .inputContainer {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .previewContainer {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+
+        .previewTitle {
+          font-size: 16px;
+          font-weight: 500;
+          color: var(--primary-400);
+          text-align: center;
+        }
+
+        .wordPreview {
+          display: flex;
+          flex-direction: column;
+          gap: 16px;
+          border-radius: 16px;
+        }
+
+        .navigationButtons {
+          display: flex;
+          gap: 16px;
+          justify-content: center;
+          align-items: center;
+        }
+
+        .actionButtons {
+          display: flex;
+          gap: 16px;
+          width: 100%;
+        }
+      }
+    }
+  }
+}
