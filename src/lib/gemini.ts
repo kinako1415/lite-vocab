@@ -63,15 +63,7 @@ URL: ${url}
 }
 
 注意点：
-1. 言語対応について：
-   - サイトの言語を自動的に検出し、適切な単語と意味のペアを抽出してください
-   - 左列が外国語（英語、中国語、韓国語など）、右列が日本語の意味となっている形式を想定しています
-   - 外国語の単語は原形（基本形）で抽出してください
-   - 日本語の意味は簡潔で分かりやすい表現を使用してください
-   - 外国語の単語は小文字で統一してください（固有名詞を除く）
-   - 日本語の意味には「～」という文字を含めることができます
-
-2. 出力形式について：
+1. 出力形式について：
    - 純粋なJSONのみを返してください（マークダウン記法なし）
    - JSONの前後に説明文や追加のテキストを入れないでください
    - すべての文字列はダブルクォート（"）で囲んでください
@@ -79,130 +71,85 @@ URL: ${url}
    - 最後の要素の後にはカンマを付けないでください
    - レスポンスは完全なJSONオブジェクトである必要があります
 
-3. 単語の抽出について：
+2. 単語の抽出について：
    - サイト内の表（<table>タグ）から単語と意味を抽出してください
    - 表の左列が外国語、右列が日本語の意味となっている形式を想定しています
    - 表以外の説明文や解説からは単語を抽出しないでください
    - 表形式でない場合は、外国語と日本語の意味のペアが明確に区別されている部分のみから抽出してください
 
-4. 抽出の基準：
+3. 抽出の基準：
    - 表内の各行を1つの単語エントリとして抽出してください
    - 外国語の単語は原形（基本形）で抽出してください
-     - 英語の場合：
-       - 動詞：原形（例：go, eat, study）
-       - 名詞：単数形（例：book, student）
-       - 形容詞：原級（例：big, beautiful）
-     - 中国語の場合：
-       - 簡体字で統一
-       - ピンインは含めない
-     - 韓国語の場合：
-       - ハングルで統一
-       - ローマ字表記は含めない
    - 日本語の意味は簡潔に抽出してください
    - 表の見出し行は除外してください
    - 空の行や説明文のみの行は除外してください
-   - 表内のすべての有効な単語エントリを抽出してください
+   - 各エントリーは必ず完全な形で出力してください
 
-5. データの品質：
+4. データの品質：
    - 外国語の単語と日本語の意味のペアを正確に抽出してください
    - 余分な説明や注釈は含めないでください
-   - 外国語の単語は適切な形式で統一してください
-   - 日本語の意味は簡潔に抽出してください
-   - 特殊文字や改行を含まないでください
-   - 外国語の単語に含まれるハイフンやアポストロフィは保持してください
-
-6. 特殊なケース：
-   - 表内に複数の意味が記載されている場合は、最初の意味のみを抽出してください
-   - 外国語の単語に括弧付きの説明がある場合は、括弧内の説明は除外してください
-   - 表内の単語が重複している場合は、1回のみ抽出してください
-   - 日本語の意味は簡潔に抽出してください
-   - 外国語の単語が複数形や過去形の場合は、原形に変換してください
-   - 外国語の単語が大文字で始まる場合は、固有名詞として扱い、そのまま保持してください
-   - 中国語や韓国語の場合は、適切な文字コードで保持してください
-
-7. 重要な指示：
-   - 表形式のデータから正確に単語を抽出してください
-   - 表以外の説明文や解説からは単語を抽出しないでください
-   - 表内のすべての有効な単語エントリを抽出してください
-   - 抽出した単語の数に制限を設けないでください
-   - 必ず完全なJSONオブジェクトを返してください
-   - 外国語の単語と日本語の意味の対応を正確に保持してください`;
+   - 特殊文字や改行を含まないでください`;
 
   try {
     const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
     const result = await model.generateContent(prompt);
     const response = await result.response;
     const text = response.text().trim();
+    console.log("Raw response:", text);
 
     // マークダウン記法を除去
     const cleanText = text.replace(/```json\n?|\n?```/g, "").trim();
 
     try {
-      const data = JSON.parse(cleanText);
-
-      if (!data || typeof data !== "object") {
-        throw new Error("Invalid JSON structure");
-      }
-
-      if (!Array.isArray(data.words)) {
-        throw new Error("Missing or invalid 'words' array in response");
-      }
-
-      // 各単語エントリの形式を検証
-      const validWords = data.words.filter((word: WordInfo) => {
-        const trimmedWord = word.word.trim();
-        const trimmedMeaning = word.meaning.trim();
-
-        // 基本的な検証
-        if (
-          typeof word !== "object" ||
-          typeof trimmedWord !== "string" ||
-          typeof trimmedMeaning !== "string" ||
-          trimmedWord === "" ||
-          trimmedMeaning === ""
-        ) {
-          return false;
+      // 不完全なJSONを修復する試み
+      let fixedText = cleanText;
+      if (!cleanText.endsWith("}")) {
+        // 最後の不完全なエントリーを削除
+        const lastCompleteEntry = cleanText.lastIndexOf("},");
+        if (lastCompleteEntry !== -1) {
+          fixedText = cleanText.substring(0, lastCompleteEntry + 1) + "]}";
         }
+      }
 
-        // 「～」が含まれている場合は、それが唯一の特殊文字であることを確認
-        if (trimmedMeaning.includes("～")) {
-          // 「～」以外の特殊文字が含まれていないことを確認
-          const withoutTilde = trimmedMeaning.replace(/～/g, "");
-          if (
-            /[^\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FFF\u3000-\u303F]/.test(
-              withoutTilde
-            )
-          ) {
+      const parsed = JSON.parse(fixedText);
+
+      // 基本的な構造チェック
+      if (
+        !parsed ||
+        typeof parsed !== "object" ||
+        !Array.isArray(parsed.words)
+      ) {
+        throw new Error(
+          "Invalid JSON structure: missing or invalid 'words' array"
+        );
+      }
+
+      // 各単語エントリーの検証
+      const validWords = parsed.words.filter(
+        (entry: { word: string; meaning: string }) => {
+          if (!entry || typeof entry !== "object") return false;
+          if (typeof entry.word !== "string" || !entry.word.trim())
             return false;
-          }
-        }
-
-        // 言語に応じた検証
-        // 英語の場合
-        if (/^[a-zA-Z]/.test(trimmedWord)) {
-          return /^[a-z]/.test(trimmedWord) || /^[A-Z]/.test(trimmedWord);
-        }
-        // 中国語の場合
-        if (/^[\u4e00-\u9fa5]/.test(trimmedWord)) {
+          if (typeof entry.meaning !== "string" || !entry.meaning.trim())
+            return false;
           return true;
         }
-        // 韓国語の場合
-        if (/^[\uac00-\ud7af]/.test(trimmedWord)) {
-          return true;
-        }
-
-        return true;
-      });
+      );
 
       if (validWords.length === 0) {
-        throw new Error("No valid word entries found in response");
+        throw new Error("No valid word entries found in the response");
       }
 
       return validWords;
     } catch (parseError) {
-      console.error("JSON parse error:", parseError);
-      console.error("Raw response:", text);
-      throw new Error("Invalid JSON format in response");
+      console.error("JSON Parse Error:", parseError);
+      console.error("Failed to parse text:", cleanText);
+      if (parseError instanceof SyntaxError) {
+        throw new Error(
+          `JSONの形式が不正です: ${parseError.message}\n応答が途中で切れている可能性があります。`
+        );
+      }
+      throw parseError;
     }
   } catch (error) {
     console.error("Error extracting words:", error);

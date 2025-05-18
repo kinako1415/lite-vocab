@@ -154,7 +154,7 @@ export const UrlImportModal: React.FC<UrlImportModalType> = ({
             <div className={styles.titleContainer}>
               <div className={styles.title}>🌐 URLから単語を取得</div>
               <div className={styles.subTitle}>
-                📚 ウェブサイトから単語を自動で抽出します
+                📚 ウェブサイトから単語簡単入力！！
               </div>
             </div>
             <div className={styles.mainContainer}>
