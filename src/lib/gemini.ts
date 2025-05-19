@@ -47,7 +47,7 @@ type WordInfo = {
   difficulty?: string; // 難易度を追加
 };
 
-// JSONの修復をGeminiに依頼する関数
+// 修復関数がコメントアウトされているため、エラーが発生しています。修復関数を再度有効化します。
 const repairJsonWithGemini = async (
   incompleteJson: string
 ): Promise<string> => {
@@ -97,6 +97,15 @@ ${incompleteJson}
       throw new Error("修復後のJSONの形式が不正です");
     }
 
+    // JSON構文の検証
+    try {
+      JSON.parse(repairedJson);
+    } catch (parseError) {
+      throw new Error(
+        `修復後のJSONが無効です: ${parseError.message}`
+      );
+    }
+
     return repairedJson;
   } catch (error) {
     console.error("JSON repair error:", error);
@@ -105,53 +114,7 @@ ${incompleteJson}
 };
 
 export const extractWordsFromUrl = async (url: string): Promise<WordInfo[]> => {
-  const prompt = `以下のURLから単語とその意味を抽出し、純粋なJSON形式で返してください。
-URL: ${url}
-
-【重要】以下の形式のJSONのみを返してください。マークダウン記法（\`\`\`jsonなど）は使用せず、説明文や追加のテキストも含めないでください：
-
-{
-  "words": [
-    {
-      "word": "agree",
-      "meaning": "賛成する"
-    }
-  ]
-}
-
-注意点：
-1. 出力形式について：
-   - 純粋なJSONのみを返してください（マークダウン記法なし）
-   - JSONの前後に説明文や追加のテキストを入れないでください
-   - すべての文字列はダブルクォート（"）で囲んでください
-   - カンマや波括弧の配置を正確に守ってください
-   - 最後の要素の後にはカンマを付けないでください
-   - レスポンスは完全なJSONオブジェクトである必要があります
-   - 各単語エントリーは必ず完全な形で出力してください（途中で切れないように）
-   - 必ず最後に "]} で終わるようにしてください
-   - 各エントリーは必ず "word" と "meaning" の両方のプロパティを持つこと
-   - できるだけ多くの有効な単語を抽出してください
-
-2. 単語の抽出について：
-   - サイト内の表（<table>タグ）から単語と意味を抽出してください
-   - 表の左列が外国語、右列が日本語の意味となっている形式を想定しています
-   - 表以外の説明文や解説からは単語を抽出しないでください
-   - 表形式でない場合は、外国語と日本語の意味のペアが明確に区別されている部分のみから抽出してください
-   - すべての有効な単語エントリーを抽出してください
-
-3. 抽出の基準：
-   - 表内の各行を1つの単語エントリとして抽出してください
-   - 外国語の単語は原形（基本形）で抽出してください
-   - 日本語の意味は簡潔に抽出してください
-   - 表の見出し行は除外してください
-   - 空の行や説明文のみの行は除外してください
-   - 各エントリーは必ず完全な形で出力してください
-
-4. データの品質：
-   - 外国語の単語と日本語の意味のペアを正確に抽出してください
-   - 余分な説明や注釈は含めないでください
-   - 特殊文字や改行を含まないでください
-   - 各エントリーは必ず完全な形で出力してください`;
+  const prompt = `以下のURLから英単語と日本語の意味のリストを抽出し、純粋なJSON形式で返してください。\nURL: ${url}\n\n【重要】以下の形式のJSONのみを返してください。マークダウン記法（\`\`\`jsonなど）は使用せず、説明文や追加のテキストも含めないでください：\n\n{\n  \"words\": [\n    {\n      \"word\": \"agree\",\n      \"meaning\": \"賛成する\"\n    }\n  ]\n}\n\n注意点：\n1. 出力形式について：\n   - 純粋なJSONのみを返してください（マークダウン記法なし）\n   - JSONの前後に説明文や追加のテキストを入れないでください\n   - すべての文字列はダブルクォート（\"）で囲んでください\n   - カンマや波括弧の配置を正確に守ってください\n   - 最後の要素の後にはカンマを付けないでください\n   - レスポンスは完全なJSONオブジェクトである必要があります\n   - 各単語エントリーは必ず完全な形で出力してください（途中で切れないように）\n   - 必ず最後に \"]} で終わるようにしてください\n   - 各エントリーは必ず \"word\" と \"meaning\" の両方のプロパティを持つこと\n   - サイト内に存在する単語のみを抽出してください。サイトにない単語を生成しないでください。\n   - サイト内のすべての単語を抽出してください。\n\n2. 単語の抽出について：\n   - サイト内の表（<table>タグ）から単語と意味を抽出してください\n   - 表の左列が英単語、右列が日本語の意味となっている形式を想定しています\n   - 表以外の説明文や解説からは単語を抽出しないでください\n   - 表形式でない場合は、英単語と日本語の意味のペアが明確に区別されている部分のみから抽出してください\n   - サイト内のすべての有効な単語エントリーを抽出してください\n\n3. 抽出の基準：\n   - 表内の各行を1つの単語エントリとして抽出してください\n   - 英単語は原形（基本形）で抽出してください\n   - 日本語の意味は簡潔に抽出してください\n   - 表の見出し行は除外してください\n   - 空の行や説明文のみの行は除外してください\n   - 各エントリーは必ず完全な形で出力してください\n\n4. データの品質：\n   - 英単語と日本語の意味のペアを正確に抽出してください\n   - 余分な説明や注釈は含めないでください\n   - 特殊文字や改行を含まないでください\n   - 各エントリーは必ず完全な形で出力してください\n\n5. 出力の完全性：\n   - サイト内のすべての単語を漏れなく抽出してください。\n   - 抽出結果が途中で切れることがないようにしてください。\n   - 必要に応じて複数回に分けて抽出を行い、すべての単語を収集してください。\n   - 抽出結果が多い場合は、JSONの配列を分割して複数のレスポンスに分けることを検討してください。\n\n6. 抽出の精度向上：\n   - サイト内のすべてのHTML要素を解析し、単語と意味のペアを見逃さないようにしてください。\n   - 特に、<table>タグ以外のリスト形式（<ul>や<ol>）や段落（<p>）内にある単語と意味のペアも抽出してください。\n   - ページ全体をスクロールして、動的に読み込まれるコンテンツも含めて抽出してください。\n   - 必要に応じて、ページのHTML構造を詳細に解析して、すべての単語を抽出してください。\n   - ページ内の隠れた要素や非表示の要素も含めて解析してください。\n   - JavaScriptで動的に生成されるコンテンツも含めて抽出してください。\n   - ページ内のすべてのセクションを個別に解析し、単語が含まれる可能性のあるすべての部分を確認してください。\n   - ページのロード後に追加で読み込まれるデータ（例: AjaxリクエストやAPIレスポンス）も含めて解析してください。`;
 
   try {
     const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
@@ -170,44 +133,23 @@ URL: ${url}
     const cleanText = text.replace(/```json\n?|\n?```/g, "").trim();
 
     try {
-      // 最初のJSON解析を試みる
-      try {
-        const parsed = JSON.parse(cleanText);
-        if (
-          parsed &&
-          typeof parsed === "object" &&
-          Array.isArray(parsed.words)
-        ) {
-          const validWords = parsed.words.filter(
-            (entry: { word: string; meaning: string }) => {
-              if (!entry || typeof entry !== "object") return false;
-              if (typeof entry.word !== "string" || !entry.word.trim())
-                return false;
-              if (typeof entry.meaning !== "string" || !entry.meaning.trim())
-                return false;
-              return true;
-            }
-          );
-          if (validWords.length > 0) {
-            return validWords;
-          }
-        }
-      } catch (initialParseError) {
-        console.log(
-          "Initial parse failed, attempting repair...",
-          initialParseError
-        );
-      }
-
-      // JSONの修復を試みる
+      // JSON.parseの前に構文エラーを修正
       let fixedText = cleanText;
 
-      // 1. 基本的な構造チェックと修復
+      // 必要に応じてJSONの開始と終了を補完
       if (!fixedText.startsWith('{"words":[')) {
         fixedText = '{"words":[' + fixedText;
       }
+      if (!fixedText.endsWith("]}")) {
+        const lastValidIndex = fixedText.lastIndexOf("},");
+        if (lastValidIndex !== -1) {
+          fixedText = fixedText.substring(0, lastValidIndex + 1) + "]}";
+        } else {
+          fixedText = '{"words":[]}';
+        }
+      }
 
-      // 2. Geminiを使用してJSONを修復
+      // 修復後のJSONをGeminiでさらに修正
       try {
         fixedText = await repairJsonWithGemini(fixedText);
       } catch (repairError) {
@@ -215,24 +157,11 @@ URL: ${url}
           "Gemini repair failed, falling back to basic repair...",
           repairError
         );
-        // 基本的な修復を試みる
-        if (!fixedText.endsWith("]}")) {
-          // 最後の完全なエントリーを探す
-          const lastCompleteEntry = fixedText.lastIndexOf("},");
-          if (lastCompleteEntry !== -1) {
-            // 最後の完全なエントリーまでを保持
-            fixedText = fixedText.substring(0, lastCompleteEntry + 1) + "]}";
-          } else {
-            // 完全なエントリーが見つからない場合は、空の配列を返す
-            fixedText = '{"words":[]}';
-          }
-        }
       }
 
-      // 3. 修復後のJSONを解析
+      // 修復後のJSONを解析
       const parsed = JSON.parse(fixedText);
 
-      // 4. 基本的な構造チェック
       if (
         !parsed ||
         typeof parsed !== "object" ||
@@ -243,7 +172,6 @@ URL: ${url}
         );
       }
 
-      // 5. 各単語エントリーの検証
       const validWords = parsed.words.filter(
         (entry: { word: string; meaning: string }) => {
           if (!entry || typeof entry !== "object") return false;
@@ -260,15 +188,19 @@ URL: ${url}
       }
 
       return validWords;
-    } catch (parseError) {
-      console.error("JSON Parse Error:", parseError);
-      console.error("Failed to parse text:", cleanText);
-      if (parseError instanceof SyntaxError) {
-        throw new Error(
-          `JSONの形式が不正です: ${parseError.message}\n応答が途中で切れている可能性があります。`
-        );
+    } catch (error) {
+      console.error("Error extracting words:", error);
+      if (error instanceof Error) {
+        if (
+          error.message.includes("API key is not authorized") ||
+          error.message.includes("not found")
+        ) {
+          throw new Error(
+            "❌ このモデルは現在のAPIキーでは利用できません（無料枠を超えた可能性があります）。"
+          );
+        }
       }
-      throw parseError;
+      throw error;
     }
   } catch (error) {
     console.error("Error extracting words:", error);
