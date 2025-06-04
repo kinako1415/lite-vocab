@@ -47,163 +47,302 @@ type WordInfo = {
   difficulty?: string; // 難易度を追加
 };
 
-// 修復関数がコメントアウトされているため、エラーが発生しています。修復関数を再度有効化します。
+// より強固なJSON修復機能
 const repairJsonWithGemini = async (
-  incompleteJson: string
+  incompleteJson: string,
+  attemptNumber: number = 1
 ): Promise<string> => {
   try {
     const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
-    const repairPrompt = `以下の不完全なJSONを修復してください。特に最後の部分が切れている可能性があります。
-修復の際は以下の点に注意してください：
-1. 最後のエントリーが不完全な場合は、適切に閉じてください
-2. すべてのエントリーが "word" と "meaning" の両方のプロパティを持つようにしてください
-3. 最後に "]} で終わるようにしてください
-4. 純粋なJSONのみを返してください（マークダウン記法なし）
-5. 最後のエントリーが不完全な場合は、そのエントリーを除外してください
-6. 既存の完全なエントリーはすべて保持してください
+    const repairPrompt = `以下の不完全なJSONを修復してください。
+
+【重要】このJSONは英単語と日本語の意味のリストです。以下の形式でのみ返してください：
+
+{"words":[{"word":"example","meaning":"例"}]}
+
+修復ルール：
+1. 最後のエントリーが不完全な場合は除外してください
+2. すべてのエントリーは必ず "word" と "meaning" の両方を持つこと
+3. 不正な文字やエスケープシーケンスを修正してください
+4. 余分なカンマや波括弧を除去してください
+5. 純粋なJSONのみを返してください（説明文やマークダウン記法なし）
+6. 文字列は必ずダブルクォートで囲んでください
+7. 改行文字やタブ文字を適切にエスケープしてください
 
 不完全なJSON:
-${incompleteJson}
-
-修復後のJSONは以下の形式である必要があります：
-{
-  "words": [
-    {
-      "word": "example",
-      "meaning": "例"
-    }
-  ]
-}`;
+${incompleteJson.substring(0, 4000)}${
+      incompleteJson.length > 4000 ? "..." : ""
+    }`;
 
     const result = await model.generateContent({
       contents: [{ role: "user", parts: [{ text: repairPrompt }] }],
       generationConfig: {
         temperature: 0.1,
-        maxOutputTokens: 2048,
+        maxOutputTokens: 4096,
       },
     });
+
     const response = await result.response;
-    const repairedJson = response
+    let repairedJson = response
       .text()
       .trim()
       .replace(/```json\n?|\n?```/g, "")
+      .replace(/^[^{]*/, "") // JSON開始前の余分なテキストを除去
+      .replace(/[^}]*$/, "}") // JSON終了後の余分なテキストを除去
       .trim();
 
-    // 修復後のJSONの基本構造を確認
-    if (
-      !repairedJson.startsWith('{"words":[') ||
-      !repairedJson.endsWith("]}")
-    ) {
-      throw new Error("修復後のJSONの形式が不正です");
+    // 基本的な構造確認と修正
+    if (!repairedJson.startsWith('{"words":[')) {
+      const wordsIndex = repairedJson.indexOf('"words":[');
+      if (wordsIndex !== -1) {
+        repairedJson = '{"words":[' + repairedJson.substring(wordsIndex + 8);
+      } else {
+        throw new Error("有効な words 配列が見つかりません");
+      }
+    }
+
+    if (!repairedJson.endsWith("]}")) {
+      // 最後の完全なエントリーまでを取得
+      const lastCompleteEntry = repairedJson.lastIndexOf('"}');
+      if (lastCompleteEntry !== -1) {
+        repairedJson = repairedJson.substring(0, lastCompleteEntry + 2) + "]}";
+      } else {
+        repairedJson = '{"words":[]}';
+      }
     }
 
     // JSON構文の検証
-    try {
-      JSON.parse(repairedJson);
-    } catch (parseError) {
-      throw new Error(
-        `修復後のJSONが無効です: ${parseError.message}`
-      );
+    const parsed = JSON.parse(repairedJson);
+    if (!parsed.words || !Array.isArray(parsed.words)) {
+      throw new Error("words配列が見つかりません");
     }
 
+    console.log(
+      `JSON修復成功 (試行${attemptNumber}): ${parsed.words.length}個の単語を抽出`
+    );
     return repairedJson;
   } catch (error) {
-    console.error("JSON repair error:", error);
-    throw new Error("JSONの修復に失敗しました");
+    console.error(`JSON修復エラー (試行${attemptNumber}):`, error);
+
+    // 最大3回まで再試行
+    if (attemptNumber < 3) {
+      console.log(`JSON修復を再試行します... (${attemptNumber + 1}/3)`);
+      return repairJsonWithGemini(incompleteJson, attemptNumber + 1);
+    }
+
+    throw new Error(`JSONの修復に失敗しました (${attemptNumber}回試行)`);
   }
 };
 
+// 基本的なJSON修復（Geminiを使わない軽量版）
+const basicJsonRepair = (text: string): string => {
+  let fixed = text.trim();
+
+  // マークダウン記法を除去
+  fixed = fixed.replace(/```json\n?|\n?```/g, "").trim();
+
+  // JSON開始前の余分なテキストを除去
+  const jsonStart = fixed.indexOf('{"words":[');
+  if (jsonStart > 0) {
+    fixed = fixed.substring(jsonStart);
+  } else if (!fixed.startsWith('{"words":[')) {
+    fixed = '{"words":[' + fixed;
+  }
+
+  // 不完全な最後のエントリーを除去
+  const lastCompleteEntry = fixed.lastIndexOf('"}');
+  if (lastCompleteEntry !== -1) {
+    fixed = fixed.substring(0, lastCompleteEntry + 2);
+    if (!fixed.endsWith("]}")) {
+      fixed += "]}";
+    }
+  } else {
+    fixed = '{"words":[]}';
+  }
+
+  // 余分なカンマを除去
+  fixed = fixed.replace(/,(\s*[\]}])/g, "$1");
+
+  return fixed;
+};
+
 export const extractWordsFromUrl = async (url: string): Promise<WordInfo[]> => {
-  const prompt = `以下のURLから英単語と日本語の意味のリストを抽出し、純粋なJSON形式で返してください。\nURL: ${url}\n\n【重要】以下の形式のJSONのみを返してください。マークダウン記法（\`\`\`jsonなど）は使用せず、説明文や追加のテキストも含めないでください：\n\n{\n  \"words\": [\n    {\n      \"word\": \"agree\",\n      \"meaning\": \"賛成する\"\n    }\n  ]\n}\n\n注意点：\n1. 出力形式について：\n   - 純粋なJSONのみを返してください（マークダウン記法なし）\n   - JSONの前後に説明文や追加のテキストを入れないでください\n   - すべての文字列はダブルクォート（\"）で囲んでください\n   - カンマや波括弧の配置を正確に守ってください\n   - 最後の要素の後にはカンマを付けないでください\n   - レスポンスは完全なJSONオブジェクトである必要があります\n   - 各単語エントリーは必ず完全な形で出力してください（途中で切れないように）\n   - 必ず最後に \"]} で終わるようにしてください\n   - 各エントリーは必ず \"word\" と \"meaning\" の両方のプロパティを持つこと\n   - サイト内に存在する単語のみを抽出してください。サイトにない単語を生成しないでください。\n   - サイト内のすべての単語を抽出してください。\n\n2. 単語の抽出について：\n   - サイト内の表（<table>タグ）から単語と意味を抽出してください\n   - 表の左列が英単語、右列が日本語の意味となっている形式を想定しています\n   - 表以外の説明文や解説からは単語を抽出しないでください\n   - 表形式でない場合は、英単語と日本語の意味のペアが明確に区別されている部分のみから抽出してください\n   - サイト内のすべての有効な単語エントリーを抽出してください\n\n3. 抽出の基準：\n   - 表内の各行を1つの単語エントリとして抽出してください\n   - 英単語は原形（基本形）で抽出してください\n   - 日本語の意味は簡潔に抽出してください\n   - 表の見出し行は除外してください\n   - 空の行や説明文のみの行は除外してください\n   - 各エントリーは必ず完全な形で出力してください\n\n4. データの品質：\n   - 英単語と日本語の意味のペアを正確に抽出してください\n   - 余分な説明や注釈は含めないでください\n   - 特殊文字や改行を含まないでください\n   - 各エントリーは必ず完全な形で出力してください\n\n5. 出力の完全性：\n   - サイト内のすべての単語を漏れなく抽出してください。\n   - 抽出結果が途中で切れることがないようにしてください。\n   - 必要に応じて複数回に分けて抽出を行い、すべての単語を収集してください。\n   - 抽出結果が多い場合は、JSONの配列を分割して複数のレスポンスに分けることを検討してください。\n\n6. 抽出の精度向上：\n   - サイト内のすべてのHTML要素を解析し、単語と意味のペアを見逃さないようにしてください。\n   - 特に、<table>タグ以外のリスト形式（<ul>や<ol>）や段落（<p>）内にある単語と意味のペアも抽出してください。\n   - ページ全体をスクロールして、動的に読み込まれるコンテンツも含めて抽出してください。\n   - 必要に応じて、ページのHTML構造を詳細に解析して、すべての単語を抽出してください。\n   - ページ内の隠れた要素や非表示の要素も含めて解析してください。\n   - JavaScriptで動的に生成されるコンテンツも含めて抽出してください。\n   - ページ内のすべてのセクションを個別に解析し、単語が含まれる可能性のあるすべての部分を確認してください。\n   - ページのロード後に追加で読み込まれるデータ（例: AjaxリクエストやAPIレスポンス）も含めて解析してください。`;
+  console.log(`単語抽出を開始: ${url}`);
+
+  // まず小さなサンプルで抽出を試す
+  const samplePrompt = `以下のURLから英単語と日本語の意味のリストのサンプル（最初の20個程度）を抽出し、純粋なJSON形式で返してください。
+URL: ${url}
+
+【重要】以下の形式のJSONのみを返してください：
+{"words":[{"word":"agree","meaning":"賛成する"}]}
+
+抽出ルール：
+1. サイト内の表やリストから英単語と日本語の意味のペアを抽出
+2. 最初の20個程度のエントリーのみを抽出
+3. 各エントリーは必ず "word" と "meaning" の両方を含む
+4. 純粋なJSONのみを返す（マークダウン記法や説明文なし）
+5. 不完全なエントリーは除外
+6. サイトに存在する単語のみを抽出（想像で単語を作らない）`;
 
   try {
     const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
-    const result = await model.generateContent({
-      contents: [{ role: "user", parts: [{ text: prompt }] }],
+
+    // サンプル抽出
+    console.log("サンプル抽出を実行中...");
+    const sampleResult = await model.generateContent({
+      contents: [{ role: "user", parts: [{ text: samplePrompt }] }],
       generationConfig: {
         temperature: 0.1,
         maxOutputTokens: 2048,
       },
     });
-    const response = await result.response;
-    const text = response.text().trim();
-    console.log("Raw response:", text);
 
-    // マークダウン記法を除去
-    const cleanText = text.replace(/```json\n?|\n?```/g, "").trim();
+    const sampleResponse = sampleResult.response.text().trim();
+    console.log(
+      "サンプルレスポンス:",
+      sampleResponse.substring(0, 200) + "..."
+    );
+
+    // サンプルのJSONを解析して形式を確認
+    let sampleWords: WordInfo[] = [];
+    try {
+      const cleanSample = basicJsonRepair(sampleResponse);
+      const parsedSample = JSON.parse(cleanSample);
+      sampleWords = parsedSample.words || [];
+      console.log(`サンプル抽出成功: ${sampleWords.length}個の単語`);
+    } catch (sampleError) {
+      console.error("サンプル抽出でエラー:", sampleError);
+      // サンプルが失敗した場合は基本的な修復を試す
+      try {
+        const repairedSample = await repairJsonWithGemini(sampleResponse);
+        const parsedSample = JSON.parse(repairedSample);
+        sampleWords = parsedSample.words || [];
+        console.log(`サンプル修復成功: ${sampleWords.length}個の単語`);
+      } catch (repairError) {
+        console.error("サンプル修復も失敗:", repairError);
+        throw new Error(
+          "サンプル抽出に失敗しました。サイトの形式を確認してください。"
+        );
+      }
+    }
+
+    if (sampleWords.length === 0) {
+      throw new Error(
+        "サイトから単語を抽出できませんでした。サイトの形式を確認してください。"
+      );
+    }
+
+    // 全体抽出（分割を考慮したプロンプト）
+    console.log("全体抽出を実行中...");
+    const fullPrompt = `以下のURLから英単語と日本語の意味のリストをすべて抽出し、純粋なJSON形式で返してください。
+URL: ${url}
+
+【重要】以下の形式のJSONのみを返してください：
+{"words":[{"word":"agree","meaning":"賛成する"}]}
+
+抽出ルール：
+1. サイト内のすべての表、リスト、段落から英単語と日本語の意味のペアを抽出
+2. サイト内のすべての単語を漏れなく抽出（300個以上ある場合もすべて含める）
+3. 各エントリーは必ず完全な形で出力（"word"と"meaning"の両方を含む）
+4. 純粋なJSONのみを返す（マークダウン記法や説明文なし）
+5. 最後まで完全に抽出を完了する
+6. サイトに存在する単語のみを抽出（想像で単語を作らない）
+7. レスポンスが長くなる場合は、必ず有効なJSONで終わること
+
+技術的指示：
+- ページ全体をスキャンし、すべてのHTMLコンテンツを解析
+- 動的コンテンツやAjaxで読み込まれるデータも含める
+- 隠れた要素や非表示の要素も含める
+- 表形式、リスト形式、段落形式すべてに対応
+- データが大量の場合は分割しても構わないが、各分割は有効なJSONで終わること`;
+
+    const fullResult = await model.generateContent({
+      contents: [{ role: "user", parts: [{ text: fullPrompt }] }],
+      generationConfig: {
+        temperature: 0.1,
+        maxOutputTokens: 8192, // より大きなレスポンスを許可
+      },
+    });
+
+    const fullResponse = fullResult.response.text().trim();
+    console.log("フルレスポンス長:", fullResponse.length);
+    console.log("フルレスポンス先頭:", fullResponse.substring(0, 100) + "...");
+    console.log(
+      "フルレスポンス末尾:",
+      "..." + fullResponse.substring(Math.max(0, fullResponse.length - 100))
+    );
+
+    // 段階的なJSON解析
+    let allWords: WordInfo[] = [];
 
     try {
-      // JSON.parseの前に構文エラーを修正
-      let fixedText = cleanText;
+      // まず基本修復を試す
+      const basicFixed = basicJsonRepair(fullResponse);
+      console.log("基本修復後の長さ:", basicFixed.length);
 
-      // 必要に応じてJSONの開始と終了を補完
-      if (!fixedText.startsWith('{"words":[')) {
-        fixedText = '{"words":[' + fixedText;
-      }
-      if (!fixedText.endsWith("]}")) {
-        const lastValidIndex = fixedText.lastIndexOf("},");
-        if (lastValidIndex !== -1) {
-          fixedText = fixedText.substring(0, lastValidIndex + 1) + "]}";
-        } else {
-          fixedText = '{"words":[]}';
-        }
-      }
+      const parsed = JSON.parse(basicFixed);
+      allWords = parsed.words || [];
+      console.log(`基本修復成功: ${allWords.length}個の単語を抽出`);
+    } catch (basicError) {
+      console.error("基本修復でエラー:", basicError);
 
-      // 修復後のJSONをGeminiでさらに修正
       try {
-        fixedText = await repairJsonWithGemini(fixedText);
-      } catch (repairError) {
-        console.error(
-          "Gemini repair failed, falling back to basic repair...",
-          repairError
-        );
-      }
+        // Geminiによる修復を試す
+        console.log("Geminiによる修復を試行中...");
+        const geminiFixed = await repairJsonWithGemini(fullResponse);
+        const parsed = JSON.parse(geminiFixed);
+        allWords = parsed.words || [];
+        console.log(`Gemini修復成功: ${allWords.length}個の単語を抽出`);
+      } catch (geminiError) {
+        console.error("Gemini修復でエラー:", geminiError);
 
-      // 修復後のJSONを解析
-      const parsed = JSON.parse(fixedText);
-
-      if (
-        !parsed ||
-        typeof parsed !== "object" ||
-        !Array.isArray(parsed.words)
-      ) {
-        throw new Error(
-          "Invalid JSON structure: missing or invalid 'words' array"
-        );
-      }
-
-      const validWords = parsed.words.filter(
-        (entry: { word: string; meaning: string }) => {
-          if (!entry || typeof entry !== "object") return false;
-          if (typeof entry.word !== "string" || !entry.word.trim())
-            return false;
-          if (typeof entry.meaning !== "string" || !entry.meaning.trim())
-            return false;
-          return true;
-        }
-      );
-
-      if (validWords.length === 0) {
-        throw new Error("No valid word entries found in the response");
-      }
-
-      return validWords;
-    } catch (error) {
-      console.error("Error extracting words:", error);
-      if (error instanceof Error) {
-        if (
-          error.message.includes("API key is not authorized") ||
-          error.message.includes("not found")
-        ) {
-          throw new Error(
-            "❌ このモデルは現在のAPIキーでは利用できません（無料枠を超えた可能性があります）。"
+        // 最後の手段：部分的な抽出
+        console.log("部分的な抽出を試行中...");
+        try {
+          const partialResponse = fullResponse.substring(0, 3000); // 安全な範囲で切り取り
+          const partialFixed = basicJsonRepair(partialResponse);
+          const parsed = JSON.parse(partialFixed);
+          allWords = parsed.words || [];
+          console.log(
+            `部分抽出成功: ${allWords.length}個の単語を抽出（部分的）`
           );
+        } catch (partialError) {
+          console.error("部分抽出も失敗:", partialError);
+
+          // サンプル結果を返す
+          console.log("サンプル結果を返します");
+          allWords = sampleWords;
         }
       }
-      throw error;
     }
+
+    // 結果の検証とフィルタリング
+    const validWords = allWords.filter((entry) => {
+      if (!entry || typeof entry !== "object") return false;
+      if (typeof entry.word !== "string" || !entry.word.trim()) return false;
+      if (typeof entry.meaning !== "string" || !entry.meaning.trim())
+        return false;
+      return true;
+    });
+
+    if (validWords.length === 0) {
+      throw new Error("有効な単語エントリーが見つかりませんでした");
+    }
+
+    console.log(`最終結果: ${validWords.length}個の有効な単語を抽出`);
+
+    // 重複を除去
+    const uniqueWords = validWords.filter(
+      (word, index, array) =>
+        array.findIndex(
+          (w) => w.word.toLowerCase() === word.word.toLowerCase()
+        ) === index
+    );
+
+    console.log(`重複除去後: ${uniqueWords.length}個のユニークな単語`);
+    return uniqueWords;
   } catch (error) {
-    console.error("Error extracting words:", error);
+    console.error("単語抽出でエラー:", error);
     if (error instanceof Error) {
       if (
         error.message.includes("API key is not authorized") ||

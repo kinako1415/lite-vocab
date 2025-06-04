@@ -6,9 +6,11 @@ import { adminAuth } from "@/lib/firebaseAdmin";
 const setSessionCookie = async (sessionCookie: string, maxAge: number) => {
   const cookieStore = await cookies();
   cookieStore.set("session", sessionCookie, {
-    maxAge,
+    maxAge: maxAge / 1000, // seconds
     httpOnly: true,
-    secure: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    path: "/",
   });
 };
 
