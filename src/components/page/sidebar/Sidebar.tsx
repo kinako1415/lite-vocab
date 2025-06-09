@@ -7,8 +7,9 @@ import { activeBoxesAtom, boxesAtom } from "@/store/boxesAtom";
 import { BoxesCard } from "./BoxesCard";
 import { wordsCacheAtom } from "@/store/wordsAtom";
 import { getWord } from "@/lib/firestore";
+import { UserProfile } from "../UserProfile";
 
-export const Sidebar = () => {
+export const Sidebar = ({ onSignOut }: { onSignOut?: () => void }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [wordsCache, setWordsCache] = useAtom(wordsCacheAtom);
 
@@ -28,36 +29,43 @@ export const Sidebar = () => {
   return (
     <div className={styles.container}>
       <BoxesModal setIsOpen={setIsOpen} isOpen={isOpen} />
-      <div className={styles.titleContainer}>
-        <div className={styles.logo}>liteVocab</div>
-        <div className={styles.buttonContainer}>
-          <OutlineButton
-            onClick={() => {
-              setIsOpen(!isOpen);
-            }}
-          >
-            単語まとめの作成
-          </OutlineButton>
+      <div className={styles.topContent}>
+        <div className={styles.titleContainer}>
+          <div className={styles.logo}>liteVocab</div>
+          <div className={styles.buttonContainer}>
+            <OutlineButton
+              onClick={() => {
+                setIsOpen(!isOpen);
+              }}
+            >
+              単語まとめの作成
+            </OutlineButton>
+          </div>
+        </div>
+        <div className={styles.boxContainer}>
+          {wordBoxes &&
+            wordBoxes.map((data, i) => (
+              <BoxesCard
+                key={i}
+                isActive={data.id === activeBoxes}
+                activeBoxId={data.id}
+                onClick={() => {
+                  const nextActive =
+                    data.id === activeBoxes ? undefined : data.id;
+                  setActiveBoxes(nextActive);
+                  handleClick(data.id);
+                }}
+                boxName={data.name}
+              >
+                {data.name}
+              </BoxesCard>
+            ))}
         </div>
       </div>
-      <div className={styles.boxContainer}>
-        {wordBoxes &&
-          wordBoxes.map((data, i) => (
-            <BoxesCard
-              key={i}
-              isActive={data.id === activeBoxes}
-              activeBoxId={data.id}
-              onClick={() => {
-                const nextActive =
-                  data.id === activeBoxes ? undefined : data.id;
-                setActiveBoxes(nextActive);
-                handleClick(data.id);
-              }}
-              boxName={data.name}
-            >
-              {data.name}
-            </BoxesCard>
-          ))}
+      
+      {/* UserProfileを下部に配置 */}
+      <div className={styles.profileContainer}>
+        <UserProfile onSignOut={onSignOut} />
       </div>
     </div>
   );

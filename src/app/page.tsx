@@ -4,7 +4,6 @@ import { auth } from "@/lib/firebase";
 import { useEffect, useState } from "react";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { deleteSessionCookie } from "./actions/deleteSessionCookie";
-import { Button } from "@/components/elements/Button";
 import { Sidebar } from "@/components/page/sidebar/Sidebar";
 import { useSetAtom } from "jotai";
 import { boxesAtom } from "@/store/boxesAtom";
@@ -88,7 +87,7 @@ export default function Home() {
           height: "100vh",
         }}
       >
-        <Sidebar />
+        <Sidebar onSignOut={handleSignOut} />
         <div
           style={{
             position: "relative",
@@ -101,14 +100,6 @@ export default function Home() {
           }}
         >
           <WordsContent />
-          <Button
-            color="gray"
-            onClick={() => {
-              handleSignOut();
-            }}
-          >
-            サインアウトします
-          </Button>
         </div>
       </div>
     </div>
