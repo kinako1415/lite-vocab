@@ -1,9 +1,7 @@
 "use client";
-import { useRouter } from "next/navigation";
 import { auth } from "@/lib/firebase";
 import { useEffect, useState } from "react";
-import { onAuthStateChanged, signOut } from "firebase/auth";
-import { deleteSessionCookie } from "./actions/deleteSessionCookie";
+import { onAuthStateChanged } from "firebase/auth";
 import { Sidebar } from "@/components/page/sidebar/Sidebar";
 import { useSetAtom } from "jotai";
 import { boxesAtom } from "@/store/boxesAtom";
@@ -12,7 +10,6 @@ import { Timestamp } from "firebase/firestore";
 import { WordsContent } from "@/components/page/WordsContent";
 
 export default function Home() {
-  const router = useRouter();
   const setBoxes = useSetAtom(boxesAtom);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
@@ -58,18 +55,6 @@ export default function Home() {
     };
   }, [setBoxes]);
 
-  const handleSignOut = async () => {
-    try {
-      await signOut(auth);
-      await deleteSessionCookie();
-      router.push("/");
-      return { success: true };
-    } catch (error) {
-      console.error("Sign out error:", error);
-      return { success: false, error: "サインアウトに失敗しました" };
-    }
-  };
-
   if (isLoading) {
     return <div>Loading...</div>; // または適切なローディングコンポーネント
   }
@@ -87,7 +72,7 @@ export default function Home() {
           height: "100vh",
         }}
       >
-        <Sidebar onSignOut={handleSignOut} />
+        <Sidebar />
         <div
           style={{
             position: "relative",

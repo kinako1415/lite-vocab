@@ -7,9 +7,9 @@ import { activeBoxesAtom, boxesAtom } from "@/store/boxesAtom";
 import { BoxesCard } from "./BoxesCard";
 import { wordsCacheAtom } from "@/store/wordsAtom";
 import { getWord } from "@/lib/firestore";
-import { UserProfile } from "../UserProfile";
+import { UserProfile } from "./UserProfile";
 
-export const Sidebar = ({ onSignOut }: { onSignOut?: () => void }) => {
+export const Sidebar = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [wordsCache, setWordsCache] = useAtom(wordsCacheAtom);
 
@@ -62,10 +62,10 @@ export const Sidebar = ({ onSignOut }: { onSignOut?: () => void }) => {
             ))}
         </div>
       </div>
-      
+
       {/* UserProfileを下部に配置 */}
       <div className={styles.profileContainer}>
-        <UserProfile onSignOut={onSignOut} />
+        <UserProfile />
       </div>
     </div>
   );

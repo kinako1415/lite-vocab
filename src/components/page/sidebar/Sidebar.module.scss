@@ -1,14 +1,13 @@
 .container {
   display: flex;
   flex-direction: column;
-  gap: 24px;
   font-weight: 500;
   margin: 16px 0;
   white-space: nowrap;
   align-items: center;
-  height: 100vh; /* フル高さに設定 */
-  justify-content: space-between; /* 上下に配置を分散 */
-  
+  height: calc(100vh - 32px); /* マージンを考慮 */
+  justify-content: space-between;
+
   .logo {
     font-weight: 900;
     font-size: 24px;
@@ -20,10 +19,11 @@
 .topContent {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 20px;
   width: 100%;
-  flex: 1; /* 残りのスペースを占有 */
-  overflow-y: auto; /* スクロール可能にする */
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .boxContainer {
@@ -46,5 +46,6 @@
 .profileContainer {
   width: 100%;
   padding: 0 16px;
-  margin-bottom: 16px;
+  margin-top: 12px;
+  flex-shrink: 0; /* サイズを固定 */
 }
