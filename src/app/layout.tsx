@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import "./globals.css";
 import "./fonts.css";
 import LoginListener from "@/hooks/LoginListener";
-import SessionManager from "@/components/SessionManager";
 
 export const metadata: Metadata = {
   title: "Create Next App",
