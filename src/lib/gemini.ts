@@ -205,7 +205,7 @@ const repairJsonWithGemini = async (
   attemptNumber: number = 1
 ): Promise<string> => {
   try {
-    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
     const prompt = getMultilingualPrompts(targetLanguage);
 
     const repairPrompt = `${prompt.repairInstruction}
@@ -227,7 +227,7 @@ ${incompleteJson.substring(0, 4000)}${
     const result = await model.generateContent({
       contents: [{ role: "user", parts: [{ text: repairPrompt }] }],
       generationConfig: {
-        temperature: 0.1,
+        temperature: 0, // 安定性のため0に設定
         maxOutputTokens: 4096,
       },
     });
@@ -450,6 +450,7 @@ export const extractWordsFromUrl = async (
           "【除外対象】一般的な文章内での単語（学習対象として特別に示されていない語）",
           "各エントリーは「word」（単語）と「meaning」（意味）の両方を完全に含める",
           "純粋なJSONのみ返す（マークダウンや説明なし）",
+          "【一貫性】同じURLで再実行した場合、常に同じ単語リストを生成するようにしてください。結果のランダムな変動を避けてください。",
         ],
         technicalInstructions: [
           "学習コンテンツの特定：<article>、<main>、.vocabulary、.wordlist、.lesson等のタグ・クラス内を優先",
@@ -479,6 +480,7 @@ export const extractWordsFromUrl = async (
           "【EXCLUDE】General words in ordinary text (not specifically marked for learning)",
           'Each entry must be complete with both "word" and "meaning"',
           "Return pure JSON only (no markdown or explanations)",
+          "【Consistency】If re-run on the same URL, strive to generate the exact same word list. Avoid random variations in the result.",
         ],
         technicalInstructions: [
           "Identify learning content: prioritize <article>, <main>, .vocabulary, .wordlist, .lesson tags/classes",
@@ -508,6 +510,7 @@ export const extractWordsFromUrl = async (
           "【제외 대상】일반 텍스트의 단어 (학습 대상으로 특별히 표시되지 않은 어휘)",
           '각 항목은 "word"(단어)와 "meaning"(의미) 모두 완전히 포함',
           "순수한 JSON만 반환 (마크다운이나 설명 없음)",
+          "【일관성】동일한 URL에서 다시 실행할 경우, 항상 동일한 단어 목록을 생성하도록 노력하세요. 결과의 무작위 변동을 피하세요.",
         ],
         technicalInstructions: [
           "학습 콘텐츠 식별: <article>, <main>, .vocabulary, .wordlist, .lesson 태그/클래스 우선",
@@ -537,6 +540,7 @@ export const extractWordsFromUrl = async (
           "【排除对象】普通文本中的词汇（未特别标记为学习对象的词汇）",
           '每个条目必须同时完整包含"word"（单词）和"meaning"（含义）',
           "仅返回纯JSON（无Markdown或解释）",
+          "【一致性】如果在同一URL上重新运行，请努力生成完全相同的单词列表。避免结果的随机变化。",
         ],
         technicalInstructions: [
           "识别学习内容：优先处理<article>、<main>、.vocabulary、.wordlist、.lesson标签/类",
@@ -567,6 +571,7 @@ export const extractWordsFromUrl = async (
           "【EXCLUIR】Palabras en texto ordinario (no marcadas específicamente para aprendizaje)",
           'Cada entrada debe estar completa con "word" y "meaning"',
           "Devuelve únicamente JSON puro (sin markdown o explicaciones)",
+          "【Consistencia】Si se vuelve a ejecutar en la misma URL, esfuércese por generar la misma lista de palabras exacta. Evite variaciones aleatorias en el resultado.",
         ],
         technicalInstructions: [
           "Identificar contenido de aprendizaje: priorizar etiquetas/clases <article>, <main>, .vocabulary, .wordlist, .lesson",
@@ -588,7 +593,7 @@ export const extractWordsFromUrl = async (
           "Ciblez **des mots individuels uniquement** (excluez les phrases composées, idiomes, phrases)",
           "Extrayez UNIQUEMENT les mots **explicitement enseignés dans le contenu éducatif** (excluez les mots du texte général de l'article)",
           "Sites d'apprentissage des langues: mots des leçons, cartes de vocabulaire, listes de vocabulaire",
-          "Sites d'actualités: mots des sections d'explication du vocabulaire, mots difficiles annotés",
+          "Sites d'actualités: mots des sections d'apprentissage du vocabulaire, mots difficiles annotés",
           "Sites de blogs/éducatifs: mots des sections d'apprentissage du vocabulaire, parties d'explication des mots",
           "Sites de dictionnaire/vocabulaire: mots-clés listés comme entrées",
           "【EXCLURE】Menus de navigation, publicités, boutons, noms de sites, noms d'auteurs, dates",
@@ -597,6 +602,7 @@ export const extractWordsFromUrl = async (
           "【EXCLURE】Mots dans le texte ordinaire (non spécifiquement marqués pour l'apprentissage)",
           'Chaque entrée doit être complète avec "word" et "meaning"',
           "Retournez uniquement du JSON pur (pas de markdown ou d'explications)",
+          "【Cohérence】Si ré-exécuté sur la même URL, s'efforcer de générer la liste de mots exacte. Évitez les variations aléatoires dans le résultat.",
         ],
         technicalInstructions: [
           "Identifier le contenu d'apprentissage: prioriser les balises/classes <article>, <main>, .vocabulary, .wordlist, .lesson",
@@ -626,6 +632,7 @@ export const extractWordsFromUrl = async (
           "【AUSSCHLIESSEN】Wörter in gewöhnlichem Text (nicht spezifisch für das Lernen markiert)",
           'Jeder Eintrag muss vollständig mit "word" und "meaning" sein',
           "Geben Sie nur reines JSON zurück (kein Markdown oder Erklärungen)",
+          "【Konsistenz】Wenn auf derselben URL erneut ausgeführt, bemühen Sie sich, die exakt gleiche Wortliste zu generieren. Vermeiden Sie zufällige Variationen im Ergebnis.",
         ],
         technicalInstructions: [
           "Lerninhalte identifizieren: <article>, <main>, .vocabulary, .wordlist, .lesson Tags/Klassen priorisieren",
@@ -691,14 +698,14 @@ VALIDATION: 各単語について以下を確認
 ✓ 単語レベルの語彙か（句や文ではないか）？`;
 
   try {
-    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
     // サンプル抽出
     console.log("Executing sample extraction...");
     const sampleResult = await model.generateContent({
       contents: [{ role: "user", parts: [{ text: samplePrompt }] }],
       generationConfig: {
-        temperature: 0.1,
+        temperature: 0, // 安定性のため0に設定
         maxOutputTokens: 2048,
       },
     });
@@ -778,7 +785,7 @@ STRICT Sample Extraction Rules (Max 15 words - Quality Focus):
           const adaptiveResult = await model.generateContent({
             contents: [{ role: "user", parts: [{ text: adaptivePrompt }] }],
             generationConfig: {
-              temperature: 0.1,
+              temperature: 0, // 安定性のため0に設定
               maxOutputTokens: 2048,
             },
           });
@@ -881,7 +888,7 @@ ${technicalInstructions
     const fullResult = await model.generateContent({
       contents: [{ role: "user", parts: [{ text: fullPrompt }] }],
       generationConfig: {
-        temperature: 0.1,
+        temperature: 0, // 安定性のため0に設定
         maxOutputTokens: 8192, // より大きなレスポンスを許可
       },
     });
