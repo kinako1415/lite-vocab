@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { QuizWord, AnswerType } from "@/types/quiz";
 import { IconButton } from "@/components/elements/IconButton";
@@ -22,6 +22,11 @@ export const WordCard: React.FC<WordCardProps> = ({
   const [showMeaning, setShowMeaning] = useState(false);
 
   const threshold = 100; // スワイプと判定する最小距離
+
+  // 単語が変わったら答えの表示状態をリセット
+  useEffect(() => {
+    setShowMeaning(false);
+  }, [word.id]);
 
   const handleToggleMeaning = () => {
     setShowMeaning(!showMeaning);
