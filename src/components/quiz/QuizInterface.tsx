@@ -85,7 +85,9 @@ export const QuizInterface: React.FC<QuizInterfaceProps> = ({
           <span>
             {progress.currentIndex + 1}/{progress.totalWords}語
           </span>
-          <span>残り{remainingWords}語</span>
+          <span>
+            {remainingWords === 1 ? "ラスト" : `残り${remainingWords}語`}
+          </span>
         </div>
       </div>
 
