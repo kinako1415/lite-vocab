@@ -108,6 +108,7 @@ export const QuizInterface: React.FC<QuizInterfaceProps> = ({
               <WordCard
                 word={nextWord}
                 onAnswer={() => {}} // 次のカードは操作できない
+                isNextCard={true}
               />
             </div>
           )}
