@@ -1,0 +1,142 @@
+.wordCard {
+  position: relative;
+  width: 800px;
+  height: 460px;
+  background: #ffffff;
+  border-radius: 28px;
+  border: 3.11562px solid #f4f5ff;
+  cursor: grab;
+  user-select: none;
+  transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+  transform-origin: center;
+}
+
+.wordCard.dragging {
+  cursor: grabbing;
+  z-index: 10;
+}
+
+.wordCard.swipePreview {
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.wordCard.swipeKnow {
+  box-shadow: 0 0 0 4px rgba(95, 49, 203, 0.3);
+}
+
+.wordCard.swipeUnknown {
+  box-shadow: 0 0 0 4px rgba(255, 69, 69, 0.3);
+}
+
+.wordCard.swipeVague {
+  box-shadow: 0 0 0 4px rgba(255, 193, 7, 0.3);
+}
+
+.cardContent {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 28px;
+}
+
+.wordText {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: "Zen Kaku Gothic New", sans-serif;
+  font-weight: bold;
+  font-size: 64px;
+  color: #5f31cb;
+  text-align: center;
+  white-space: nowrap;
+  line-height: 1;
+}
+
+.speakerButton {
+  position: absolute;
+  top: 18px;
+  left: 21px;
+  width: 73px;
+  height: 73px;
+  background: #f4f5ff;
+  border-radius: 51.1px;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.speakerButton:hover {
+  background: #e8eaff;
+}
+
+.speakerIcon {
+  width: 38.087px;
+  height: 38.087px;
+}
+
+.answerButton {
+  position: absolute;
+  top: 18px;
+  right: 21px;
+  width: 142px;
+  height: 73px;
+  background: #f4f5ff;
+  border-radius: 51.1px;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.answerButton:hover {
+  background: #e8eaff;
+}
+
+.answerButtonText {
+  font-family: "Zen Kaku Gothic New", sans-serif;
+  font-weight: bold;
+  font-size: 32px;
+  color: #7750d3;
+  line-height: 1;
+}
+
+.meaningText {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: "Zen Kaku Gothic New", sans-serif;
+  font-weight: 600;
+  font-size: 48px;
+  color: #2b2c37;
+  text-align: center;
+  white-space: nowrap;
+  line-height: 1;
+}
+
+.cardExit {
+  position: absolute;
+  transition: all 0.3s ease-out;
+}
+
+.cardExitKnow {
+  transform: translateX(100vw) rotate(30deg);
+  opacity: 0;
+}
+
+.cardExitUnknown {
+  transform: translateX(-100vw) rotate(-30deg);
+  opacity: 0;
+}
+
+.cardExitVague {
+  transform: translateY(100vh) rotate(15deg);
+  opacity: 0;
+}

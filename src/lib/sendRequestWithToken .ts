@@ -1,6 +1,6 @@
 import getIdTokenAuth from "./getIdTokenAuth";
 
-const sendRequestWithToken = async () => {
+export const sendRequestWithToken = async () => {
   const token = await getIdTokenAuth();
 
   if (!token) {
@@ -16,4 +16,5 @@ const sendRequestWithToken = async () => {
   });
 
   const data = await response.json();
+  return data;
 };

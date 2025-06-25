@@ -1,4 +1,7 @@
+"use client";
+
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { OutlineButton } from "../../elements/OutlineButton";
 import styles from "./Sidebar.module.scss";
 import { BoxesModal } from "./BoxesModal";
@@ -10,6 +13,7 @@ import { getWord } from "@/lib/firestore";
 import { UserProfile } from "./UserProfile";
 
 export const Sidebar = () => {
+  const router = useRouter();
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [wordsCache, setWordsCache] = useAtom(wordsCacheAtom);
 
@@ -26,6 +30,16 @@ export const Sidebar = () => {
     }
   };
 
+  const handleStartQuiz = () => {
+    if (activeBoxes) {
+      // アクティブな単語帳でクイズを開始
+      router.push(`/quiz?boxId=${activeBoxes}`);
+    } else {
+      // 単語帳が選択されていない場合は、サンプルクイズを開始
+      router.push("/quiz");
+    }
+  };
+
   return (
     <div className={styles.container}>
       <BoxesModal setIsOpen={setIsOpen} isOpen={isOpen} />
@@ -39,6 +53,9 @@ export const Sidebar = () => {
               }}
             >
               単語まとめの作成
+            </OutlineButton>
+            <OutlineButton onClick={handleStartQuiz}>
+              クイズを始める
             </OutlineButton>
           </div>
         </div>

@@ -346,7 +346,11 @@ const getDomStructureHints = async (url: string): Promise<string[]> => {
     $("*").each((i, el) => {
       const element = $(el);
       let score = 0;
-      const tagName = el.tagName.toLowerCase();
+      
+      // cheerioの要素がElementタイプかチェック
+      if (el.type !== 'tag') return;
+      
+      const tagName = el.name.toLowerCase();
 
       // Score based on tag type
       if (["ul", "ol", "dl", "table"].includes(tagName)) score += 5;

@@ -1,0 +1,79 @@
+.quizPageContainer {
+  min-height: 100vh;
+  background: #7750d3;
+  font-family: "Zen Kaku Gothic New", sans-serif;
+}
+
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  color: #ffffff;
+}
+
+.loadingSpinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid rgba(255, 255, 255, 0.3);
+  border-top: 4px solid #ffffff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 24px;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.loadingText {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.errorContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  color: #ffffff;
+  text-align: center;
+  padding: 40px;
+}
+
+.errorTitle {
+  font-size: 48px;
+  font-weight: bold;
+  margin-bottom: 24px;
+}
+
+.errorMessage {
+  font-size: 24px;
+  margin-bottom: 40px;
+  opacity: 0.8;
+}
+
+.errorButton {
+  padding: 16px 32px;
+  background: #ffffff;
+  color: #7750d3;
+  border: none;
+  border-radius: 16px;
+  font-family: "Zen Kaku Gothic New", sans-serif;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.errorButton:hover {
+  background: #f0eaff;
+  transform: translateY(-2px);
+}
