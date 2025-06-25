@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { QuizWord, AnswerType } from "@/types/quiz";
 import { useSwipeGesture } from "@/hooks/useSwipeGesture";
 import { IconButton } from "@/components/elements/IconButton";
-import { OutlineButton } from "@/components/elements/OutlineButton";
 import styles from "./WordCard.module.scss";
 
 interface WordCardProps {
@@ -96,7 +95,9 @@ export const WordCard: React.FC<WordCardProps> = ({
           onClick={handleSpeakWord}
         />
 
-        <OutlineButton onClick={handleToggleMeaning}>答え</OutlineButton>
+        <button className={styles.answerButton} onClick={handleToggleMeaning}>
+          答え
+        </button>
 
         {showMeaning ? (
           <div className={styles.meaningText}>{word.meaning}</div>

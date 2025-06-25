@@ -16,22 +16,6 @@
   z-index: 10;
 }
 
-.wordCard.swipePreview {
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-}
-
-.wordCard.swipeKnow {
-  box-shadow: 0 0 0 4px rgba(95, 49, 203, 0.3);
-}
-
-.wordCard.swipeUnknown {
-  box-shadow: 0 0 0 4px rgba(255, 69, 69, 0.3);
-}
-
-.wordCard.swipeVague {
-  box-shadow: 0 0 0 4px rgba(255, 193, 7, 0.3);
-}
-
 .cardContent {
   position: relative;
   width: 100%;
@@ -53,6 +37,32 @@
   top: 12px;
   right: 16px;
   z-index: 10;
+}
+
+/* 答えボタンのカスタムスタイル */
+.answerButton {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  z-index: 10;
+  padding: 8px 16px;
+  background: var(--gray-50);
+  border-radius: 12px;
+  color: var(--primary-400);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+
+  &:hover {
+    background: var(--gray-100);
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
 }
 
 .wordText {

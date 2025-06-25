@@ -68,6 +68,7 @@ export const QuizInterface: React.FC<QuizInterfaceProps> = ({
         <IconButton
           url="https://api.iconify.design/heroicons:arrow-left-20-solid.svg?color=%23ffffff"
           onClick={onExit}
+          color="purple"
         />
         <div className={styles.exitLabel}>終わるボタン</div>
       </div>
@@ -120,12 +121,6 @@ export const QuizInterface: React.FC<QuizInterfaceProps> = ({
               />
             </div>
           )}
-        </div>
-
-        {/* 操作説明ラベル */}
-        <div className={styles.instructionLabels}>
-          <div className={styles.instructionLabel}>音声再生</div>
-          <div className={styles.instructionLabel}>右か左にドラッグで回答</div>
         </div>
       </div>
     </div>
