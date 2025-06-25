@@ -17,29 +17,6 @@
   z-index: 20;
 }
 
-.backButton {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 57px;
-  height: 57px;
-  background: #5f31cb;
-  border: none;
-  border-radius: 28.5px;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.backButton:hover {
-  background: #4a2699;
-  transform: translateY(-2px);
-}
-
-.backIcon {
-  width: 34.2px;
-  height: 34.2px;
-}
-
 .exitLabel {
   position: absolute;
   left: 150px;

@@ -1,5 +1,7 @@
 import React from "react";
 import { QuizResult } from "@/types/quiz";
+import { Button } from "@/components/elements/Button";
+import { OutlineButton } from "@/components/elements/OutlineButton";
 import styles from "./QuizResults.module.scss";
 
 interface QuizResultsProps {
@@ -146,18 +148,8 @@ export const QuizResults: React.FC<QuizResultsProps> = ({
         </div>
 
         <div className={styles.actionsContainer}>
-          <button
-            className={`${styles.actionButton} ${styles.primaryButton}`}
-            onClick={onRestart}
-          >
-            もう一度
-          </button>
-          <button
-            className={`${styles.actionButton} ${styles.secondaryButton}`}
-            onClick={onExit}
-          >
-            終了
-          </button>
+          <Button onClick={onRestart}>もう一度</Button>
+          <OutlineButton onClick={onExit}>終了</OutlineButton>
         </div>
       </div>
     </div>

@@ -123,35 +123,3 @@
   justify-content: center;
   margin-top: 40px;
 }
-
-.actionButton {
-  padding: 16px 32px;
-  border: none;
-  border-radius: 16px;
-  font-family: "Zen Kaku Gothic New", sans-serif;
-  font-size: 18px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.primaryButton {
-  background: #5f31cb;
-  color: #ffffff;
-}
-
-.primaryButton:hover {
-  background: #4a2699;
-  transform: translateY(-2px);
-}
-
-.secondaryButton {
-  background: #f4f5ff;
-  color: #5f31cb;
-  border: 2px solid #5f31cb;
-}
-
-.secondaryButton:hover {
-  background: #e8eaff;
-  transform: translateY(-2px);
-}

@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { QuizWord, AnswerType } from "@/types/quiz";
 import { useSwipeGesture } from "@/hooks/useSwipeGesture";
+import { IconButton } from "@/components/elements/IconButton";
+import { OutlineButton } from "@/components/elements/OutlineButton";
 import styles from "./WordCard.module.scss";
 
 interface WordCardProps {
@@ -89,50 +91,12 @@ export const WordCard: React.FC<WordCardProps> = ({
   return (
     <div className={getCardClassName()} style={cardStyle} {...handlers}>
       <div className={styles.cardContent}>
-        <button
-          className={styles.speakerButton}
+        <IconButton
+          url="https://api.iconify.design/heroicons:speaker-wave-20-solid.svg?color=%237750d3"
           onClick={handleSpeakWord}
-          type="button"
-        >
-          <svg
-            width="38"
-            height="38"
-            viewBox="0 0 39 39"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            className={styles.speakerIcon}
-          >
-            <path
-              d="M16.25 9.75L11.375 14.625H6.5V24.375H11.375L16.25 29.25V9.75Z"
-              stroke="#7750D3"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-            <path
-              d="M24.375 14.625C25.4948 15.7448 26.125 17.2474 26.125 18.8125C26.125 20.3776 25.4948 21.8802 24.375 23"
-              stroke="#7750D3"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-            <path
-              d="M28.4375 10.5625C30.6797 12.8047 32 15.8984 32 19.5C32 23.1016 30.6797 26.1953 28.4375 28.4375"
-              stroke="#7750D3"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-        </button>
+        />
 
-        <button
-          className={styles.answerButton}
-          onClick={handleToggleMeaning}
-          type="button"
-        >
-          <span className={styles.answerButtonText}>答え</span>
-        </button>
+        <OutlineButton onClick={handleToggleMeaning}>答え</OutlineButton>
 
         {showMeaning ? (
           <div className={styles.meaningText}>{word.meaning}</div>

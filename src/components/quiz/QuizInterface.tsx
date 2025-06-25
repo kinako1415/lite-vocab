@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { QuizWord, AnswerType } from "@/types/quiz";
 import { useQuizManager } from "@/hooks/useQuizManager";
+import { IconButton } from "@/components/elements/IconButton";
 import { WordCard } from "./WordCard";
 import { QuizResults } from "./QuizResults";
 import styles from "./QuizInterface.module.scss";
@@ -64,22 +65,10 @@ export const QuizInterface: React.FC<QuizInterfaceProps> = ({
     <div className={styles.quizContainer}>
       {/* ヘッダー */}
       <div className={styles.header}>
-        <button className={styles.backButton} onClick={onExit} type="button">
-          <svg
-            className={styles.backIcon}
-            viewBox="0 0 35 35"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M22 26L14 18L22 10"
-              stroke="#ffffff"
-              strokeWidth="3"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-        </button>
+        <IconButton
+          url="https://api.iconify.design/heroicons:arrow-left-20-solid.svg?color=%23ffffff"
+          onClick={onExit}
+        />
         <div className={styles.exitLabel}>終わるボタン</div>
       </div>
 
