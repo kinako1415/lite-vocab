@@ -58,9 +58,6 @@ export const Sidebar = () => {
             >
               単語まとめの作成
             </OutlineButton>
-            <OutlineButton onClick={() => handleStartQuiz()}>
-              クイズを始める
-            </OutlineButton>
           </div>
         </div>
         <div className={styles.boxContainer}>
