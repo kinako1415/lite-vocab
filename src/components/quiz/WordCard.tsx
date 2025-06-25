@@ -35,9 +35,219 @@ export const WordCard: React.FC<WordCardProps> = ({
   const handleSpeakWord = () => {
     if ("speechSynthesis" in window) {
       const utterance = new SpeechSynthesisUtterance(word.word);
-      utterance.lang = "en-US";
+
+      // 単語の言語を自動検出
+      const detectedLanguage = detectLanguage(word.word);
+      utterance.lang = detectedLanguage;
+
+      // 言語に応じた音声設定の最適化
+      const voiceSettings = getVoiceSettings(detectedLanguage);
+      utterance.rate = voiceSettings.rate;
+      utterance.pitch = voiceSettings.pitch;
+      utterance.volume = voiceSettings.volume;
+
+      // 利用可能な音声の中から最適なものを選択
+      const voices = speechSynthesis.getVoices();
+      const preferredVoice = findBestVoice(voices, detectedLanguage);
+      if (preferredVoice) {
+        utterance.voice = preferredVoice;
+      }
+
       speechSynthesis.speak(utterance);
     }
+  };
+
+  // 言語に応じた音声設定を取得
+  const getVoiceSettings = (language: string) => {
+    const settings: {
+      [key: string]: { rate: number; pitch: number; volume: number };
+    } = {
+      "ja-JP": { rate: 0.7, pitch: 1.1, volume: 0.9 }, // 日本語は少しゆっくり、高めの音程
+      "en-US": { rate: 0.8, pitch: 1.0, volume: 0.8 }, // 英語は標準的
+      "zh-CN": { rate: 0.7, pitch: 1.2, volume: 0.9 }, // 中国語は声調を考慮して高め
+      "ko-KR": { rate: 0.7, pitch: 1.1, volume: 0.9 }, // 韓国語は少しゆっくり
+      "fr-FR": { rate: 0.9, pitch: 0.9, volume: 0.8 }, // フランス語は流暢に
+      "es-ES": { rate: 0.9, pitch: 1.0, volume: 0.8 }, // スペイン語は流暢に
+      "de-DE": { rate: 0.8, pitch: 0.9, volume: 0.8 }, // ドイツ語は少し低めの音程
+      "it-IT": { rate: 0.9, pitch: 1.1, volume: 0.8 }, // イタリア語は音楽的に
+      "pt-PT": { rate: 0.8, pitch: 1.0, volume: 0.8 }, // ポルトガル語は標準的
+      "ru-RU": { rate: 0.7, pitch: 0.9, volume: 0.9 }, // ロシア語は重厚に
+      "ar-SA": { rate: 0.7, pitch: 1.0, volume: 0.9 }, // アラビア語はゆっくり
+    };
+
+    return settings[language] || { rate: 0.8, pitch: 1.0, volume: 0.8 };
+  };
+
+  // 最適な音声を選択
+  const findBestVoice = (
+    voices: SpeechSynthesisVoice[],
+    targetLang: string
+  ) => {
+    // 完全一致する音声を検索
+    let bestVoice = voices.find((voice) => voice.lang === targetLang);
+
+    if (!bestVoice) {
+      // 言語コードの前半部分で検索（例: en-US -> en）
+      const langCode = targetLang.split("-")[0];
+      bestVoice = voices.find((voice) => voice.lang.startsWith(langCode));
+    }
+
+    if (!bestVoice) {
+      // 特定の言語で高品質な音声を優先選択
+      const preferredVoices: { [key: string]: string[] } = {
+        en: ["Google US English", "Microsoft Zira", "Alex", "Samantha"],
+        ja: ["Google 日本語", "Microsoft Haruka", "Kyoko", "Otoya"],
+        zh: ["Google 中文", "Microsoft Huihui", "Ting-Ting"],
+        ko: ["Google 한국어", "Microsoft Heami", "Yuna"],
+        fr: ["Google français", "Microsoft Hortense", "Amelie"],
+        es: ["Google español", "Microsoft Helena", "Monica"],
+        de: ["Google Deutsch", "Microsoft Hedda", "Anna"],
+        it: ["Google italiano", "Microsoft Elsa", "Alice"],
+        pt: ["Google português", "Microsoft Heloisa", "Joana"],
+        ru: ["Google русский", "Microsoft Irina", "Milena"],
+        ar: ["Google العربية", "Microsoft Naayf", "Maged"],
+      };
+
+      const langCode = targetLang.split("-")[0];
+      const preferred = preferredVoices[langCode];
+
+      if (preferred) {
+        for (const voiceName of preferred) {
+          const voice = voices.find((v) =>
+            v.name.includes(voiceName.split(" ")[0])
+          );
+          if (voice) {
+            bestVoice = voice;
+            break;
+          }
+        }
+      }
+    }
+
+    return bestVoice;
+  };
+
+  // 改良された言語検出関数
+  const detectLanguage = (text: string): string => {
+    const lowerText = text.toLowerCase().trim();
+
+    // 日本語の文字（ひらがな、カタカナ、漢字）が含まれているかチェック
+    if (/[\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FAF]/.test(text)) {
+      return "ja-JP";
+    }
+
+    // 韓国語の文字（ハングル）が含まれているかチェック
+    if (/[\uAC00-\uD7AF]/.test(text)) {
+      return "ko-KR";
+    }
+
+    // 中国語の文字（簡体字、繁体字）をより精密にチェック
+    if (
+      /[\u4E00-\u9FFF]/.test(text) &&
+      !/[\u3040-\u309F\u30A0-\u30FF]/.test(text)
+    ) {
+      // 簡体字特有の文字をチェック
+      if (
+        /[与样来这样时候过还很多就说不人会一在能好没有他我大了都]/.test(text)
+      ) {
+        return "zh-CN";
+      }
+      // 繁体字特有の文字をチェック
+      if (
+        /[與樣來這樣時候過還很多就說不人會一在能好沒有他我大了都]/.test(text)
+      ) {
+        return "zh-TW";
+      }
+      return "zh-CN"; // デフォルトは簡体字
+    }
+
+    // ロシア語の文字（キリル文字）が含まれているかチェック
+    if (/[\u0400-\u04FF]/.test(text)) {
+      return "ru-RU";
+    }
+
+    // アラビア語の文字が含まれているかチェック
+    if (/[\u0600-\u06FF]/.test(text)) {
+      return "ar-SA";
+    }
+
+    // ヒンディー語の文字（デーヴァナーガリー文字）が含まれているかチェック
+    if (/[\u0900-\u097F]/.test(text)) {
+      return "hi-IN";
+    }
+
+    // タイ語の文字が含まれているかチェック
+    if (/[\u0E00-\u0E7F]/.test(text)) {
+      return "th-TH";
+    }
+
+    // ヨーロッパ言語の特徴的な文字と一般的な単語で判定
+    const languagePatterns = [
+      {
+        lang: "fr-FR",
+        chars: /[àâäéèêëîïôùûüÿç]/i,
+        words:
+          /\b(le|la|les|un|une|des|du|de|et|est|dans|pour|avec|sur|mais|que|qui|cette|tout|bien|être|avoir)\b/,
+      },
+      {
+        lang: "es-ES",
+        chars: /[ñáéíóúü]/i,
+        words:
+          /\b(el|la|los|las|un|una|y|es|en|de|que|para|con|por|son|del|se|no|te|lo|le|da|su|por|más)\b/,
+      },
+      {
+        lang: "de-DE",
+        chars: /[äöüß]/i,
+        words:
+          /\b(der|die|das|und|ist|in|zu|den|von|mit|für|auf|ein|eine|sich|sie|nicht|werden|haben|ich|werden)\b/,
+      },
+      {
+        lang: "it-IT",
+        chars: /[àèéìíîòóù]/i,
+        words:
+          /\b(il|la|lo|gli|le|un|una|e|è|in|di|che|per|con|su|da|del|della|sono|hanno|questo|più)\b/,
+      },
+      {
+        lang: "pt-PT",
+        chars: /[ãâáàçéêíóôõú]/i,
+        words:
+          /\b(o|a|os|as|um|uma|e|é|em|de|que|para|com|por|do|da|dos|das|se|não|mais|muito|bem)\b/,
+      },
+      {
+        lang: "nl-NL",
+        chars: /[]/,
+        words:
+          /\b(de|het|een|en|is|in|van|te|dat|voor|met|op|aan|door|over|zijn|hebben|worden|kunnen|zullen)\b/,
+      },
+    ];
+
+    // 各言語パターンをチェック
+    for (const pattern of languagePatterns) {
+      const hasChars = pattern.chars.test(text);
+
+      // 特徴的な文字がある、または複数の特徴的な単語がある場合
+      if (
+        hasChars ||
+        lowerText.split(" ").filter((word) => pattern.words.test(word))
+          .length >= 2
+      ) {
+        return pattern.lang;
+      }
+    }
+
+    // 英語の一般的な単語パターンをチェック
+    const englishWords =
+      /\b(the|and|for|are|but|not|you|all|can|had|her|was|one|our|out|day|get|has|him|his|how|its|may|new|now|old|see|two|way|who|boy|did|does|each|from|have|here|into|like|look|make|many|over|such|take|than|them|very|were)\b/;
+    const englishWordCount = lowerText
+      .split(" ")
+      .filter((word) => englishWords.test(word)).length;
+
+    if (englishWordCount >= 2) {
+      return "en-US";
+    }
+
+    // デフォルトは英語
+    return "en-US";
   };
 
   const handleDragEnd = (
