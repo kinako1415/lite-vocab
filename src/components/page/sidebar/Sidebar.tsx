@@ -30,10 +30,11 @@ export const Sidebar = () => {
     }
   };
 
-  const handleStartQuiz = () => {
-    if (activeBoxes) {
-      // アクティブな単語帳でクイズを開始
-      router.push(`/quiz?boxId=${activeBoxes}`);
+  const handleStartQuiz = (boxId?: string) => {
+    const targetBoxId = boxId || activeBoxes;
+    if (targetBoxId) {
+      // 指定された単語帳でクイズを開始
+      router.push(`/quiz?boxId=${targetBoxId}`);
     } else {
       // 単語帳が選択されていない場合は、サンプルクイズを開始
       router.push("/quiz");
@@ -54,7 +55,7 @@ export const Sidebar = () => {
             >
               単語まとめの作成
             </OutlineButton>
-            <OutlineButton onClick={handleStartQuiz}>
+            <OutlineButton onClick={() => handleStartQuiz()}>
               クイズを始める
             </OutlineButton>
           </div>
@@ -73,6 +74,7 @@ export const Sidebar = () => {
                   handleClick(data.id);
                 }}
                 boxName={data.name}
+                onStartQuiz={() => handleStartQuiz(data.id)}
               >
                 {data.name}
               </BoxesCard>

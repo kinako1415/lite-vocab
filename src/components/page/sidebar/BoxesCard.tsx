@@ -12,6 +12,7 @@ type BoxesCardProps = {
   onClick?: () => void;
   activeBoxId: string;
   boxName: string;
+  onStartQuiz?: () => void;
 };
 
 export const BoxesCard = ({
@@ -20,6 +21,7 @@ export const BoxesCard = ({
   onClick,
   activeBoxId,
   boxName,
+  onStartQuiz,
 }: BoxesCardProps) => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
@@ -98,6 +100,7 @@ export const BoxesCard = ({
                 <IconButton
                   url="https://api.iconify.design/heroicons:play-solid.svg?color=%23ffffff"
                   color="purple"
+                  onClick={onStartQuiz}
                 />
               </motion.div>
               <motion.div
