@@ -22,11 +22,14 @@ export const Sidebar = () => {
 
   const handleClick = async (boxId: string) => {
     if (!wordsCache[boxId]) {
+      console.log(`Fetching words from Firebase for box: ${boxId}`);
       const words = await getWord(boxId);
       setWordsCache((prev) => ({
         ...prev,
         [boxId]: words,
       }));
+    } else {
+      console.log(`Using cached words for box: ${boxId}`);
     }
   };
 

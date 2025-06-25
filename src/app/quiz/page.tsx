@@ -6,7 +6,43 @@ import { QuizWord } from "@/types/quiz";
 import { QuizInterface } from "@/components/quiz/QuizInterface";
 import { getWord } from "@/lib/firestore";
 import { Words } from "@/types/word";
+import { useAtom } from "jotai";
+import { wordsCacheAtom } from "@/store/wordsAtom";
 import styles from "./page.module.scss";
+
+// サンプルデータ（boxIdが指定されていない場合に使用）
+const sampleWords: QuizWord[] = [
+  {
+    id: "1",
+    word: "friend",
+    meaning: "友達",
+    partOfSpeech: "名詞",
+  },
+  {
+    id: "2",
+    word: "beautiful",
+    meaning: "美しい",
+    partOfSpeech: "形容詞",
+  },
+  {
+    id: "3",
+    word: "study",
+    meaning: "勉強する",
+    partOfSpeech: "動詞",
+  },
+  {
+    id: "4",
+    word: "important",
+    meaning: "重要な",
+    partOfSpeech: "形容詞",
+  },
+  {
+    id: "5",
+    word: "computer",
+    meaning: "コンピューター",
+    partOfSpeech: "名詞",
+  },
+];
 
 function QuizPageContent() {
   const router = useRouter();
@@ -14,6 +50,7 @@ function QuizPageContent() {
   const [words, setWords] = useState<QuizWord[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [wordsCache, setWordsCache] = useAtom(wordsCacheAtom);
 
   useEffect(() => {
     // URLパラメータからboxIdを取得
@@ -36,16 +73,39 @@ function QuizPageContent() {
         setError(null);
 
         if (boxId) {
-          // 指定されたboxIdの単語を取得
-          const wordsData = await getWord(boxId);
+          // まずキャッシュから取得を試みる
+          if (wordsCache[boxId]) {
+            console.log(`Using cached data for box: ${boxId}`);
+            const quizWords = convertWordsToQuizWords(wordsCache[boxId]);
+            
+            if (quizWords.length === 0) {
+              setError("この単語帳には単語が登録されていません。");
+              return;
+            }
+            
+            setWords(quizWords);
+          } else {
+            // キャッシュにない場合はFirebaseから取得
+            console.log(`Fetching data from Firebase for box: ${boxId}`);
+            const wordsData = await getWord(boxId);
 
-          if (wordsData.length === 0) {
-            setError("この単語帳には単語が登録されていません。");
-            return;
+            if (wordsData.length === 0) {
+              setError("この単語帳には単語が登録されていません。");
+              return;
+            }
+
+            // キャッシュに保存
+            setWordsCache((prev) => ({
+              ...prev,
+              [boxId]: wordsData,
+            }));
+
+            const quizWords = convertWordsToQuizWords(wordsData);
+            setWords(quizWords);
           }
-
-          const quizWords = convertWordsToQuizWords(wordsData);
-          setWords(quizWords);
+        } else {
+          // boxIdが指定されていない場合はサンプルデータを使用
+          setWords(sampleWords);
         }
       } catch (err) {
         console.error("Failed to load words:", err);
@@ -56,7 +116,7 @@ function QuizPageContent() {
     };
 
     loadWords();
-  }, [searchParams]);
+  }, [searchParams, wordsCache, setWordsCache]);
 
   const handleExit = () => {
     router.push("/");
