@@ -102,6 +102,13 @@ export const QuizInterface: React.FC<QuizInterfaceProps> = ({
 
         {/* カードスタック */}
         <div className={styles.cardStack}>
+          {/* モバイル用スワイプラベル */}
+          <div className={styles.mobileSwipeLabels}>
+            <div className={styles.mobileSwipeLabel}>わからない</div>
+            <div className={styles.mobileSwipeLabel}>わかる</div>
+          </div>
+          <div className={styles.mobileSwipeLabelCenter}>あいまい</div>
+
           {/* 次のカード（背景） */}
           {nextWord && (
             <div className={`${styles.cardContainer} ${styles.nextCard}`}>

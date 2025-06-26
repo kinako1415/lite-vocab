@@ -149,7 +149,7 @@
   /* スマホ向けレスポンシブ */
   @media (max-width: 480px) {
     height: calc(100vh - 160px);
-    top: 55%; /* モバイルボタンの分だけ下に調整 */
+    top: 50%; /* センタリングを維持 */
   }
 
   @media (max-width: 360px) {
@@ -161,7 +161,7 @@
   position: relative;
   width: 550px;
   height: 320px;
-  z-index: 10;
+  z-index: 10; /* モバイルラベルより下に */
 
   /* タブレット向けレスポンシブ */
   @media (max-width: 768px) {
@@ -175,14 +175,14 @@
     width: 85vw;
     max-width: 350px;
     height: 240px;
-    margin-top: 40px; /* モバイルボタンのスペースを確保 */
+    margin-top: 0; /* ラベル用のマージンをリセット */
   }
 
   @media (max-width: 360px) {
     width: 90vw;
     max-width: 300px;
     height: 200px;
-    margin-top: 35px;
+    margin-top: 0;
   }
 }
 
@@ -333,69 +333,62 @@
   display: none;
 }
 
-/* モバイル用ボタン */
-.mobileButtons {
+/* モバイル用のスワイプラベル */
+.mobileSwipeLabels {
   position: absolute;
   top: -60px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: none; /* デフォルトは非表示 */
-  gap: 20px;
-  z-index: 15;
+  left: 0;
+  right: 0;
+  display: none;
+  justify-content: space-between;
+  padding: 0 40px;
+  z-index: 100;
+  pointer-events: none;
 
   /* スマホで表示 */
   @media (max-width: 480px) {
     display: flex;
   }
-}
 
-.mobileButton {
-  padding: 12px 24px;
-  border: none;
-  border-radius: 12px;
-  font-size: 16px;
-  font-weight: 700;
-  font-family: "Zen Kaku Gothic New", sans-serif;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-  min-width: 100px;
-
-  &:active {
-    transform: translateY(1px);
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
-  }
-
-  /* 極小スマホ向け */
   @media (max-width: 360px) {
-    padding: 10px 20px;
-    font-size: 14px;
-    min-width: 80px;
+    top: -50px;
+    padding: 0 30px;
   }
 }
 
-.mobileButtonKnow {
-  background: #4caf50;
-  color: white;
+.mobileSwipeLabel {
+  font-size: 18px;
+  font-weight: 600;
+  color: #ffffff;
+  text-align: center;
+  white-space: nowrap;
 
-  &:hover {
-    background: #45a049;
-  }
-
-  &:active {
-    background: #3d8b40;
+  @media (max-width: 360px) {
+    font-size: 16px;
   }
 }
 
-.mobileButtonUnknown {
-  background: #f44336;
-  color: white;
+.mobileSwipeLabelCenter {
+  position: absolute;
+  bottom: -60px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: none;
+  font-size: 18px;
+  font-weight: 600;
+  color: #ffffff;
+  text-align: center;
+  white-space: nowrap;
+  z-index: 100;
+  pointer-events: none;
 
-  &:hover {
-    background: #da190b;
+  /* スマホで表示 */
+  @media (max-width: 480px) {
+    display: block;
   }
 
-  &:active {
-    background: #c62828;
+  @media (max-width: 360px) {
+    bottom: -50px;
+    font-size: 16px;
   }
 }
