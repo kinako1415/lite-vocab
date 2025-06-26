@@ -308,7 +308,7 @@ export const WordCard: React.FC<WordCardProps> = ({
   return (
     <motion.div
       className={styles.wordCard}
-      drag={!isExiting && !isNextCard}
+      drag={!isExiting && !isNextCard} // スワイプは常に有効に戻す
       dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
       dragElastic={0.2}
       onDragEnd={handleDragEnd}

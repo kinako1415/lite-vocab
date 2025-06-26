@@ -15,6 +15,15 @@
   padding: 16px 32px;
   position: relative;
   z-index: 20;
+
+  /* スマホ向けレスポンシブ */
+  @media (max-width: 480px) {
+    padding: 12px 16px;
+  }
+
+  @media (max-width: 360px) {
+    padding: 10px 12px;
+  }
 }
 
 .exitLabel {
@@ -24,6 +33,19 @@
   font-weight: 600;
   margin-left: 16px;
   color: #f0eaff;
+
+  /* スマホ向けレスポンシブ */
+  @media (max-width: 480px) {
+    left: 60px;
+    font-size: 16px;
+    margin-left: 8px;
+  }
+
+  @media (max-width: 360px) {
+    left: 50px;
+    font-size: 14px;
+    margin-left: 6px;
+  }
 }
 
 .progressSection {
@@ -33,6 +55,17 @@
   flex-direction: column;
   padding: 12px 0;
   margin-bottom: 20px;
+
+  /* スマホ向けレスポンシブ */
+  @media (max-width: 480px) {
+    padding: 8px 0;
+    margin-bottom: 15px;
+  }
+
+  @media (max-width: 360px) {
+    padding: 6px 0;
+    margin-bottom: 10px;
+  }
 }
 
 .progressBar {
@@ -42,6 +75,27 @@
   border-radius: 20px;
   overflow: hidden;
   margin-bottom: 16px;
+
+  /* タブレット向けレスポンシブ */
+  @media (max-width: 768px) {
+    width: 80vw;
+    max-width: 350px;
+  }
+
+  /* スマホ向けレスポンシブ */
+  @media (max-width: 480px) {
+    width: 85vw;
+    max-width: 300px;
+    height: 6px;
+    margin-bottom: 12px;
+  }
+
+  @media (max-width: 360px) {
+    width: 90vw;
+    max-width: 250px;
+    height: 5px;
+    margin-bottom: 10px;
+  }
 }
 
 .progressFill {
@@ -58,6 +112,26 @@
   color: #ffffff;
   font-size: 16px;
   font-weight: 600;
+
+  /* タブレット向けレスポンシブ */
+  @media (max-width: 768px) {
+    width: 80vw;
+    max-width: 350px;
+    font-size: 15px;
+  }
+
+  /* スマホ向けレスポンシブ */
+  @media (max-width: 480px) {
+    width: 85vw;
+    max-width: 300px;
+    font-size: 14px;
+  }
+
+  @media (max-width: 360px) {
+    width: 90vw;
+    max-width: 250px;
+    font-size: 12px;
+  }
 }
 
 .mainContent {
@@ -71,6 +145,16 @@
   width: 100%;
   height: calc(100vh - 200px); /* ヘッダーとプログレスバーの高さを考慮 */
   z-index: 5;
+
+  /* スマホ向けレスポンシブ */
+  @media (max-width: 480px) {
+    height: calc(100vh - 160px);
+    top: 55%; /* モバイルボタンの分だけ下に調整 */
+  }
+
+  @media (max-width: 360px) {
+    height: calc(100vh - 140px);
+  }
 }
 
 .cardStack {
@@ -78,6 +162,28 @@
   width: 550px;
   height: 320px;
   z-index: 10;
+
+  /* タブレット向けレスポンシブ */
+  @media (max-width: 768px) {
+    width: 90vw;
+    max-width: 450px;
+    height: 280px;
+  }
+
+  /* スマホ向けレスポンシブ */
+  @media (max-width: 480px) {
+    width: 85vw;
+    max-width: 350px;
+    height: 240px;
+    margin-top: 40px; /* モバイルボタンのスペースを確保 */
+  }
+
+  @media (max-width: 360px) {
+    width: 90vw;
+    max-width: 300px;
+    height: 200px;
+    margin-top: 35px;
+  }
 }
 
 .cardContainer {
@@ -106,6 +212,11 @@
   height: 100%;
   pointer-events: none;
   z-index: 5;
+
+  /* スマホではスワイプヒントを非表示 */
+  @media (max-width: 480px) {
+    display: none;
+  }
 }
 
 .swipeHintLeft {
@@ -123,6 +234,13 @@
   border-radius: 8px;
   transition: all 0.2s ease;
   z-index: 10;
+
+  /* タブレット向けレスポンシブ */
+  @media (max-width: 768px) {
+    left: 80px;
+    font-size: 18px;
+    padding: 6px 12px;
+  }
 }
 
 .swipeHintRight {
@@ -140,6 +258,13 @@
   border-radius: 8px;
   transition: all 0.2s ease;
   z-index: 10;
+
+  /* タブレット向けレスポンシブ */
+  @media (max-width: 768px) {
+    right: 80px;
+    font-size: 18px;
+    padding: 6px 12px;
+  }
 }
 
 .swipeHintDown {
@@ -157,6 +282,13 @@
   padding: 8px 16px;
   border-radius: 8px;
   transition: all 0.2s ease;
+
+  /* タブレット向けレスポンシブ */
+  @media (max-width: 768px) {
+    bottom: 30px;
+    font-size: 20px;
+    padding: 6px 12px;
+  }
 }
 
 .instructionLabels {
@@ -167,6 +299,17 @@
   display: flex;
   gap: 140px;
   z-index: 10;
+
+  /* タブレット向けレスポンシブ */
+  @media (max-width: 768px) {
+    gap: 100px;
+    bottom: 60px;
+  }
+
+  /* スマホではinstructionLabelsも非表示 */
+  @media (max-width: 480px) {
+    display: none;
+  }
 }
 
 .instructionLabel {
@@ -177,9 +320,82 @@
   font-weight: 600;
   color: #ffffff;
   white-space: nowrap;
+
+  /* タブレット向けレスポンシブ */
+  @media (max-width: 768px) {
+    padding: 4px 12px;
+    font-size: 11px;
+  }
 }
 
 /* コントロールボタンは非表示（Figmaデザインにないため） */
 .controlButtons {
   display: none;
+}
+
+/* モバイル用ボタン */
+.mobileButtons {
+  position: absolute;
+  top: -60px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: none; /* デフォルトは非表示 */
+  gap: 20px;
+  z-index: 15;
+
+  /* スマホで表示 */
+  @media (max-width: 480px) {
+    display: flex;
+  }
+}
+
+.mobileButton {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 700;
+  font-family: "Zen Kaku Gothic New", sans-serif;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  min-width: 100px;
+
+  &:active {
+    transform: translateY(1px);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+  }
+
+  /* 極小スマホ向け */
+  @media (max-width: 360px) {
+    padding: 10px 20px;
+    font-size: 14px;
+    min-width: 80px;
+  }
+}
+
+.mobileButtonKnow {
+  background: #4caf50;
+  color: white;
+
+  &:hover {
+    background: #45a049;
+  }
+
+  &:active {
+    background: #3d8b40;
+  }
+}
+
+.mobileButtonUnknown {
+  background: #f44336;
+  color: white;
+
+  &:hover {
+    background: #da190b;
+  }
+
+  &:active {
+    background: #c62828;
+  }
 }
