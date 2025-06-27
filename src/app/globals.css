@@ -59,3 +59,45 @@ button {
 input {
   font-family: "Zen Kaku Gothic New", sans-serif;
 }
+
+/* モバイル対応の基本設定 */
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+}
+
+/* タッチデバイス対応 */
+button,
+input[type="submit"],
+input[type="button"] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  touch-action: manipulation;
+}
+
+/* モバイルでの最小タップサイズ確保 */
+@media (max-width: 768px) {
+  button,
+  input,
+  textarea,
+  select {
+    min-height: 44px;
+  }
+
+  /* フォームのズーム防止（iOS Safari） */
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="url"],
+  textarea,
+  select {
+    font-size: 16px;
+  }
+}

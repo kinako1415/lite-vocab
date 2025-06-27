@@ -9,6 +9,18 @@
   margin: auto;
   z-index: 1000;
   background-color: rgba(32, 34, 41, 0.7);
+  padding: 20px;
+
+  /* モバイル対応 */
+  @media (max-width: 768px) {
+    padding: 16px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 12px;
+    align-items: stretch;
+    justify-content: center;
+  }
 
   form {
     border-radius: 20px;
@@ -21,21 +33,61 @@
     padding: 54px 48px;
     background-color: var(--white-100);
     gap: 56px;
+    max-width: 90vw;
+    max-height: 90vh;
+    overflow-y: auto;
+
+    /* モバイル対応 */
+    @media (max-width: 768px) {
+      width: 100%;
+      max-width: 500px;
+      padding: 40px 32px;
+      gap: 40px;
+      border-radius: 16px;
+    }
+
+    @media (max-width: 480px) {
+      width: 100%;
+      max-width: none;
+      padding: 32px 24px;
+      gap: 32px;
+      border-radius: 12px;
+      max-height: 85vh;
+    }
+
+    @media (max-width: 360px) {
+      padding: 24px 20px;
+      gap: 24px;
+    }
 
     .titleContainer {
       display: flex;
       flex-direction: column;
       gap: 2px;
       align-items: center;
+
       .title {
         font-size: 24px;
         font-weight: 500;
         color: var(--primary-400);
+
+        @media (max-width: 480px) {
+          font-size: 20px;
+        }
+
+        @media (max-width: 360px) {
+          font-size: 18px;
+        }
       }
+
       .subTitle {
         font-size: 12px;
         font-weight: 400;
         color: var(--primary-200);
+
+        @media (max-width: 480px) {
+          font-size: 11px;
+        }
       }
     }
 
@@ -45,10 +97,32 @@
       gap: 32px;
       width: 400px;
 
+      /* モバイル対応 */
+      @media (max-width: 768px) {
+        width: 100%;
+        gap: 28px;
+      }
+
+      @media (max-width: 480px) {
+        gap: 24px;
+      }
+
+      @media (max-width: 360px) {
+        gap: 20px;
+      }
+
       .inputContainer {
         display: flex;
         flex-direction: column;
         gap: 20px;
+
+        @media (max-width: 480px) {
+          gap: 16px;
+        }
+
+        @media (max-width: 360px) {
+          gap: 14px;
+        }
       }
 
       .previewContainer {
@@ -56,11 +130,27 @@
         flex-direction: column;
         gap: 24px;
 
+        @media (max-width: 480px) {
+          gap: 20px;
+        }
+
+        @media (max-width: 360px) {
+          gap: 16px;
+        }
+
         .previewTitle {
           font-size: 16px;
           font-weight: 500;
           color: var(--primary-400);
           text-align: center;
+
+          @media (max-width: 480px) {
+            font-size: 14px;
+          }
+
+          @media (max-width: 360px) {
+            font-size: 13px;
+          }
         }
 
         .wordPreview {
@@ -68,6 +158,15 @@
           flex-direction: column;
           gap: 16px;
           border-radius: 16px;
+
+          @media (max-width: 480px) {
+            gap: 12px;
+            border-radius: 12px;
+          }
+
+          @media (max-width: 360px) {
+            gap: 10px;
+          }
         }
 
         .navigationButtons {
@@ -75,14 +174,33 @@
           gap: 16px;
           justify-content: center;
           align-items: center;
+
+          @media (max-width: 480px) {
+            gap: 12px;
+          }
+
+          @media (max-width: 360px) {
+            gap: 10px;
+          }
         }
 
         .actionButtons {
           display: flex;
           gap: 16px;
           width: 100%;
+
+          @media (max-width: 480px) {
+            gap: 12px;
+            flex-direction: column;
+          }
+
+          @media (max-width: 360px) {
+            gap: 10px;
+          }
         }
       }
     }
   }
+
+  // 既存のモバイル対応部分を削除（上記で統一）
 }

@@ -6,6 +6,16 @@
   justify-content: center;
   flex-direction: column;
   overflow: hidden;
+  padding: 20px;
+
+  /* モバイル対応 */
+  @media (max-width: 768px) {
+    padding: 16px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 12px;
+  }
 
   .completeContainer {
     background-color: var(--white-100);
@@ -16,6 +26,29 @@
     gap: 48px;
     padding: 54px 48px;
     border-radius: 20px;
+
+    /* モバイル対応 */
+    @media (max-width: 768px) {
+      width: 100%;
+      max-width: 500px;
+      padding: 40px 32px;
+      gap: 40px;
+      border-radius: 16px;
+    }
+
+    @media (max-width: 480px) {
+      width: 100%;
+      max-width: none;
+      padding: 32px 24px;
+      gap: 32px;
+      border-radius: 12px;
+      max-height: 85vh;
+    }
+
+    @media (max-width: 360px) {
+      padding: 24px 20px;
+      gap: 24px;
+    }
     .mainContainer {
       display: flex;
       flex-direction: column;
@@ -58,6 +91,32 @@
     padding: 54px 48px;
     background-color: var(--white-100);
     gap: 56px;
+    max-width: 90vw;
+    max-height: 90vh;
+    overflow-y: auto;
+
+    /* モバイル対応 */
+    @media (max-width: 768px) {
+      width: 100%;
+      max-width: 500px;
+      padding: 40px 32px;
+      gap: 40px;
+      border-radius: 16px;
+    }
+
+    @media (max-width: 480px) {
+      width: 100%;
+      max-width: none;
+      padding: 32px 24px;
+      gap: 32px;
+      border-radius: 12px;
+      max-height: 85vh;
+    }
+
+    @media (max-width: 360px) {
+      padding: 24px 20px;
+      gap: 24px;
+    }
 
     .titleContainer {
       display: flex;
