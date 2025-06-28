@@ -25,12 +25,12 @@
 
   // モバイル対応（480px以下）
   @media (max-width: 480px) {
-    padding: 20px;
+    padding: 32px;
 
     .mainContainer {
       width: 100%;
       max-width: 360px;
-      padding: 40px 24px;
+      padding: 40px 32px;
       border-radius: 16px;
       max-height: 90vh;
       overflow-y: auto;
@@ -39,11 +39,11 @@
 
   // モバイル対応（360px以下）
   @media (max-width: 360px) {
-    padding: 16px;
+    padding: 24px;
 
     .mainContainer {
       max-width: 320px;
-      padding: 32px 20px;
+      padding: 32px 24px;
     }
   }
 }

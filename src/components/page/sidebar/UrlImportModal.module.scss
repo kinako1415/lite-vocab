@@ -9,15 +9,15 @@
   margin: auto;
   z-index: 1000;
   background-color: rgba(32, 34, 41, 0.7);
-  padding: 20px;
+  padding: 32px;
 
   /* モバイル対応 */
   @media (max-width: 768px) {
-    padding: 16px;
+    padding: 24px;
   }
 
   @media (max-width: 480px) {
-    padding: 12px;
+    padding: 20px;
     align-items: stretch;
     justify-content: center;
   }
@@ -49,14 +49,14 @@
     @media (max-width: 480px) {
       width: 100%;
       max-width: none;
-      padding: 32px 24px;
+      padding: 40px 32px;
       gap: 32px;
       border-radius: 12px;
       max-height: 85vh;
     }
 
     @media (max-width: 360px) {
-      padding: 24px 20px;
+      padding: 32px 24px;
       gap: 24px;
     }
 
