@@ -185,7 +185,7 @@ export const subscribeToBoxesWithWords = (
       async (boxesSnapshot) => {
         try {
           // 既存の単語リスナーをクリーンアップ
-          unsubscribeWordListeners.forEach(unsubscribe => unsubscribe());
+          unsubscribeWordListeners.forEach((unsubscribe) => unsubscribe());
           unsubscribeWordListeners = [];
 
           const boxes = boxesSnapshot.docs
@@ -226,7 +226,7 @@ export const subscribeToBoxesWithWords = (
                   .filter((word): word is Words => !!word.createdAt);
 
                 boxesWithWords[index] = { ...box, words };
-                
+
                 // 初回読み込み時の処理
                 if (pendingUpdates > 0) {
                   pendingUpdates--;
@@ -239,8 +239,13 @@ export const subscribeToBoxesWithWords = (
                 }
               },
               (error) => {
-                console.error(`Error in words subscription for box ${box.id}:`, error);
-                onError(error instanceof Error ? error : new Error("Unknown error"));
+                console.error(
+                  `Error in words subscription for box ${box.id}:`,
+                  error
+                );
+                onError(
+                  error instanceof Error ? error : new Error("Unknown error")
+                );
               }
             );
 
@@ -251,7 +256,6 @@ export const subscribeToBoxesWithWords = (
           if (boxes.length === 0) {
             onUpdate([]);
           }
-
         } catch (error) {
           onError(error instanceof Error ? error : new Error("Unknown error"));
         }
@@ -263,7 +267,7 @@ export const subscribeToBoxesWithWords = (
 
     return () => {
       unsubscribeBoxes();
-      unsubscribeWordListeners.forEach(unsubscribe => unsubscribe());
+      unsubscribeWordListeners.forEach((unsubscribe) => unsubscribe());
     };
   } catch (error) {
     onError(error instanceof Error ? error : new Error("Unknown error"));

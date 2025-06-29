@@ -27,7 +27,7 @@ export const WordsContent: React.FC = () => {
   // boxesAtomから直接単語データを取得（リアルタイム更新対応）
   const currentWords = useMemo(() => {
     if (!activeBoxes || !wordBoxes) return [];
-    const activeBox = wordBoxes.find(box => box.id === activeBoxes);
+    const activeBox = wordBoxes.find((box) => box.id === activeBoxes);
     return activeBox?.words || [];
   }, [wordBoxes, activeBoxes]);
 
