@@ -12,7 +12,7 @@ import {
 } from "firebase/firestore";
 import { auth, db } from "./firebase";
 import { converter } from "./converter";
-import { Boxes } from "@/types/boxes";
+import { Boxes, BoxesWithWords } from "@/types/boxes";
 import { Words } from "@/types/word";
 
 export const addBox = async (name: string) => {
@@ -168,12 +168,14 @@ export const updateWord = async (
 };
 
 export const subscribeToBoxesWithWords = (
-  onUpdate: (boxes: Boxes[]) => void,
+  onUpdate: (boxes: BoxesWithWords[]) => void,
   onError: (error: Error) => void
 ): Unsubscribe => {
   try {
     const user = auth.currentUser;
     if (!user) throw new Error("ログインしていません");
+
+    let unsubscribeWordListeners: Unsubscribe[] = [];
 
     // ボックスの変更を監視
     const unsubscribeBoxes = onSnapshot(
@@ -182,6 +184,10 @@ export const subscribeToBoxesWithWords = (
       ),
       async (boxesSnapshot) => {
         try {
+          // 既存の単語リスナーをクリーンアップ
+          unsubscribeWordListeners.forEach(unsubscribe => unsubscribe());
+          unsubscribeWordListeners = [];
+
           const boxes = boxesSnapshot.docs
             .map((doc) => ({
               id: doc.id,
@@ -189,32 +195,63 @@ export const subscribeToBoxesWithWords = (
             }))
             .filter((box): box is Boxes => !!box.createdAt && !!box.name);
 
-          // 各ボックスの単語を並列で取得
-          const boxesWithWords = await Promise.all(
-            boxes.map(async (box) => {
-              const wordsSnapshot = await getDocs(
-                collection(
-                  db,
-                  "users",
-                  user.uid,
-                  "boxes",
-                  box.id,
-                  "words"
-                ).withConverter(converter<Words>())
-              );
+          // 各ボックスごとに単語の変更をリアルタイム監視
+          const boxesWithWords: BoxesWithWords[] = [];
+          let pendingUpdates = boxes.length;
 
-              const words = wordsSnapshot.docs
-                .map((doc) => ({
-                  id: doc.id,
-                  ...doc.data(),
-                }))
-                .filter((word): word is Words => !!word.createdAt);
+          const updateBoxesWithWords = () => {
+            onUpdate([...boxesWithWords]);
+          };
 
-              return { ...box, words };
-            })
-          );
+          boxes.forEach((box, index) => {
+            // 初期値設定
+            boxesWithWords[index] = { ...box, words: [] };
 
-          onUpdate(boxesWithWords);
+            // 各ボックスの単語コレクションを監視
+            const unsubscribeWords = onSnapshot(
+              collection(
+                db,
+                "users",
+                user.uid,
+                "boxes",
+                box.id,
+                "words"
+              ).withConverter(converter<Words>()),
+              (wordsSnapshot) => {
+                const words = wordsSnapshot.docs
+                  .map((doc) => ({
+                    id: doc.id,
+                    ...doc.data(),
+                  }))
+                  .filter((word): word is Words => !!word.createdAt);
+
+                boxesWithWords[index] = { ...box, words };
+                
+                // 初回読み込み時の処理
+                if (pendingUpdates > 0) {
+                  pendingUpdates--;
+                  if (pendingUpdates === 0) {
+                    updateBoxesWithWords();
+                  }
+                } else {
+                  // リアルタイム更新
+                  updateBoxesWithWords();
+                }
+              },
+              (error) => {
+                console.error(`Error in words subscription for box ${box.id}:`, error);
+                onError(error instanceof Error ? error : new Error("Unknown error"));
+              }
+            );
+
+            unsubscribeWordListeners.push(unsubscribeWords);
+          });
+
+          // ボックスが空の場合は即座に更新
+          if (boxes.length === 0) {
+            onUpdate([]);
+          }
+
         } catch (error) {
           onError(error instanceof Error ? error : new Error("Unknown error"));
         }
@@ -226,6 +263,7 @@ export const subscribeToBoxesWithWords = (
 
     return () => {
       unsubscribeBoxes();
+      unsubscribeWordListeners.forEach(unsubscribe => unsubscribe());
     };
   } catch (error) {
     onError(error instanceof Error ? error : new Error("Unknown error"));

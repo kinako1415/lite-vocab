@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import styles from "./WordsContent.module.scss";
 import { useAtomValue } from "jotai";
 import { activeBoxesAtom, boxesAtom } from "@/store/boxesAtom";
-import { wordsCacheAtom } from "@/store/wordsAtom";
 import { WordsModal } from "./WordsModal";
 import { WordUpdateModal } from "./sidebar/WordUpdateModal";
 import { UrlImportModal } from "./sidebar/UrlImportModal";
@@ -24,7 +23,13 @@ export const WordsContent: React.FC = () => {
   });
   const wordBoxes = useAtomValue(boxesAtom);
   const activeBoxes = useAtomValue(activeBoxesAtom);
-  const wordsCache = useAtomValue(wordsCacheAtom);
+
+  // boxesAtomから直接単語データを取得（リアルタイム更新対応）
+  const currentWords = useMemo(() => {
+    if (!activeBoxes || !wordBoxes) return [];
+    const activeBox = wordBoxes.find(box => box.id === activeBoxes);
+    return activeBox?.words || [];
+  }, [wordBoxes, activeBoxes]);
 
   const handleWordClick = (word: Words) => {
     setUpdateModal({
@@ -75,7 +80,7 @@ export const WordsContent: React.FC = () => {
             </div>
           </div>
           <div className={styles.buttonContainer}>
-            {wordsCache[activeBoxes]?.map((data, i) => {
+            {currentWords?.map((data, i) => {
               return (
                 <WordsCard
                   meaning={data.meaning}
