@@ -1,5 +1,5 @@
-import React from 'react';
-import styles from './MobileHeader.module.scss';
+import React from "react";
+import styles from "./MobileHeader.module.scss";
 
 interface MobileHeaderProps {
   isMenuOpen: boolean;
@@ -15,16 +15,16 @@ interface MobileHeaderProps {
 export const MobileHeader: React.FC<MobileHeaderProps> = ({
   isMenuOpen,
   onMenuToggle,
-  title = 'LiteVocab',
+  title = "LiteVocab",
   actions,
   showBackButton = false,
   onBackClick,
   isLoading = false,
-  notifications = 0
+  notifications = 0,
 }) => {
   // 振動フィードバック（サポートされている場合）
   const handleVibration = () => {
-    if ('vibrate' in navigator) {
+    if ("vibrate" in navigator) {
       navigator.vibrate(10); // 10msの軽い振動
     }
   };
@@ -50,7 +50,13 @@ export const MobileHeader: React.FC<MobileHeaderProps> = ({
             aria-label="戻る"
             disabled={isLoading}
           >
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              aria-hidden="true"
+            >
               <path
                 d="M15 18L9 12L15 6"
                 stroke="currentColor"
@@ -62,9 +68,11 @@ export const MobileHeader: React.FC<MobileHeaderProps> = ({
           </button>
         ) : (
           <button
-            className={`${styles.navigationButton} ${styles.menuButton} ${isMenuOpen ? styles.active : ''}`}
+            className={`${styles.navigationButton} ${styles.menuButton} ${
+              isMenuOpen ? styles.active : ""
+            }`}
             onClick={handleMenuClick}
-            aria-label={isMenuOpen ? 'メニューを閉じる' : 'メニューを開く'}
+            aria-label={isMenuOpen ? "メニューを閉じる" : "メニューを開く"}
             aria-expanded={isMenuOpen}
             disabled={isLoading}
           >
@@ -74,8 +82,11 @@ export const MobileHeader: React.FC<MobileHeaderProps> = ({
               <span className={styles.line}></span>
             </div>
             {notifications > 0 && (
-              <span className={styles.notificationBadge} aria-label={`${notifications}件の通知`}>
-                {notifications > 99 ? '99+' : notifications}
+              <span
+                className={styles.notificationBadge}
+                aria-label={`${notifications}件の通知`}
+              >
+                {notifications > 99 ? "99+" : notifications}
               </span>
             )}
           </button>
@@ -97,9 +108,7 @@ export const MobileHeader: React.FC<MobileHeaderProps> = ({
       </div>
 
       {/* 右側: アクション */}
-      <div className={styles.rightSection}>
-        {actions}
-      </div>
+      <div className={styles.rightSection}>{actions}</div>
     </header>
   );
 };

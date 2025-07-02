@@ -8,44 +8,39 @@
   cursor: pointer;
   z-index: 999;
   overflow: hidden;
-  
+
   // セーフエリア対応
-  margin: max(16px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-right));
-  
+  margin: max(16px, env(safe-area-inset-bottom))
+    max(16px, env(safe-area-inset-right));
+
   // シャドウ
-  box-shadow: 
-    0 4px 8px rgba(0, 0, 0, 0.3),
-    0 6px 20px rgba(0, 0, 0, 0.15);
-  
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3), 0 6px 20px rgba(0, 0, 0, 0.15);
+
   // トランジション
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  
+
   // タッチフィードバック
   -webkit-tap-highlight-color: transparent;
-  
+
   &:hover:not(.disabled) {
     transform: scale(1.1);
-    box-shadow: 
-      0 6px 12px rgba(0, 0, 0, 0.4),
-      0 8px 24px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4), 0 8px 24px rgba(0, 0, 0, 0.2);
   }
-  
+
   &:active:not(.disabled) {
     transform: scale(0.95);
   }
-  
+
   &:focus-visible {
     outline: 2px solid rgba(255, 255, 255, 0.8);
     outline-offset: 2px;
   }
-  
+
   &.disabled {
     opacity: 0.5;
     cursor: not-allowed;
     transform: none;
-    box-shadow: 
-      0 2px 4px rgba(0, 0, 0, 0.2),
-      0 3px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 3px 10px rgba(0, 0, 0, 0.1);
   }
 }
 
@@ -58,17 +53,18 @@
 .bottom-left {
   bottom: 0;
   left: 0;
-  margin: max(16px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+  margin: max(16px, env(safe-area-inset-bottom))
+    max(16px, env(safe-area-inset-left));
 }
 
 // サイズ
 .small {
   width: 48px;
   height: 48px;
-  
+
   .iconWrapper {
     font-size: 20px;
-    
+
     svg {
       width: 20px;
       height: 20px;
@@ -79,10 +75,10 @@
 .medium {
   width: 56px;
   height: 56px;
-  
+
   .iconWrapper {
     font-size: 24px;
-    
+
     svg {
       width: 24px;
       height: 24px;
@@ -93,10 +89,10 @@
 .large {
   width: 64px;
   height: 64px;
-  
+
   .iconWrapper {
     font-size: 28px;
-    
+
     svg {
       width: 28px;
       height: 28px;
@@ -108,11 +104,11 @@
 .primary {
   background: #7750d3;
   color: white;
-  
+
   &:hover:not(.disabled) {
     background: #6640b3;
   }
-  
+
   .ripple {
     background: rgba(255, 255, 255, 0.3);
   }
@@ -122,11 +118,11 @@
   background: white;
   color: #7750d3;
   border: 2px solid #7750d3;
-  
+
   &:hover:not(.disabled) {
     background: #f8f9fa;
   }
-  
+
   .ripple {
     background: rgba(119, 80, 211, 0.3);
   }
@@ -168,22 +164,18 @@
     background: #2c2c2c;
     color: #7750d3;
     border-color: #7750d3;
-    
+
     &:hover:not(.disabled) {
       background: #3c3c3c;
     }
   }
-  
+
   .fab {
-    box-shadow: 
-      0 4px 8px rgba(0, 0, 0, 0.5),
-      0 6px 20px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5), 0 6px 20px rgba(0, 0, 0, 0.3);
   }
-  
+
   .fab:hover:not(.disabled) {
-    box-shadow: 
-      0 6px 12px rgba(0, 0, 0, 0.6),
-      0 8px 24px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.6), 0 8px 24px rgba(0, 0, 0, 0.4);
   }
 }
 
@@ -192,15 +184,15 @@
   .fab {
     transition: none;
   }
-  
+
   .fab:hover:not(.disabled) {
     transform: none;
   }
-  
+
   .fab:active:not(.disabled) {
     transform: none;
   }
-  
+
   .ripple {
     transition: none;
   }
@@ -211,12 +203,12 @@
   .fab {
     border: 3px solid currentColor;
   }
-  
+
   .primary {
     background: #000;
     color: #fff;
   }
-  
+
   .secondary {
     background: #fff;
     color: #000;

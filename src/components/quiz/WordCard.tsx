@@ -23,17 +23,26 @@ export const WordCard: React.FC<WordCardProps> = ({
 
   const threshold = 100; // スワイプと判定する最小距離
 
+  // 振動フィードバック
+  const vibrate = (pattern: number | number[]) => {
+    if ("vibrate" in navigator) {
+      navigator.vibrate(pattern);
+    }
+  };
+
   // 単語が変わったら答えの表示状態をリセット
   useEffect(() => {
     setShowMeaning(false);
   }, [word.id]);
 
   const handleToggleMeaning = () => {
+    vibrate(25); // カードフリップ時の振動
     setShowMeaning(!showMeaning);
   };
 
   const handleSpeakWord = () => {
     if ("speechSynthesis" in window) {
+      vibrate(20); // 音声ボタン押下時の振動
       const utterance = new SpeechSynthesisUtterance(word.word);
 
       // 単語の言語を自動検出
@@ -263,11 +272,21 @@ export const WordCard: React.FC<WordCardProps> = ({
       // 横方向のスワイプ
       if (offset.x > 0) {
         onAnswer("know");
+        vibrate(50); // スワイプ右: 振動フィードバック
       } else {
         onAnswer("unknown");
+        vibrate(50); // スワイプ左: 振動フィードバック
       }
-    } else if (offset.y > threshold && absY > absX) {
-      onAnswer("vague");
+    } else if (absY > threshold && absX < absY) {
+      // 縦方向のスワイプ
+      if (offset.y > 0) {
+        // 下スワイプ: あいまい
+        onAnswer("vague");
+        vibrate(50); // スワイプ下: 振動フィードバック
+      } else {
+        // 上スワイプ: カードフリップ
+        handleToggleMeaning();
+      }
     }
   };
 
@@ -338,20 +357,29 @@ export const WordCard: React.FC<WordCardProps> = ({
       }}
       key={word.id} // 重要: 単語が変わったら完全に新しいコンポーネントとして扱う
     >
-      <div className={styles.cardContent}>
+      <div className={`${styles.cardContent} ${showMeaning ? styles.showingMeaning : ""}`}>
         <IconButton
           url="https://api.iconify.design/heroicons:speaker-wave-20-solid.svg?color=%237750d3"
           onClick={handleSpeakWord}
         />
 
         <button className={styles.answerButton} onClick={handleToggleMeaning}>
-          答え
+          {showMeaning ? "単語" : "答え"}
         </button>
 
         {showMeaning ? (
-          <div className={styles.meaningText}>{word.meaning}</div>
+          <div className={styles.meaningText}>
+            {word.meaning}
+          </div>
         ) : (
-          <div className={styles.wordText}>{word.word}</div>
+          <div className={styles.wordText}>
+            {word.word}
+          </div>
+        )}
+
+        {/* フリップヒント */}
+        {!isNextCard && (
+          <div className={styles.flipHint}>↑ 上スワイプでフリップ</div>
         )}
       </div>
     </motion.div>

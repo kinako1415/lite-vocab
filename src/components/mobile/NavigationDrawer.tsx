@@ -1,11 +1,11 @@
-import React, { useEffect, useRef } from 'react';
-import styles from './NavigationDrawer.module.scss';
+import React, { useEffect, useRef } from "react";
+import styles from "./NavigationDrawer.module.scss";
 
 interface NavigationDrawerProps {
   isOpen: boolean;
   onClose: () => void;
   children: React.ReactNode;
-  position?: 'left' | 'right';
+  position?: "left" | "right";
   overlay?: boolean;
 }
 
@@ -13,8 +13,8 @@ export const NavigationDrawer: React.FC<NavigationDrawerProps> = ({
   isOpen,
   onClose,
   children,
-  position = 'left',
-  overlay = true
+  position = "left",
+  overlay = true,
 }) => {
   const drawerRef = useRef<HTMLDivElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
@@ -22,20 +22,20 @@ export const NavigationDrawer: React.FC<NavigationDrawerProps> = ({
   // ESCキーで閉じる
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape' && isOpen) {
+      if (event.key === "Escape" && isOpen) {
         onClose();
       }
     };
 
     if (isOpen) {
-      document.addEventListener('keydown', handleKeyDown);
+      document.addEventListener("keydown", handleKeyDown);
       // 背景スクロールを防止
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = "hidden";
     }
 
     return () => {
-      document.removeEventListener('keydown', handleKeyDown);
-      document.body.style.overflow = '';
+      document.removeEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = "";
     };
   }, [isOpen, onClose]);
 
@@ -48,10 +48,12 @@ export const NavigationDrawer: React.FC<NavigationDrawerProps> = ({
       'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
     );
     const firstElement = focusableElements[0] as HTMLElement;
-    const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement;
+    const lastElement = focusableElements[
+      focusableElements.length - 1
+    ] as HTMLElement;
 
     const handleTabKey = (event: KeyboardEvent) => {
-      if (event.key !== 'Tab') return;
+      if (event.key !== "Tab") return;
 
       if (event.shiftKey) {
         if (document.activeElement === firstElement) {
@@ -66,11 +68,11 @@ export const NavigationDrawer: React.FC<NavigationDrawerProps> = ({
       }
     };
 
-    drawer.addEventListener('keydown', handleTabKey);
+    drawer.addEventListener("keydown", handleTabKey);
     firstElement?.focus();
 
     return () => {
-      drawer.removeEventListener('keydown', handleTabKey);
+      drawer.removeEventListener("keydown", handleTabKey);
     };
   }, [isOpen]);
 
@@ -80,7 +82,7 @@ export const NavigationDrawer: React.FC<NavigationDrawerProps> = ({
       {overlay && (
         <div
           ref={overlayRef}
-          className={`${styles.overlay} ${isOpen ? styles.overlayVisible : ''}`}
+          className={`${styles.overlay} ${isOpen ? styles.overlayVisible : ""}`}
           onClick={onClose}
           aria-hidden="true"
         />
@@ -89,14 +91,14 @@ export const NavigationDrawer: React.FC<NavigationDrawerProps> = ({
       {/* ドロワー */}
       <div
         ref={drawerRef}
-        className={`${styles.drawer} ${styles[position]} ${isOpen ? styles.open : ''}`}
+        className={`${styles.drawer} ${styles[position]} ${
+          isOpen ? styles.open : ""
+        }`}
         role="dialog"
         aria-modal="true"
         aria-label="ナビゲーションメニュー"
       >
-        <div className={styles.drawerContent}>
-          {children}
-        </div>
+        <div className={styles.drawerContent}>{children}</div>
       </div>
     </>
   );

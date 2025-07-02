@@ -1,0 +1,443 @@
+.cardContainer {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  perspective: 1000px;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.card {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 16px;
+  cursor: grab;
+
+  &:active {
+    cursor: grabbing;
+  }
+
+  // スワイプアニメーション
+  &.swiping {
+    transition: transform 0.2s ease-out;
+
+    &.left {
+      transform: translateX(-30px) rotate(-5deg);
+      filter: brightness(0.8);
+    }
+
+    &.right {
+      transform: translateX(30px) rotate(5deg);
+      filter: brightness(1.1);
+    }
+
+    &.down {
+      transform: translateY(20px) scale(0.95);
+      filter: brightness(0.9);
+    }
+  }
+
+  // 退場アニメーション
+  &.exiting {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    &.unknown {
+      transform: translateX(-100vw) rotate(-30deg);
+      opacity: 0;
+    }
+
+    &.know {
+      transform: translateX(100vw) rotate(30deg);
+      opacity: 0;
+    }
+
+    &.vague {
+      transform: translateY(100vh) scale(0.8);
+      opacity: 0;
+    }
+  }
+
+  // フリップアニメーション
+  &.flipped {
+    transform: rotateY(180deg);
+  }
+
+  // 次のカード（背景）
+  &.nextCard {
+    filter: brightness(0.8);
+    transform: scale(0.95) translateY(10px);
+    z-index: 1;
+  }
+
+  // 現在のカード
+  &.currentCard {
+    z-index: 2;
+  }
+}
+
+.cardFront,
+.cardBack {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 16px;
+  padding: 20px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+
+  // セーフエリア対応
+  padding-top: max(20px, env(safe-area-inset-top) + 10px);
+  padding-bottom: max(20px, env(safe-area-inset-bottom) + 10px);
+  padding-left: max(20px, env(safe-area-inset-left) + 10px);
+  padding-right: max(20px, env(safe-area-inset-right) + 10px);
+
+  @media (max-width: 480px) {
+    padding: 16px;
+    padding-top: max(16px, env(safe-area-inset-top) + 8px);
+    padding-bottom: max(16px, env(safe-area-inset-bottom) + 8px);
+  }
+
+  @media (max-width: 360px) {
+    padding: 12px;
+    padding-top: max(12px, env(safe-area-inset-top) + 6px);
+    padding-bottom: max(12px, env(safe-area-inset-bottom) + 6px);
+  }
+}
+
+.cardFront {
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%);
+  color: #2d3748;
+  box-shadow: 0 8px 32px rgba(119, 80, 211, 0.15);
+}
+
+.cardBack {
+  background: linear-gradient(135deg, #7750d3 0%, #9f7aea 100%);
+  color: white;
+  transform: rotateY(180deg);
+  box-shadow: 0 8px 32px rgba(119, 80, 211, 0.3);
+}
+
+.cardContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  position: relative;
+}
+
+.wordHeader,
+.meaningHeader {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+
+  @media (max-width: 480px) {
+    margin-bottom: 16px;
+  }
+}
+
+.wordType,
+.meaningLabel {
+  background: rgba(119, 80, 211, 0.1);
+  color: #7750d3;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+
+  @media (max-width: 480px) {
+    font-size: 10px;
+    padding: 3px 8px;
+  }
+}
+
+.meaningLabel {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+.speakButton {
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  border-radius: 8px;
+  padding: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.1);
+  }
+
+  &:active {
+    transform: scale(0.9);
+  }
+
+  @media (max-width: 480px) {
+    padding: 6px;
+    font-size: 14px;
+  }
+}
+
+.word {
+  font-size: clamp(28px, 8vw, 48px);
+  font-weight: 900;
+  margin: 0;
+  color: #2d3748;
+  line-height: 1.2;
+  word-break: break-word;
+
+  @media (max-width: 480px) {
+    font-size: clamp(24px, 7vw, 36px);
+  }
+
+  @media (max-width: 360px) {
+    font-size: clamp(20px, 6vw, 28px);
+  }
+}
+
+.meaning {
+  font-size: clamp(20px, 6vw, 32px);
+  font-weight: 700;
+  margin: 0;
+  color: white;
+  line-height: 1.3;
+  word-break: break-word;
+
+  @media (max-width: 480px) {
+    font-size: clamp(18px, 5vw, 24px);
+  }
+
+  @media (max-width: 360px) {
+    font-size: clamp(16px, 4vw, 20px);
+  }
+}
+
+.flipButton {
+  background: rgba(119, 80, 211, 0.1);
+  border: 2px solid rgba(119, 80, 211, 0.3);
+  border-radius: 12px;
+  padding: 12px 20px;
+  color: #7750d3;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  &:hover {
+    background: rgba(119, 80, 211, 0.15);
+    border-color: rgba(119, 80, 211, 0.5);
+    transform: translateY(-2px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  @media (max-width: 480px) {
+    padding: 10px 16px;
+    font-size: 12px;
+    margin-top: 20px;
+    gap: 6px;
+  }
+}
+
+.cardBack .flipButton {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+  color: white;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.25);
+    border-color: rgba(255, 255, 255, 0.5);
+  }
+}
+
+.flipIcon {
+  font-size: 16px;
+
+  @media (max-width: 480px) {
+    font-size: 14px;
+  }
+}
+
+.swipeHints {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding: 0 20px 20px;
+
+  @media (max-width: 480px) {
+    padding: 0 16px 16px;
+  }
+}
+
+.hintLeft,
+.hintRight,
+.hintDown {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  opacity: 0.6;
+  transition: opacity 0.2s ease;
+
+  @media (max-width: 480px) {
+    gap: 2px;
+  }
+}
+
+.hintDown {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+
+  @media (max-width: 480px) {
+    bottom: 16px;
+  }
+}
+
+.hintIcon {
+  font-size: 20px;
+
+  @media (max-width: 480px) {
+    font-size: 18px;
+  }
+
+  @media (max-width: 360px) {
+    font-size: 16px;
+  }
+}
+
+.hintText {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+
+  @media (max-width: 480px) {
+    font-size: 10px;
+  }
+
+  @media (max-width: 360px) {
+    font-size: 9px;
+  }
+}
+
+.cardBack .hintText {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+// スワイプ中のヒント強調
+.card.swiping {
+  .hintLeft .hintText,
+  .hintRight .hintText,
+  .hintDown .hintText {
+    opacity: 1;
+  }
+
+  &.left .hintLeft {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+
+  &.right .hintRight {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+
+  &.down .hintDown {
+    opacity: 1;
+    transform: translateX(-50%) scale(1.1);
+  }
+}
+
+// 横画面対応
+@media (orientation: landscape) and (max-height: 500px) {
+  .cardFront,
+  .cardBack {
+    padding: 12px 16px;
+  }
+
+  .word {
+    font-size: clamp(20px, 5vh, 32px);
+  }
+
+  .meaning {
+    font-size: clamp(16px, 4vh, 24px);
+  }
+
+  .flipButton {
+    padding: 8px 12px;
+    font-size: 12px;
+    margin-top: 12px;
+  }
+
+  .hintIcon {
+    font-size: 16px;
+  }
+
+  .hintText {
+    font-size: 9px;
+  }
+}
+
+// ダークモード対応
+@media (prefers-color-scheme: dark) {
+  .cardFront {
+    background: linear-gradient(135deg, #2d3748 0%, #4a5568 100%);
+    color: #f7fafc;
+  }
+
+  .wordType {
+    background: rgba(119, 80, 211, 0.2);
+    color: #c4b5fd;
+  }
+}
+
+// 縮小モーション対応
+@media (prefers-reduced-motion: reduce) {
+  .card {
+    transition: none;
+  }
+
+  .card.swiping,
+  .card.exiting,
+  .card.flipped {
+    transition: none;
+  }
+
+  .flipButton,
+  .speakButton {
+    transition: none;
+  }
+
+  .flipButton:hover,
+  .speakButton:hover {
+    transform: none;
+  }
+}

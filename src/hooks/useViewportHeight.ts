@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
 /**
  * Dynamic Viewport Height対応フック
@@ -11,7 +11,7 @@ export const useViewportHeight = () => {
     const setVH = () => {
       // 実際の表示可能高さを取得
       const vh = window.innerHeight * 0.01;
-      document.documentElement.style.setProperty('--vh', `${vh}px`);
+      document.documentElement.style.setProperty("--vh", `${vh}px`);
       setViewportHeight(window.innerHeight);
     };
 
@@ -24,19 +24,19 @@ export const useViewportHeight = () => {
       requestAnimationFrame(setVH);
     };
 
-    window.addEventListener('resize', handleResize);
-    window.addEventListener('orientationchange', handleResize);
+    window.addEventListener("resize", handleResize);
+    window.addEventListener("orientationchange", handleResize);
 
     // Visual Viewport API対応（iOS Safari等）
     if (window.visualViewport) {
-      window.visualViewport.addEventListener('resize', handleResize);
+      window.visualViewport.addEventListener("resize", handleResize);
     }
 
     return () => {
-      window.removeEventListener('resize', handleResize);
-      window.removeEventListener('orientationchange', handleResize);
+      window.removeEventListener("resize", handleResize);
+      window.removeEventListener("orientationchange", handleResize);
       if (window.visualViewport) {
-        window.visualViewport.removeEventListener('resize', handleResize);
+        window.visualViewport.removeEventListener("resize", handleResize);
       }
     };
   }, []);
@@ -57,7 +57,7 @@ export const useKeyboardDetection = () => {
     const handleResize = () => {
       const currentHeight = window.visualViewport?.height || window.innerHeight;
       const heightDifference = initialViewportHeight - currentHeight;
-      
+
       // キーボードが表示されているかを判定（150px以上の高さ差）
       const isVisible = heightDifference > 150;
       setIsKeyboardVisible(isVisible);
@@ -68,16 +68,16 @@ export const useKeyboardDetection = () => {
     initialViewportHeight = window.innerHeight;
 
     if (window.visualViewport) {
-      window.visualViewport.addEventListener('resize', handleResize);
+      window.visualViewport.addEventListener("resize", handleResize);
     } else {
-      window.addEventListener('resize', handleResize);
+      window.addEventListener("resize", handleResize);
     }
 
     return () => {
       if (window.visualViewport) {
-        window.visualViewport.removeEventListener('resize', handleResize);
+        window.visualViewport.removeEventListener("resize", handleResize);
       } else {
-        window.removeEventListener('resize', handleResize);
+        window.removeEventListener("resize", handleResize);
       }
     };
   }, []);
@@ -99,10 +99,10 @@ export const useMediaQuery = (query: string) => {
       setMatches(event.matches);
     };
 
-    mediaQuery.addEventListener('change', handleChange);
+    mediaQuery.addEventListener("change", handleChange);
 
     return () => {
-      mediaQuery.removeEventListener('change', handleChange);
+      mediaQuery.removeEventListener("change", handleChange);
     };
   }, [query]);
 

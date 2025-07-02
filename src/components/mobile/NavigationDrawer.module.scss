@@ -4,16 +4,16 @@
   left: 0;
   right: 0;
   bottom: 0;
-  
+
   background: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
-  
+
   z-index: 998;
   opacity: 0;
   visibility: hidden;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  
+
   &.overlayVisible {
     opacity: 1;
     visibility: visible;
@@ -24,43 +24,43 @@
   position: fixed;
   top: 0;
   bottom: 0;
-  
+
   width: 100vw;
   max-width: 320px;
-  
+
   background: #7750d3;
   z-index: 999;
-  
+
   transform: translateX(-100%);
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  
+
   // セーフエリア対応
   padding-top: env(safe-area-inset-top);
   padding-bottom: env(safe-area-inset-bottom);
-  
+
   &.right {
     right: 0;
     transform: translateX(100%);
-    
+
     &.open {
       transform: translateX(0);
     }
   }
-  
+
   &.left {
     left: 0;
-    
+
     &.open {
       transform: translateX(0);
     }
   }
-  
+
   // モバイル専用
   @media (max-width: 768px) {
     width: 100vw;
     max-width: none;
   }
-  
+
   @media (max-width: 480px) {
     width: 100vw;
   }
@@ -70,24 +70,24 @@
   height: 100%;
   overflow-y: auto;
   overflow-x: hidden;
-  
+
   // スムーズスクロール
   -webkit-overflow-scrolling: touch;
   scroll-behavior: smooth;
-  
+
   // カスタムスクロールバー（Webkit）
   &::-webkit-scrollbar {
     width: 4px;
   }
-  
+
   &::-webkit-scrollbar-track {
     background: rgba(255, 255, 255, 0.1);
   }
-  
+
   &::-webkit-scrollbar-thumb {
     background: rgba(255, 255, 255, 0.3);
     border-radius: 2px;
-    
+
     &:hover {
       background: rgba(255, 255, 255, 0.5);
     }
@@ -106,7 +106,7 @@
 @media (orientation: landscape) and (max-height: 500px) {
   .drawer {
     max-width: 280px;
-    
+
     @media (max-width: 768px) {
       max-width: 60vw;
     }
@@ -118,10 +118,10 @@
   .overlay {
     background: rgba(0, 0, 0, 0.8);
   }
-  
+
   .drawer {
     border-right: 2px solid #ffffff;
-    
+
     &.right {
       border-right: none;
       border-left: 2px solid #ffffff;

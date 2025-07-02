@@ -89,6 +89,23 @@ export const QuizInterface: React.FC<QuizInterfaceProps> = ({
             {remainingWords === 1 ? "ラスト" : `残り${remainingWords}語`}
           </span>
         </div>
+        {/* 統計表示 */}
+        <div className={styles.statsDisplay}>
+          <div className={styles.statItem}>
+            <span className={styles.statIcon}>✓</span>
+            <span className={styles.statCount}>{getResults().knowCount}</span>
+          </div>
+          <div className={styles.statItem}>
+            <span className={styles.statIcon}>✗</span>
+            <span className={styles.statCount}>
+              {getResults().unknownCount}
+            </span>
+          </div>
+          <div className={styles.statItem}>
+            <span className={styles.statIcon}>?</span>
+            <span className={styles.statCount}>{getResults().vagueCount}</span>
+          </div>
+        </div>
       </div>
 
       {/* メインコンテンツ */}
@@ -97,6 +114,7 @@ export const QuizInterface: React.FC<QuizInterfaceProps> = ({
         <div className={styles.swipeHints}>
           <div className={styles.swipeHintLeft}>わからない</div>
           <div className={styles.swipeHintRight}>わかる</div>
+          <div className={styles.swipeHintUp}>フリップ</div>
           <div className={styles.swipeHintDown}>あいまい</div>
         </div>
 
@@ -108,6 +126,7 @@ export const QuizInterface: React.FC<QuizInterfaceProps> = ({
             <div className={styles.mobileSwipeLabel}>わかる</div>
           </div>
           <div className={styles.mobileSwipeLabelCenter}>あいまい</div>
+          <div className={styles.mobileSwipeLabelTop}>↑フリップ</div>
 
           {/* 次のカード（背景） */}
           {nextWord && (
