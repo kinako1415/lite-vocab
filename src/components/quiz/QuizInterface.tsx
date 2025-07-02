@@ -30,6 +30,11 @@ export const QuizInterface: React.FC<QuizInterfaceProps> = ({
     direction: AnswerType;
   } | null>(null);
 
+  const [dragPreview, setDragPreview] = useState<{
+    type: "know" | "unknown" | "vague" | null;
+    show: boolean;
+  }>({ type: null, show: false });
+
   const handleAnswer = (answerType: AnswerType) => {
     if (!currentWord) return;
 
@@ -44,6 +49,13 @@ export const QuizInterface: React.FC<QuizInterfaceProps> = ({
       answerWord(answerType);
       setExitingCard(null);
     }, 300);
+  };
+
+  const handleDragPreview = (preview: {
+    type: "know" | "unknown" | "vague" | null;
+    show: boolean;
+  }) => {
+    setDragPreview(preview);
   };
 
   // プログレスバーの幅を計算
@@ -110,24 +122,8 @@ export const QuizInterface: React.FC<QuizInterfaceProps> = ({
 
       {/* メインコンテンツ */}
       <div className={styles.mainContent}>
-        {/* スワイプヒント */}
-        <div className={styles.swipeHints}>
-          <div className={styles.swipeHintLeft}>わからない</div>
-          <div className={styles.swipeHintRight}>わかる</div>
-          <div className={styles.swipeHintUp}>フリップ</div>
-          <div className={styles.swipeHintDown}>あいまい</div>
-        </div>
-
         {/* カードスタック */}
         <div className={styles.cardStack}>
-          {/* モバイル用スワイプラベル */}
-          <div className={styles.mobileSwipeLabels}>
-            <div className={styles.mobileSwipeLabel}>わからない</div>
-            <div className={styles.mobileSwipeLabel}>わかる</div>
-          </div>
-          <div className={styles.mobileSwipeLabelCenter}>あいまい</div>
-          <div className={styles.mobileSwipeLabelTop}>↑フリップ</div>
-
           {/* 次のカード（背景） */}
           {nextWord && (
             <div className={`${styles.cardContainer} ${styles.nextCard}`}>
@@ -145,6 +141,7 @@ export const QuizInterface: React.FC<QuizInterfaceProps> = ({
               <WordCard
                 word={currentWord}
                 onAnswer={handleAnswer}
+                onDragPreview={handleDragPreview}
                 isExiting={exitingCard?.word.id === currentWord.id}
                 exitDirection={exitingCard?.direction}
               />
@@ -152,6 +149,15 @@ export const QuizInterface: React.FC<QuizInterfaceProps> = ({
           )}
         </div>
       </div>
+
+      {/* 画面全体のドラッグプレビュー */}
+      {dragPreview.show && (
+        <div className={styles.globalDragPreview}>
+          {dragPreview.type === "know" && "わかる 😎"}
+          {dragPreview.type === "unknown" && "わからない 😩"}
+          {dragPreview.type === "vague" && "あいまい ❓"}
+        </div>
+      )}
     </div>
   );
 };

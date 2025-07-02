@@ -7,6 +7,10 @@ import styles from "./WordCard.module.scss";
 interface WordCardProps {
   word: QuizWord;
   onAnswer: (answerType: AnswerType) => void;
+  onDragPreview?: (preview: {
+    type: "know" | "unknown" | "vague" | null;
+    show: boolean;
+  }) => void;
   isExiting?: boolean;
   exitDirection?: AnswerType;
   isNextCard?: boolean; // 次のカードかどうかを示すフラグ
@@ -15,6 +19,7 @@ interface WordCardProps {
 export const WordCard: React.FC<WordCardProps> = ({
   word,
   onAnswer,
+  onDragPreview,
   isExiting = false,
   exitDirection,
   isNextCard = false,
@@ -34,10 +39,36 @@ export const WordCard: React.FC<WordCardProps> = ({
   useEffect(() => {
     setShowMeaning(false);
   }, [word.id]);
-
   const handleToggleMeaning = () => {
     vibrate(25); // カードフリップ時の振動
     setShowMeaning(!showMeaning);
+  }; // ドラッグ中のプレビュー表示
+  const updateDragPreview = (offset: { x: number; y: number }) => {
+    const absX = Math.abs(offset.x);
+    const absY = Math.abs(offset.y);
+
+    // プレビュー表示の閾値（実際のスワイプ判定より低く設定）
+    const previewThreshold = 30; // より早くフィードバックを表示
+
+    if (absX > previewThreshold && absX > absY) {
+      // 横方向のドラッグ
+      if (offset.x > 0) {
+        onDragPreview?.({ type: "know", show: true });
+      } else {
+        onDragPreview?.({ type: "unknown", show: true });
+      }
+    } else if (absY > previewThreshold && absX < absY && offset.y > 0) {
+      // 下方向のドラッグ
+      onDragPreview?.({ type: "vague", show: true });
+    } else {
+      // 閾値以下の場合はプレビューを非表示
+      onDragPreview?.({ type: null, show: false });
+    }
+  };
+
+  // ドラッグ終了時にプレビューをクリア
+  const clearDragPreview = () => {
+    onDragPreview?.({ type: null, show: false });
   };
 
   const handleSpeakWord = () => {
@@ -267,6 +298,9 @@ export const WordCard: React.FC<WordCardProps> = ({
     const absX = Math.abs(offset.x);
     const absY = Math.abs(offset.y);
 
+    // ドラッグプレビューをクリア
+    clearDragPreview();
+
     // スワイプ判定
     if (absX > threshold && absX > absY) {
       // 横方向のスワイプ
@@ -288,6 +322,14 @@ export const WordCard: React.FC<WordCardProps> = ({
         handleToggleMeaning();
       }
     }
+  };
+
+  // ドラッグ中の処理
+  const handleDrag = (
+    _event: MouseEvent | TouchEvent | PointerEvent,
+    info: { offset: { x: number; y: number } }
+  ) => {
+    updateDragPreview(info.offset);
   };
 
   // exitDirectionに基づく退場アニメーション
@@ -330,6 +372,7 @@ export const WordCard: React.FC<WordCardProps> = ({
       drag={!isExiting && !isNextCard} // スワイプは常に有効に戻す
       dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
       dragElastic={0.2}
+      onDrag={handleDrag}
       onDragEnd={handleDragEnd}
       whileDrag={{
         scale: 1.05,
@@ -357,30 +400,48 @@ export const WordCard: React.FC<WordCardProps> = ({
       }}
       key={word.id} // 重要: 単語が変わったら完全に新しいコンポーネントとして扱う
     >
-      <div className={`${styles.cardContent} ${showMeaning ? styles.showingMeaning : ""}`}>
-        <IconButton
-          url="https://api.iconify.design/heroicons:speaker-wave-20-solid.svg?color=%237750d3"
-          onClick={handleSpeakWord}
-        />
+      <div
+        className={`${styles.cardContent} ${
+          showMeaning ? styles.showingMeaning : ""
+        }`}
+      >
+        {/* カードの表面（単語側） */}
+        <div className={styles.cardFront}>
+          <IconButton
+            url="https://api.iconify.design/heroicons:speaker-wave-20-solid.svg?color=%237750d3"
+            onClick={handleSpeakWord}
+          />
 
-        <button className={styles.answerButton} onClick={handleToggleMeaning}>
-          {showMeaning ? "単語" : "答え"}
-        </button>
+          <button className={styles.answerButton} onClick={handleToggleMeaning}>
+            答え
+          </button>
 
-        {showMeaning ? (
-          <div className={styles.meaningText}>
-            {word.meaning}
-          </div>
-        ) : (
-          <div className={styles.wordText}>
-            {word.word}
-          </div>
-        )}
+          <div className={styles.wordText}>{word.word}</div>
 
-        {/* フリップヒント */}
-        {!isNextCard && (
-          <div className={styles.flipHint}>↑ 上スワイプでフリップ</div>
-        )}
+          {/* フリップヒント */}
+          {!isNextCard && (
+            <div className={styles.flipHint}>上スワイプで答え</div>
+          )}
+        </div>
+
+        {/* カードの裏面（意味側） */}
+        <div className={styles.cardBack}>
+          <IconButton
+            url="https://api.iconify.design/heroicons:speaker-wave-20-solid.svg?color=%237750d3"
+            onClick={handleSpeakWord}
+          />
+
+          <button className={styles.answerButton} onClick={handleToggleMeaning}>
+            単語
+          </button>
+
+          <div className={styles.meaningText}>{word.meaning}</div>
+
+          {/* フリップヒント */}
+          {!isNextCard && (
+            <div className={styles.flipHint}>上スワイプで答え</div>
+          )}
+        </div>
       </div>
     </motion.div>
   );

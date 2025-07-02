@@ -481,3 +481,36 @@
 .controlButtons {
   display: none;
 }
+
+/* 画面全体のドラッグプレビュー - カードの外に表示 */
+.globalDragPreview {
+  position: fixed;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(119, 80, 211, 0.9);
+  color: white;
+  padding: 16px 32px;
+  border-radius: 30px;
+  font-size: 24px;
+  font-weight: bold;
+  z-index: 2000; /* カードより高い優先度 */
+  pointer-events: none;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 32px rgba(119, 80, 211, 0.3);
+  transition: opacity 0.1s ease-out;
+  opacity: 1;
+
+  /* スマホ向けレスポンシブ */
+  @media (max-width: 480px) {
+    bottom: 30px;
+    padding: 12px 24px;
+    font-size: 20px;
+  }
+
+  @media (max-width: 360px) {
+    bottom: 25px;
+    padding: 10px 20px;
+    font-size: 18px;
+  }
+}
