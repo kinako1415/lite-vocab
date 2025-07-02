@@ -55,6 +55,7 @@ export const QuizInterface: React.FC<QuizInterfaceProps> = ({
     type: "know" | "unknown" | "vague" | null;
     show: boolean;
   }) => {
+    // フリップ状態に関わらず、ドラッグプレビューを更新
     setDragPreview(preview);
   };
 

@@ -494,12 +494,13 @@
   border-radius: 30px;
   font-size: 24px;
   font-weight: bold;
-  z-index: 2000; /* カードより高い優先度 */
+  z-index: 3000; /* 最前面に表示 */
   pointer-events: none;
   backdrop-filter: blur(10px);
   box-shadow: 0 8px 32px rgba(119, 80, 211, 0.3);
-  transition: opacity 0.1s ease-out;
+  transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   opacity: 1;
+  animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
 
   /* スマホ向けレスポンシブ */
   @media (max-width: 480px) {
@@ -512,5 +513,16 @@
     bottom: 25px;
     padding: 10px 20px;
     font-size: 18px;
+  }
+}
+
+@keyframes popIn {
+  0% {
+    transform: translateX(-50%) translateY(20px) scale(0.8);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(-50%) translateY(0) scale(1);
+    opacity: 1;
   }
 }

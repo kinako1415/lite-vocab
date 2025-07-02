@@ -7,8 +7,10 @@
   border: 2px solid #f4f5ff;
   cursor: grab;
   user-select: none;
-  transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
   transform-origin: center;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+  will-change: transform;
 
   /* タブレット向けレスポンシブ */
   @media (max-width: 768px) {
@@ -45,7 +47,9 @@
   width: 100%;
   height: 100%;
   border-radius: 20px;
-  transition: all 0.3s ease-in-out;
+  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.05);
+  pointer-events: auto; // すべてのイベントを有効化
 
   /* タブレット向けレスポンシブ */
   @media (max-width: 768px) {
@@ -75,8 +79,11 @@
   border: 2px solid #f4f5ff;
   overflow: hidden;
   opacity: 1;
-  transform: scale(1);
-  transition: all 0.3s ease-in-out;
+  transform: scale(1) translateY(0);
+  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+  box-shadow: 0 10px 25px rgba(119, 80, 211, 0.05);
+  will-change: transform, opacity;
+  pointer-events: auto;
 }
 
 /* カードの裏面 */
@@ -89,24 +96,37 @@
   border-radius: inherit;
   background: linear-gradient(135deg, #f8f9ff 0%, #e8f2ff 100%);
   border: 2px solid #7750d3;
-  box-shadow: 0 8px 32px rgba(119, 80, 211, 0.2);
+  box-shadow: 0 15px 40px rgba(119, 80, 211, 0.25);
   overflow: hidden;
   opacity: 0;
-  transform: scale(0.9);
-  transition: all 0.3s ease-in-out;
+  transform: scale(1.05) translateY(-10px);
+  transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+  will-change: transform, opacity;
+  pointer-events: none; // 初期状態では操作を無効化
 }
 
 /* 意味表示状態でのフリップ */
 .cardContent.showingMeaning {
   .cardFront {
     opacity: 0;
-    transform: scale(0.9);
+    transform: scale(0.95) translateY(10px);
+    filter: blur(2px);
+    pointer-events: none; /* フリップ中は表面の操作を無効化 */
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
   }
 
   .cardBack {
     opacity: 1;
-    transform: scale(1);
+    transform: scale(1) translateY(0);
+    filter: brightness(1.02);
+    box-shadow: 0 20px 40px rgba(119, 80, 211, 0.3);
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    pointer-events: auto; /* 裏面を操作可能に */
   }
+  
+  /* フリップ中でもカードそのものはドラッグ可能に維持 */
+  pointer-events: auto;
+  z-index: 5;
 }
 
 /* ボタン配置用のスタイル - 表面と裏面両方に適用 */
@@ -161,16 +181,20 @@
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   border: none;
+  box-shadow: 0 2px 8px rgba(119, 80, 211, 0.1);
+  backdrop-filter: blur(4px);
 
   &:hover {
     background: var(--gray-100);
-    transform: translateY(-1px);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(119, 80, 211, 0.15);
   }
 
   &:active {
     transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(119, 80, 211, 0.1);
   }
 
   /* スマホ向けレスポンシブ */
@@ -204,7 +228,8 @@
   white-space: nowrap;
   line-height: 1;
   opacity: 1;
-  transition: opacity 0.2s ease-in-out;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  text-shadow: 0 1px 2px rgba(95, 49, 203, 0.1);
 
   /* タブレット向けレスポンシブ */
   @media (max-width: 768px) {
@@ -241,7 +266,8 @@
   white-space: nowrap;
   line-height: 1;
   opacity: 1;
-  transition: opacity 0.2s ease-in-out;
+  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+  letter-spacing: 0.02em;
 
   /* タブレット向けレスポンシブ */
   @media (max-width: 768px) {
@@ -291,7 +317,7 @@
   bottom: 16px;
   left: 50%;
   transform: translateX(-50%);
-  background: rgba(119, 80, 211, 0.1);
+  background: rgba(119, 80, 211, 0.15);
   border: 1px solid rgba(119, 80, 211, 0.3);
   border-radius: 20px;
   padding: 8px 16px;
@@ -299,8 +325,10 @@
   color: #7750d3;
   font-weight: 600;
   pointer-events: none;
-  opacity: 0.7;
-  transition: all 0.3s ease;
+  opacity: 0.85;
+  transition: all 0.4s ease;
+  backdrop-filter: blur(4px);
+  box-shadow: 0 2px 8px rgba(119, 80, 211, 0.1);
 
   /* スマホ向けレスポンシブ */
   @media (max-width: 480px) {

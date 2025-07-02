@@ -39,17 +39,21 @@ export const WordCard: React.FC<WordCardProps> = ({
   useEffect(() => {
     setShowMeaning(false);
   }, [word.id]);
+
   const handleToggleMeaning = () => {
     vibrate(25); // カードフリップ時の振動
     setShowMeaning(!showMeaning);
-  }; // ドラッグ中のプレビュー表示
+  }; 
+  
+  // ドラッグ中のプレビュー表示
   const updateDragPreview = (offset: { x: number; y: number }) => {
     const absX = Math.abs(offset.x);
     const absY = Math.abs(offset.y);
-
+    
     // プレビュー表示の閾値（実際のスワイプ判定より低く設定）
     const previewThreshold = 30; // より早くフィードバックを表示
-
+    
+    // カードの状態に関わらず、ドラッグ方向に応じたフィードバックを表示
     if (absX > previewThreshold && absX > absY) {
       // 横方向のドラッグ
       if (offset.x > 0) {
@@ -70,6 +74,10 @@ export const WordCard: React.FC<WordCardProps> = ({
   const clearDragPreview = () => {
     onDragPreview?.({ type: null, show: false });
   };
+  
+  // フリップ状態でもドラッグが可能かどうか
+  // 常にドラッグ可能（フリップ状態でも操作できるように）
+  const isDraggable = !isExiting && !isNextCard;
 
   const handleSpeakWord = () => {
     if ("speechSynthesis" in window) {
@@ -329,6 +337,7 @@ export const WordCard: React.FC<WordCardProps> = ({
     _event: MouseEvent | TouchEvent | PointerEvent,
     info: { offset: { x: number; y: number } }
   ) => {
+    // 現在のカード状態に関わらず、ドラッグプレビューを更新
     updateDragPreview(info.offset);
   };
 
@@ -343,7 +352,9 @@ export const WordCard: React.FC<WordCardProps> = ({
           y: 0,
           rotate: 30,
           opacity: 0,
-          scale: 0.8,
+          scale: 0.9,
+          boxShadow: "0 30px 60px rgba(119, 80, 211, 0.2)",
+          filter: "brightness(1.1)",
         };
       case "unknown":
         return {
@@ -351,7 +362,9 @@ export const WordCard: React.FC<WordCardProps> = ({
           y: 0,
           rotate: -30,
           opacity: 0,
-          scale: 0.8,
+          scale: 0.9,
+          boxShadow: "0 30px 60px rgba(119, 80, 211, 0.2)",
+          filter: "brightness(0.95)",
         };
       case "vague":
         return {
@@ -359,7 +372,8 @@ export const WordCard: React.FC<WordCardProps> = ({
           y: window.innerHeight + 300,
           rotate: 15,
           opacity: 0,
-          scale: 0.8,
+          scale: 0.9,
+          boxShadow: "0 30px 60px rgba(119, 80, 211, 0.2)",
         };
       default:
         return {};
@@ -369,7 +383,7 @@ export const WordCard: React.FC<WordCardProps> = ({
   return (
     <motion.div
       className={styles.wordCard}
-      drag={!isExiting && !isNextCard} // スワイプは常に有効に戻す
+      drag={isDraggable} // スワイプは常に有効に戻す
       dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
       dragElastic={0.2}
       onDrag={handleDrag}
@@ -378,6 +392,7 @@ export const WordCard: React.FC<WordCardProps> = ({
         scale: 1.05,
         rotate: 5,
         zIndex: 10,
+        boxShadow: "0 15px 40px rgba(119, 80, 211, 0.15)",
       }}
       initial={
         isNextCard
@@ -388,15 +403,16 @@ export const WordCard: React.FC<WordCardProps> = ({
         isExiting
           ? getExitAnimation()
           : isNextCard
-          ? { scale: 0.9, opacity: 1, y: 0 } // 次のカードは不透明度100に
-          : { scale: 1, opacity: 1, x: 0, y: 0, rotate: 0 }
+          ? { scale: 0.9, opacity: 1, y: 0, boxShadow: "0 5px 20px rgba(0,0,0,0.05)" } // 次のカードは不透明度100に
+          : { scale: 1, opacity: 1, x: 0, y: 0, rotate: 0, boxShadow: "0 10px 30px rgba(119, 80, 211, 0.1)" }
       }
       transition={{
         type: "spring",
-        stiffness: 300,
-        damping: 25,
-        duration: isNextCard ? 0.4 : 0.2, // 全体的に速く
-        delay: isNextCard ? 0.1 : 0, // 遅延も短く
+        stiffness: 400,
+        damping: 30,
+        mass: 1.2,
+        duration: isNextCard ? 0.5 : 0.3,
+        delay: isNextCard ? 0.1 : 0,
       }}
       key={word.id} // 重要: 単語が変わったら完全に新しいコンポーネントとして扱う
     >
@@ -420,7 +436,7 @@ export const WordCard: React.FC<WordCardProps> = ({
 
           {/* フリップヒント */}
           {!isNextCard && (
-            <div className={styles.flipHint}>上スワイプで答え</div>
+            <div className={styles.flipHint}>↑ タップ・スワイプで答え</div>
           )}
         </div>
 
@@ -439,7 +455,7 @@ export const WordCard: React.FC<WordCardProps> = ({
 
           {/* フリップヒント */}
           {!isNextCard && (
-            <div className={styles.flipHint}>上スワイプで答え</div>
+            <div className={styles.flipHint}>↑ タップ・スワイプで戻る</div>
           )}
         </div>
       </div>
